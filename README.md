@@ -8,14 +8,14 @@ Add your own name (do not add the names for others!) to the section below.
  
 ## Group members
 
-| Profile Picture | Name                                   | Email                                           |
-|---|----------------------------------------|-------------------------------------------------|
-|---| Ewout de DObbelaar                     | e.w.dedobbelaar@student.tudelft.nl              |
+| Profile Picture                                                                                         | Name                                   | Email                                           |
+|---------------------------------------------------------------------------------------------------------|----------------------------------------|-------------------------------------------------|
+| ---                                                                                                     | Ewout de DObbelaar                     | e.w.dedobbelaar@student.tudelft.nl              |
 | ![](https://eu.ui-avatars.com/api/?name=OOPP&length=4&size=50&color=DDD&background=777&font-size=0.325) | ALEXIS FIMEYER                         | a.h.p.a.fimeyer@student.tudelft.nl              |
-|![](https://gitlab.ewi.tudelft.nl/uploads/-/system/user/avatar/5985/avatar.png?width=400)| Farhan Farhan Taufiqillah Lingga Djaya | farhantaufiqillahlinggadjaya@student.tudelft.nl |
-|![](https://gitlab.ewi.tudelft.nl/uploads/-/system/user/avatar/5985/avatar.png?width=400)| Rares Serban                           | R.Serban@student.tudelft.nl                     |
-|---| Max Eradus         | M.T.J.eradus@student.tudelft.nl                     |
-|---| Samuel van den Houten | s.e.vandenhouten@student.tudelft.nl |
+| ![](https://gitlab.ewi.tudelft.nl/uploads/-/system/user/avatar/5985/avatar.png?width=400)               | Farhan Farhan Taufiqillah Lingga Djaya | farhantaufiqillahlinggadjaya@student.tudelft.nl |
+| ---                                                                                                     | Rares Serban                           | R.Serban@student.tudelft.nl                     |
+| ---                                                                                                     | Max Eradus         | M.T.J.eradus@student.tudelft.nl                     |
+| ---                                                                                                     | Samuel van den Houten | s.e.vandenhouten@student.tudelft.nl |
 <!-- Instructions (remove once assignment has been completed -->
 <!-- - Add (only!) your own name to the table above (use Markdown formatting) -->
 <!-- - Mention your *student* email address -->
