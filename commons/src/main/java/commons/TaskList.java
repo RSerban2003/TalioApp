@@ -12,23 +12,21 @@ import java.util.List;
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
 @Entity
-public class Card {
+public class TaskList {
     @Id
     private Long id;
     private String name;
     @OneToMany
     private List<Task> taskList;
-    @OneToMany
-    private List<Tags> tagsList;
 
-    public Card(Long id, String name, List<Task> taskList, List<Tags> tagsList) {
+
+    public TaskList(Long id, String name, List<Task> taskList) {
         this.id = id;
         this.name = name;
         this.taskList = taskList;
-        this.tagsList = tagsList;
     }
 
-    public Card() {
+    public TaskList() {
     }
 
     public String getName() {

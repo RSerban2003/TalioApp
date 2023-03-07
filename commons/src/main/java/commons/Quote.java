@@ -39,9 +39,8 @@ public class Quote {
     public Person person;
     public String quote;
 
-    @SuppressWarnings("unused")
-    private Quote() {
-        // for object mappers
+
+    public Quote() {
     }
 
     public Quote(Person person, String quote) {
