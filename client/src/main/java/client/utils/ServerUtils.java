@@ -65,6 +65,7 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(quote, APPLICATION_JSON), Quote.class);
     }
+
     public boolean ping() {
         ClientConfig config = new ClientConfig();
         config.property(ClientProperties.CONNECT_TIMEOUT, 1000);
@@ -79,7 +80,5 @@ public class ServerUtils {
         } catch (ProcessingException pe) {
             return false;
         }
-
-
     }
 }
