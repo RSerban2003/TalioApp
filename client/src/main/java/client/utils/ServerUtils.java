@@ -31,9 +31,11 @@ import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
 
 public class ServerUtils {
+    private static String SERVER = "http://localhost:8080/";
 
-    private static final String SERVER = "http://localhost:8080/";
-
+    public static void setHost(String hostname) {
+        SERVER = "http://" + hostname + ":8080/";
+    }
     public void getQuotesTheHardWay() throws IOException {
         var url = new URL("http://localhost:8080/api/quotes");
         var is = url.openConnection().getInputStream();
