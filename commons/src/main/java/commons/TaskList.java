@@ -17,13 +17,13 @@ public class TaskList {
     private Long id;
     private String name;
     @OneToMany
-    private List<Task> taskList;
+    private List<Task> task;
 
 
-    public TaskList(Long id, String name, List<Task> taskList) {
+    public TaskList(Long id, String name, List<Task> task) {
         this.id = id;
         this.name = name;
-        this.taskList = taskList;
+        this.task = task;
     }
 
     public TaskList() {
@@ -38,11 +38,11 @@ public class TaskList {
     }
 
     public List<Task> getTaskList() {
-        return taskList;
+        return task;
     }
 
-    public void setTaskList(List<Task> taskList) {
-        this.taskList = taskList;
+    public void setTaskList(List<Task> task) {
+        this.task = task;
     }
 
     public void setId(Long id) {
