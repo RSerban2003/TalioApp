@@ -20,15 +20,19 @@ import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.InvocationTargetException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.util.List;
 
+import jakarta.ws.rs.ProcessingException;
 import org.glassfish.jersey.client.ClientConfig;
 
 import commons.Quote;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
+import org.glassfish.jersey.client.ClientProperties;
 
 public class ServerUtils {
     private static String SERVER = "http://localhost:8080/";
@@ -60,5 +64,22 @@ public class ServerUtils {
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(quote, APPLICATION_JSON), Quote.class);
+    }
+    public boolean ping() {
+        ClientConfig config = new ClientConfig();
+        config.property(ClientProperties.CONNECT_TIMEOUT, 1000);
+        config.property(ClientProperties.READ_TIMEOUT, 1000);
+        try {
+            String pong = ClientBuilder.newClient(config)
+                    .target(SERVER).path("api/quotes/ping")
+                    .request(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+                    .get(new GenericType<String>() {});
+            return pong.equals("pong");
+        } catch (ProcessingException pe) {
+            return false;
+        }
+
+
     }
 }
