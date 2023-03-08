@@ -21,7 +21,7 @@ public class Board {
     private String title;
 
     @Column(name = "taskList")
-    @OneToMany
+    @OneToMany(mappedBy = "title", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TaskList> taskList;
 
 
