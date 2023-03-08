@@ -29,7 +29,14 @@ public class BoardController {
         return ResponseEntity.ok(dto);
     }
 
-
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteBoardById(@PathVariable Long id){
+        if(id < 0 || !boardRepository.existsById(id)){
+            return ResponseEntity.badRequest().build();
+        }
+        boardRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
 
 
 }
