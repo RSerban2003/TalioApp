@@ -2,7 +2,6 @@ package server.api;
 
 
 import commons.Board;
-import commons.Task;
 import commons.TaskList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
