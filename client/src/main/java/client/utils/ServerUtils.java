@@ -72,7 +72,7 @@ public class ServerUtils {
         config.property(ClientProperties.READ_TIMEOUT, 1000);
         try {
             String pong = ClientBuilder.newClient(config)
-                    .target(SERVER).path("api/quotes/ping")
+                    .target(SERVER).path("api/ping")
                     .request(APPLICATION_JSON)
                     .accept(APPLICATION_JSON)
                     .get(new GenericType<String>() {});
