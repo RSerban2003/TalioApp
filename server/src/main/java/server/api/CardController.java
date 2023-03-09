@@ -1,12 +1,9 @@
 package server.api;
 
-import commons.Board;
 import commons.Task;
 import commons.TaskList;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import server.database.BoardRepository;
 import server.database.TaskListRepository;
 import server.database.TaskRepository;
 
