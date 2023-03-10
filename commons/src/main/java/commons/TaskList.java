@@ -75,4 +75,9 @@ public class TaskList {
     public void add(Task taskItem) {
         task.add(taskItem);
     }
+
+    public void remove(Task taskItem) {
+        if (!task.contains(taskItem)) return;
+        this.task.remove(taskItem);
+    }
 }
