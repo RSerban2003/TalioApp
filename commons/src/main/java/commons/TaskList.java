@@ -20,7 +20,8 @@ public class TaskList {
     private String name;
 
     @Column(name = "task")
-    @OneToMany(mappedBy = "id", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "task")
     private List<Task> task;
 
 
