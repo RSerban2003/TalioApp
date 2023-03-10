@@ -21,9 +21,9 @@ public class Board {
     @Column(name = "title")
     private String title;
 
-    @Column(name = "taskList")
+    @Column(name = "listOfTaskList")
     @OneToMany(mappedBy = "id", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<TaskList> taskList;
+    private List<TaskList> listOfTaskList;
 
 
     public Board(Long id, String title) {
@@ -44,8 +44,8 @@ public class Board {
     }
 
 
-    public List<TaskList> getTasklist() {
-        return taskList;
+    public List<TaskList> getListOfTaskList() {
+        return listOfTaskList;
     }
 
     public void add(TaskList list){
