@@ -30,4 +30,9 @@ public class CardController {
 
         return ResponseEntity.ok(task);
     }
+
+    @GetMapping("/")
+    public ResponseEntity<Object> showAll() {
+        return ResponseEntity.ok(taskRepository.findAll());
+    }
 }
