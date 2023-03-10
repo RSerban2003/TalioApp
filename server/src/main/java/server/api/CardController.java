@@ -14,7 +14,7 @@ import server.database.TaskRepository;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/boards/list/task")
+@RequestMapping("/api/{boards}/{list}")
 public class CardController {
 
     private TaskListRepository taskListRepository;
@@ -39,19 +39,21 @@ public class CardController {
         return ResponseEntity.ok(task);
     }
 
-    @GetMapping("/get-all-cards")
-    public ResponseEntity<List<Task>> get() {
-        return ResponseEntity.ok(taskRepository.findAll());
-    }
-
     @DeleteMapping("/delete-card")
-    public ResponseEntity<Object> deleteTask(@RequestBody Task task) {
-        if (task == null || isNullOrEmpty(task.getDescription()) || isNullOrEmpty(task.getName()) || task.getId() == null) return ResponseEntity.badRequest().build();
-        if (!taskRepository.exists(Example.of(task))) return ResponseEntity.badRequest().build();
-        //return ResponseEntity.ok(taskRepository.getById(task.getId()));
-        if (!task.equals(taskRepository.findAll(Example.of(task)).get(0))) return ResponseEntity.badRequest().build();
-        taskRepository.delete(task);
-        // TODO: delete the entry in the taskList
+    public ResponseEntity<Object> deleteTask(@RequestBody Task task, @PathVariable("list") long listId) {
+        // check if the task is valid
+        if (task == null || isNullOrEmpty(task.getDescription()) || isNullOrEmpty(task.getName()) || task.getId() == null) return ResponseEntity.ok(1);//ResponseEntity.badRequest().build();
+        // check if the task exists
+        if (!taskRepository.exists(Example.of(task))) return ResponseEntity.ok(2);//ResponseEntity.badRequest().build();
+        // check if the tasks are equal
+        if (!task.equals(taskRepository.findAll(Example.of(task)).get(0))) return ResponseEntity.ok(3);//ResponseEntity.badRequest().build();
+
+        // check if the listId is valid
+        if (!taskListRepository.existsById(listId)) return ResponseEntity.ok(4); //ResponseEntity.badRequest().build();
+        TaskList taskList = taskListRepository.getById(listId);
+        taskList.remove(task);
+        taskListRepository.save(taskList);
+
         return ResponseEntity.ok().build();
     }
 
@@ -63,5 +65,4 @@ public class CardController {
     private static boolean isNullOrEmpty(String s) {
         return s == null || s.isEmpty();
     }
-
 }
