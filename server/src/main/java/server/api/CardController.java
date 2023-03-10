@@ -30,4 +30,10 @@ public class CardController {
 
         return ResponseEntity.ok(task);
     }
+
+    @PostMapping("/edit-card")
+    public ResponseEntity<Object> edit() {
+        return ResponseEntity.ok().build();
+    }
+
 }
