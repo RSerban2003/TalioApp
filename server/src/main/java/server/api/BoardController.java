@@ -38,5 +38,18 @@ public class BoardController {
         return ResponseEntity.noContent().build();
     }
 
+    @PostMapping("/")
+    public ResponseEntity<Board> add(@RequestBody Board board){
+        if(board === null || isNullOrEmpty(board.getTitle()) || board.getTasklist() == null){
+            return ResponseEntity.badRequest().build();
+        }
+
+        Board saved = boardRepository.save(board);
+        return ResponseEntity.ok(saved);
+    }
+
+    private static boolean isNullOrEmpty(String s) {
+        return s == null || s.isEmpty();
+    }
 
 }
