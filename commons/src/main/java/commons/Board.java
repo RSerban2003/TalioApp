@@ -20,15 +20,15 @@ public class Board {
     @Column(name = "title")
     private String title;
 
-    @Column(name = "taskList")
+    @Column(name = "listOfTaskList")
     @OneToMany(mappedBy = "id", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<TaskList> taskList;
+    private List<TaskList> listOfTaskList;
 
 
-    public Board(Long id, String title, List<TaskList> taskList) {
+    public Board(Long id, String title, List<TaskList> listOfTaskList) {
         this.id = id;
         this.title = title;
-        this.taskList = taskList;
+        this.listOfTaskList = listOfTaskList;
     }
 
     public Board() {
@@ -43,12 +43,12 @@ public class Board {
     }
 
 
-    public List<TaskList> getTasklist() {
-        return taskList;
+    public List<TaskList> getListOfTaskList() {
+        return listOfTaskList;
     }
 
-    public void setTaskList(List<TaskList> taskList) {
-        this.taskList = taskList;
+    public void setListOfTaskListt(List<TaskList> listOfTaskList) {
+        this.listOfTaskList = listOfTaskList;
     }
 
     
