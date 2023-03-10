@@ -40,7 +40,7 @@ public class BoardController {
 
     @PostMapping("/")
     public ResponseEntity<Board> add(@RequestBody Board board){
-        if(board === null || isNullOrEmpty(board.getTitle()) || board.getTasklist() == null){
+        if(board == null || isNullOrEmpty(board.getTitle()) || board.getTasklist() == null){
             return ResponseEntity.badRequest().build();
         }
 
