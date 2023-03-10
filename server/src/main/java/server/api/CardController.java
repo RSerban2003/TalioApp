@@ -39,14 +39,17 @@ public class CardController {
         return ResponseEntity.ok(task);
     }
 
-    @DeleteMapping("/delete-card")
-    public ResponseEntity<Object> deleteTask(@RequestBody Task task, @PathVariable("list") long listId) {
-        // check if the task is valid
-        if (task == null || isNullOrEmpty(task.getDescription()) || isNullOrEmpty(task.getName()) || task.getId() == null) return ResponseEntity.badRequest().build();
+    @GetMapping("/card")
+    public ResponseEntity<Object> get() {
+        return ResponseEntity.ok(taskRepository.findAll());
+    }
+
+    @DeleteMapping("/{cardId}")
+    public ResponseEntity<Object> deleteTask(@PathVariable("cardId") long cardId, @PathVariable("list") long listId) {
+
         // check if the task exists
-        if (!taskRepository.exists(Example.of(task))) return ResponseEntity.badRequest().build();
-        // check if the tasks are equal
-        if (!task.equals(taskRepository.findAll(Example.of(task)).get(0))) return ResponseEntity.badRequest().build();
+        if (!taskRepository.existsById(cardId)) return ResponseEntity.badRequest().build();
+        Task task = taskRepository.getById(cardId);
 
         // check if the listId is valid
         if (!taskListRepository.existsById(listId)) return ResponseEntity.badRequest().build();
