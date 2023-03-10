@@ -5,6 +5,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
@@ -20,15 +21,15 @@ public class Board {
     @Column(name = "title")
     private String title;
 
-    @Column(name = "taskList")
+    @Column(name = "listOfTaskList")
     @OneToMany(mappedBy = "id", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<TaskList> taskList;
+    private List<TaskList> listOfTaskList;
 
 
-    public Board(Long id, String title, List<TaskList> taskList) {
+    public Board(Long id, String title) {
         this.id = id;
         this.title = title;
-        this.taskList = taskList;
+        this.listOfTaskList = new ArrayList<>();
     }
 
     public Board() {
@@ -43,15 +44,16 @@ public class Board {
     }
 
 
-    public List<TaskList> getTasklist() {
-        return taskList;
+    public List<TaskList> getListOfTaskList() {
+        return listOfTaskList;
     }
 
-    public void setTaskList(List<TaskList> taskList) {
-        this.taskList = taskList;
+    public void add(TaskList list){
+        if(list == null) return;
+        listOfTaskList.add(list);
     }
 
-    
+
     public void setId(Long id) {
         this.id = id;
     }
