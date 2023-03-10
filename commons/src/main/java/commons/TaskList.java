@@ -72,4 +72,7 @@ public class TaskList {
         return ToStringBuilder.reflectionToString(this, MULTI_LINE_STYLE);
     }
 
+    public void add(Task taskItem) {
+        task.add(taskItem);
+    }
 }
