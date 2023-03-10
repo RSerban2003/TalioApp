@@ -42,15 +42,17 @@ public class CardController {
     @DeleteMapping("/delete-card")
     public ResponseEntity<Object> deleteTask(@RequestBody Task task, @PathVariable("list") long listId) {
         // check if the task is valid
-        if (task == null || isNullOrEmpty(task.getDescription()) || isNullOrEmpty(task.getName()) || task.getId() == null) return ResponseEntity.ok(1);//ResponseEntity.badRequest().build();
+        if (task == null || isNullOrEmpty(task.getDescription()) || isNullOrEmpty(task.getName()) || task.getId() == null) return ResponseEntity.badRequest().build();
         // check if the task exists
-        if (!taskRepository.exists(Example.of(task))) return ResponseEntity.ok(2);//ResponseEntity.badRequest().build();
+        if (!taskRepository.exists(Example.of(task))) return ResponseEntity.badRequest().build();
         // check if the tasks are equal
-        if (!task.equals(taskRepository.findAll(Example.of(task)).get(0))) return ResponseEntity.ok(3);//ResponseEntity.badRequest().build();
+        if (!task.equals(taskRepository.findAll(Example.of(task)).get(0))) return ResponseEntity.badRequest().build();
 
         // check if the listId is valid
-        if (!taskListRepository.existsById(listId)) return ResponseEntity.ok(4); //ResponseEntity.badRequest().build();
+        if (!taskListRepository.existsById(listId)) return ResponseEntity.badRequest().build();
         TaskList taskList = taskListRepository.getById(listId);
+
+        // update the taskList and save
         taskList.remove(task);
         taskListRepository.save(taskList);
 
