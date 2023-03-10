@@ -20,7 +20,7 @@ public class Board {
     @Column(name = "title")
     private String title;
 
-    @Column(name = "taskList")
+    @Column(name = "listOfTaskList")
     @OneToMany(mappedBy = "id", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TaskList> listOfTaskList;
 
