@@ -29,7 +29,7 @@ public class Board {
     public Board(Long id, String title) {
         this.id = id;
         this.title = title;
-        this.taskList = new ArrayList<>();
+        this.listOfTaskList = new ArrayList<>();
     }
 
     public Board() {
@@ -50,7 +50,7 @@ public class Board {
 
     public void add(TaskList list){
         if(list == null) return;
-        taskList.add(list);
+        listOfTaskList.add(list);
     }
 
 
