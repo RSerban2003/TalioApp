@@ -25,6 +25,11 @@ public class CardController {
         this.taskRepository = taskRepository;
     }
 
+    @GetMapping("/")
+    public ResponseEntity<Object> showAll() {
+        return ResponseEntity.ok(taskRepository.findAll());
+    }
+
     @PostMapping(path = "/add-card")
     public ResponseEntity<Task> add(@RequestBody Task task){        // , @RequestBody TaskList taskList
 
