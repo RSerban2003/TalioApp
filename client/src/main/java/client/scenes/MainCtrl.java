@@ -31,9 +31,11 @@ public class MainCtrl {
     private Scene add;
     private ConnectCtrl connectCtrl;
     private Scene connect;
+    private BoardCtrl boardCtrl;
+    private Scene board;
 
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
-            Pair<AddQuoteCtrl, Parent> add, Pair<ConnectCtrl, Parent> connect) {
+            Pair<AddQuoteCtrl, Parent> add, Pair<ConnectCtrl, Parent> connect, Pair<BoardCtrl, Parent> board) {
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
@@ -43,6 +45,9 @@ public class MainCtrl {
 
         this.connectCtrl = connect.getKey();
         this.connect = new Scene(connect.getValue());
+
+        this.boardCtrl = board.getKey();
+        this.board = new Scene(board.getValue(), 1900, 1000);
 
         showConnect();
         primaryStage.show();
@@ -62,5 +67,9 @@ public class MainCtrl {
     public void showConnect() {
         primaryStage.setTitle("Connect: select a hostname");
         primaryStage.setScene(connect);
+    }
+    public void showBoard(){
+        primaryStage.setTitle("Taskboard");
+        primaryStage.setScene(board);
     }
 }
