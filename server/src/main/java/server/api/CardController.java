@@ -34,4 +34,10 @@ public class CardController {
         taskListRepository.save(taskList);
         return ResponseEntity.ok(task);
     }
+
+    @GetMapping("/")
+    public ResponseEntity<Object> showAll() {
+        return ResponseEntity.ok(taskRepository.findAll());
+    }
+
 }
