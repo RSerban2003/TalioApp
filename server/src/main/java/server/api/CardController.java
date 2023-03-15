@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import server.database.TaskListRepository;
 import server.database.TaskRepository;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/")
 public class CardController {
@@ -19,15 +21,16 @@ public class CardController {
         this.taskRepository = taskRepository;
     }
 
-    @PostMapping(path = "/boards/list/add-card")
-    public ResponseEntity<Task> add(@RequestBody Task task, @RequestBody TaskList taskList){
+    @PostMapping(path = "/boards/{board-id}/{list-id}/add-card")
+    public ResponseEntity<Task> add(@RequestBody Task task, @PathVariable("list-id") long listId,
+                                    @PathVariable("board-id") long boardId){
 
         if (task.getName() == null || task.getDescription() == null) {
             return ResponseEntity.badRequest().build();
         }
 
+        TaskList taskList = taskListRepository.findById(listId).orElseThrow();
         taskList.add(task);
-
         return ResponseEntity.ok(task);
     }
 }
