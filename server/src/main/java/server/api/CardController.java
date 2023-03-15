@@ -23,13 +23,13 @@ public class CardController {
 
     @PostMapping(path = "/boards/{board-id}/{list-id}/add-card")
     public ResponseEntity<Task> add(@RequestBody Task task, @PathVariable("list-id") long listId,
-                                    @PathVariable("board-id") long boardId){
+                                    @PathVariable("board-id") long boardId) throws RuntimeException {
 
         if (task.getName() == null || task.getDescription() == null) {
             return ResponseEntity.badRequest().build();
         }
 
-        TaskList taskList = taskListRepository.findById(listId).orElseThrow();
+        TaskList taskList = taskListRepository.findById(listId).orElseThrow(() -> new RuntimeException("Task list not found"));
         taskList.add(task);
         return ResponseEntity.ok(task);
     }
