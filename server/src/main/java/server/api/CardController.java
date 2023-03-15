@@ -32,7 +32,12 @@ public class CardController {
     }
 
     @PostMapping("/edit-card")
-    public ResponseEntity<Object> edit() {
+    public ResponseEntity<Object> edit(@RequestBody Task task, @PathVariable("list") long listId) {
+        var t = taskListRepository.findById(listId);
+        if (!t.isPresent()) return ResponseEntity.badRequest().build();
+        TaskList taskList = t.get();
+
+
         return ResponseEntity.ok().build();
     }
 
