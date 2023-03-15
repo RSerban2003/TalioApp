@@ -31,6 +31,7 @@ public class CardController {
 
         TaskList taskList = taskListRepository.findById(listId).orElseThrow(() -> new RuntimeException("Task list not found"));
         taskList.add(task);
+        taskListRepository.save(taskList);
         return ResponseEntity.ok(task);
     }
 }
