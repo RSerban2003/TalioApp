@@ -9,11 +9,11 @@ import java.util.List;
 public class BoardWithTaskListDto {
 
     private Board board;
-    private List<TaskList> taskList;
+    private List<TaskList> listOfTaskList;
 
-    public BoardWithTaskListDto(Board board, List<TaskList> taskList) {
+    public BoardWithTaskListDto(Board board, List<TaskList> listOfTaskList) {
         this.board = board;
-        this.taskList = taskList;
+        this.listOfTaskList = listOfTaskList;
     }
 
     public Board getBoard() {
@@ -24,12 +24,12 @@ public class BoardWithTaskListDto {
         this.board = board;
     }
 
-    public List<TaskList> getTaskList() {
-        return taskList;
+    public List<TaskList> getListOfTaskList() {
+        return listOfTaskList;
     }
 
-    public void setTaskList(List<TaskList> taskList) {
-        this.taskList = taskList;
+    public void setListOfTaskList(List<TaskList> listOfTaskList) {
+        this.listOfTaskList = listOfTaskList;
     }
 }
 
