@@ -40,5 +40,4 @@ public class CardController {
         taskListRepository.save(taskList);
         return ResponseEntity.ok(task);
     }
-
 }
