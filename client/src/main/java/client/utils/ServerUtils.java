@@ -25,7 +25,10 @@ import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.util.List;
 
+import commons.Board;
 import jakarta.ws.rs.ProcessingException;
+import jakarta.ws.rs.client.Client;
+import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
 
 import commons.Quote;
@@ -80,5 +83,13 @@ public class ServerUtils {
         } catch (ProcessingException pe) {
             return false;
         }
+    }
+
+    public boolean boardExists(String boardId) {
+        Client client = ClientBuilder.newClient(new ClientConfig());
+        Response response = client.target(SERVER).path("api/boards/" + boardId).request().get();
+        int status = response.getStatus();
+        response.close();
+        return status == 200;
     }
 }

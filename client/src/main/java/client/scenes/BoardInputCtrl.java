@@ -26,5 +26,13 @@ public class BoardInputCtrl {
             alert.showAndWait();
             return;
         }
+        if (!server.boardExists(boardId)) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setContentText("The board with ID " + boardId + " does not exist");
+            alert.showAndWait();
+            return;
+        }
+        // board exists, do something here
     }
+
 }
