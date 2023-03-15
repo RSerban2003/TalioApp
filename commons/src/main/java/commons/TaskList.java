@@ -5,6 +5,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
@@ -20,14 +21,15 @@ public class TaskList {
     private String name;
 
     @Column(name = "task")
-    @OneToMany(mappedBy = "id", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "task")
     private List<Task> task;
 
 
-    public TaskList(Long id, String name, List<Task> task) {
+    public TaskList(Long id, String name) {
         this.id = id;
         this.name = name;
-        this.task = task;
+        this.task = new ArrayList<>();
     }
 
     public TaskList() {
@@ -74,5 +76,10 @@ public class TaskList {
 
     public void add(Task taskItem) {
         task.add(taskItem);
+    }
+
+    public void remove(Task taskItem) {
+        if (!task.contains(taskItem)) return;
+        this.task.remove(taskItem);
     }
 }

@@ -23,8 +23,8 @@ public class BoardController {
         if (board == null){
             return ResponseEntity.notFound().build();
         }
-        List<TaskList> taskList = board.getTasklist();
-        BoardWithTaskListDto dto = new BoardWithTaskListDto(board, taskList);
+        List<TaskList> listOfTaskList = board.getListOfTaskList();
+        BoardWithTaskListDto dto = new BoardWithTaskListDto(board, listOfTaskList);
         return ResponseEntity.ok(dto);
     }
 
@@ -38,14 +38,17 @@ public class BoardController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<Board> add(@RequestBody Board board){
-        if(board == null || isNullOrEmpty(board.getTitle()) || board.getTasklist() == null){
+    public ResponseEntity<Board> add(@RequestParam String name){
+        if(name == null || name.isBlank()){
             return ResponseEntity.badRequest().build();
         }
 
+        Board board = new Board();
+        board.setTitle(name);
         Board saved = boardRepository.save(board);
         return ResponseEntity.ok(saved);
     }
+
 
     private static boolean isNullOrEmpty(String s) {
         return s == null || s.isEmpty();
