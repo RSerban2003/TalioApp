@@ -92,4 +92,8 @@ public class ServerUtils {
         response.close();
         return status == 200;
     }
+
+    public String getServerUrl() {
+        return SERVER;
+    }
 }

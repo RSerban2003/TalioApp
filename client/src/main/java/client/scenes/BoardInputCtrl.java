@@ -2,6 +2,10 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import commons.Board;
+import jakarta.ws.rs.client.Client;
+import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.core.Response;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
@@ -9,6 +13,7 @@ import javafx.scene.control.TextField;
 public class BoardInputCtrl {
     @FXML
     private TextField boardIdTextField;
+
     private ServerUtils server;
     private MainCtrl mainCtrl;
 
@@ -26,13 +31,20 @@ public class BoardInputCtrl {
             alert.showAndWait();
             return;
         }
-        if (!server.boardExists(boardId)) {
+
+        Client client = ClientBuilder.newClient();
+        Response response = client.target(server.getServerUrl()).path("api/boards/" + boardId).request().get();
+
+        if (response.getStatus() == 404) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setContentText("The board with ID " + boardId + " does not exist");
+            alert.setContentText("Board with ID " + boardId + " does not exist");
             alert.showAndWait();
             return;
         }
-        // board exists, do something here
+
+        Board board = response.readEntity(Board.class);
+        // TODO: do something with the retrieved board
     }
+
 
 }
