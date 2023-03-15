@@ -10,7 +10,7 @@ import server.database.TaskRepository;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/boards/{board}/{list}")
 public class CardController {
 
     private TaskListRepository taskListRepository;
@@ -21,9 +21,9 @@ public class CardController {
         this.taskRepository = taskRepository;
     }
 
-    @PostMapping(path = "/boards/{board-id}/{list-id}/add-card")
-    public ResponseEntity<Task> add(@RequestBody Task task, @PathVariable("list-id") long listId,
-                                    @PathVariable("board-id") long boardId) throws RuntimeException {
+    @PostMapping(path = "/add-card")
+    public ResponseEntity<Task> add(@RequestBody Task task, @PathVariable("list") long listId,
+                                    @PathVariable("board") long boardId) throws RuntimeException {
 
         if (task.getName() == null || task.getDescription() == null) {
             return ResponseEntity.badRequest().build();
