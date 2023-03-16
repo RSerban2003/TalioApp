@@ -10,7 +10,7 @@ import javafx.scene.layout.TilePane;
 public class BoardComponent extends AnchorPane {
     public BoardComponent(Board board) {
         super();
-        Node[] taskLists = board.getTasklist().stream().map(TaskListComponent::new).toArray(Node[]::new);
+        Node[] taskLists = board.getListOfTaskList().stream().map(TaskListComponent::new).toArray(Node[]::new);
         HBox taskListContainer = new HBox(taskLists);
         taskListContainer.setSpacing(45.0);
         AnchorPane.setTopAnchor(taskListContainer, 150.0);
