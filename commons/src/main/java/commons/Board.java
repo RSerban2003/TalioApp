@@ -53,6 +53,10 @@ public class Board {
         listOfTaskList.add(list);
     }
 
+    public void remove(TaskList taskList) {
+        if (!listOfTaskList.contains(taskList)) return;
+        this.listOfTaskList.remove(taskList);
+    }
 
     public void setId(Long id) {
         this.id = id;
