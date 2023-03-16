@@ -77,11 +77,8 @@ public class TaskList {
         task.add(taskItem);
     }
 
-    public void remove(Task task) {
-        List<Task> result = new ArrayList<Task>();
-        for (Task t : this.task) {
-            if (!t.equals(task)) result.add(task);
-        }
-        this.task = result;
+    public void remove(Task taskItem) {
+        if (!task.contains(taskItem)) return;
+        this.task.remove(taskItem);
     }
 }
