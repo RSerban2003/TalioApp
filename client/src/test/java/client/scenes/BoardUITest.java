@@ -35,16 +35,14 @@ public class BoardUITest extends Application {
         primaryStage.setScene(boardscene);
         primaryStage.show();
         Board testBoard = new Board();
-        TaskList a = new TaskList(1L, "a", new ArrayList<>());
-        TaskList b = new TaskList(2L, "b", new ArrayList<>());
+        TaskList a = new TaskList(1L, "a");
+        TaskList b = new TaskList(2L, "b");
         a.add(new Task(1L, "1", ""));
         a.add(new Task(2L, "2", ""));
         b.add(new Task(3L, "3", ""));
         b.add(new Task(4L, "4", ""));
-        List<TaskList> taskLists = new ArrayList<>();
-        taskLists.add(a);
-        taskLists.add(b);
-        testBoard.setTaskList(taskLists);
+        testBoard.add(a);
+        testBoard.add(b);
         boardCtrl.updateBoard(testBoard);
     }
 }
