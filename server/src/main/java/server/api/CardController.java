@@ -48,4 +48,27 @@ public class CardController {
 
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/card")
+    public ResponseEntity<Object> get() {
+        return ResponseEntity.ok(taskRepository.findAll());
+    }
+
+    @DeleteMapping("/{cardId}")
+    public ResponseEntity<Object> deleteTask(@PathVariable("cardId") long cardId, @PathVariable("list") long listId) {
+
+        // check if the task exists
+        if (!taskRepository.existsById(cardId)) return ResponseEntity.badRequest().build();
+        Task task = taskRepository.getById(cardId);
+
+        // check if the listId is valid
+        if (!taskListRepository.existsById(listId)) return ResponseEntity.badRequest().build();
+        TaskList taskList = taskListRepository.getById(listId);
+
+        // update the taskList and save
+        taskList.remove(task);
+        taskListRepository.save(taskList);
+
+        return ResponseEntity.ok().build();
+    }
 }
