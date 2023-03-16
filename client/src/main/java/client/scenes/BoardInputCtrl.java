@@ -19,11 +19,13 @@ public class BoardInputCtrl {
 
     private ServerUtils server;
     private MainCtrl mainCtrl;
+    private BoardCtrl boardCtrl;
 
     @Inject
-    public BoardInputCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public BoardInputCtrl(ServerUtils server, MainCtrl mainCtrl, BoardCtrl boardCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
+        this.boardCtrl = boardCtrl;
     }
 
     /**
@@ -50,7 +52,7 @@ public class BoardInputCtrl {
         }
 
         Board board = response.readEntity(Board.class);
-        // TODO: do something with the retrieved board
+        boardCtrl.updateBoard(board);
     }
 
 
