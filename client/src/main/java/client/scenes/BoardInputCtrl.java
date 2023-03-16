@@ -3,6 +3,7 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Board;
+import jakarta.ws.rs.ProcessingException;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.core.Response;
@@ -40,19 +41,29 @@ public class BoardInputCtrl {
             alert.showAndWait();
             return;
         }
-        // If there is an input make a get request with the board id to retrieve it
-        Client client = ClientBuilder.newClient();
-        Response response = client.target(server.getServerUrl()).path("api/boards/" + boardId).request().get();
-        // if there is no board with such id, put up a warning and wait for another input
-        if (response.getStatus() == 404) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setContentText("Board with ID " + boardId + " does not exist");
+        Response response;
+        try {
+            // If there is an input make a get request with the board id to retrieve it
+            Client client = ClientBuilder.newClient();
+            response = client.target(server.getServerUrl()).path("api/boards/" + boardId).request().get();
+            // if there is no board with such id, put up a warning and wait for another input
+            if (response.getStatus() == 404) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setContentText("Board with ID " + boardId + " does not exist");
+                alert.showAndWait();
+                return;
+            }
+            else if (response.getStatus() != 200) {
+            throw new RuntimeException("Failed to retrieve board: HTTP error code " + response.getStatus());
+            }
+            Board board = response.readEntity(Board.class);
+            boardCtrl.updateBoard(board);
+            mainCtrl.showBoard();
+            } catch (ProcessingException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("Failed to retrieve board: " + e.getMessage());
             alert.showAndWait();
-            return;
         }
-
-        Board board = response.readEntity(Board.class);
-        boardCtrl.updateBoard(board);
     }
 
 
