@@ -5,6 +5,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
@@ -25,10 +26,10 @@ public class Board {
     private List<TaskList> listOfTaskList;
 
 
-    public Board(Long id, String title, List<TaskList> listOfTaskList) {
+    public Board(Long id, String title) {
         this.id = id;
         this.title = title;
-        this.listOfTaskList = listOfTaskList;
+        this.listOfTaskList = new ArrayList<>();
     }
 
     public Board() {
@@ -47,11 +48,12 @@ public class Board {
         return listOfTaskList;
     }
 
-    public void setListOfTaskListt(List<TaskList> listOfTaskList) {
-        this.listOfTaskList = listOfTaskList;
+    public void add(TaskList list){
+        if(list == null) return;
+        listOfTaskList.add(list);
     }
 
-    
+
     public void setId(Long id) {
         this.id = id;
     }
