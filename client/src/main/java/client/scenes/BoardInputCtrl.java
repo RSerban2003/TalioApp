@@ -26,7 +26,11 @@ public class BoardInputCtrl {
         this.server = server;
     }
 
+    /**
+     * Takes input and makes a get request to retrieve the board with id entered
+     */
     public void retrieveBoard() {
+        // check if the input field is either empty or null to display a warning
         String boardId = boardIdTextField.getText();
         if (boardId == null || boardId.isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -34,10 +38,10 @@ public class BoardInputCtrl {
             alert.showAndWait();
             return;
         }
-
+        // If there is an input make a get request with the board id to retrieve it
         Client client = ClientBuilder.newClient();
         Response response = client.target(server.getServerUrl()).path("api/boards/" + boardId).request().get();
-
+        // if there is no board with such id, put up a warning and wait for another input
         if (response.getStatus() == 404) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setContentText("Board with ID " + boardId + " does not exist");

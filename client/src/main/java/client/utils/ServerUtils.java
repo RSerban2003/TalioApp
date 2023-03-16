@@ -85,6 +85,11 @@ public class ServerUtils {
         }
     }
 
+    /**
+     * Checks if a board with a given id is in the database
+     * @param boardId
+     * @return a boolean if the status of the get request is 200
+     */
     public boolean boardExists(String boardId) {
         Client client = ClientBuilder.newClient(new ClientConfig());
         Response response = client.target(SERVER).path("api/boards/" + boardId).request().get();
@@ -93,6 +98,10 @@ public class ServerUtils {
         return status == 200;
     }
 
+    /**
+     * getter for the server URL
+     * @return server url
+     */
     public String getServerUrl() {
         return SERVER;
     }
