@@ -5,6 +5,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
@@ -74,5 +75,13 @@ public class TaskList {
 
     public void add(Task taskItem) {
         task.add(taskItem);
+    }
+
+    public void remove(Task task) {
+        List<Task> result = new ArrayList<Task>();
+        for (Task t : this.task) {
+            if (!t.equals(task)) result.add(task);
+        }
+        this.task = result;
     }
 }

@@ -37,6 +37,15 @@ public class CardController {
         if (!t.isPresent()) return ResponseEntity.badRequest().build();
         TaskList taskList = t.get();
 
+        for (Task tasky : taskList.getTaskList()) {
+            if (task.getId() == tasky.getId()) {
+                taskList.remove(tasky);
+                taskList.add(task);
+                break;
+            }
+        }
+
+        taskListRepository.save(taskList);
 
         return ResponseEntity.ok().build();
     }
