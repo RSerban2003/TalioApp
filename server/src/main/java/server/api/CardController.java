@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.*;
 import server.database.TaskListRepository;
 import server.database.TaskRepository;
 
-import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/{boards}/{list}")
+@RequestMapping("/boards/{board}/{list}")
 public class CardController {
 
     private TaskListRepository taskListRepository;
@@ -30,17 +30,18 @@ public class CardController {
         return ResponseEntity.ok(taskRepository.findAll());
     }
 
+
     @PostMapping(path = "/add-card")
-    public ResponseEntity<Task> add(@RequestBody Task task){        // , @RequestBody TaskList taskList
+    public ResponseEntity<Task> add(@RequestBody Task task, @PathVariable("list") long listId,
+                                    @PathVariable("board") long boardId) throws RuntimeException {
 
         if (task.getName() == null || task.getDescription() == null) {
             return ResponseEntity.badRequest().build();
         }
 
-        //taskList.add(task);
-        taskRepository.save(task);
-        // TODO: tasklist adding
-
+        TaskList taskList = taskListRepository.findById(listId).orElseThrow(() -> new RuntimeException("Task list not found"));
+        taskList.add(task);
+        taskListRepository.save(taskList);
         return ResponseEntity.ok(task);
     }
 
