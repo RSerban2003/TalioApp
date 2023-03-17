@@ -33,6 +33,7 @@ public class Board {
     }
 
     public Board() {
+        this.listOfTaskList = new ArrayList<>();
     }
 
     public String getTitle() {
