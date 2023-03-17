@@ -2,16 +2,12 @@ package server.api;
 
 
 import commons.Board;
-import commons.Task;
 import commons.TaskList;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.database.BoardRepository;
 import server.database.TaskListRepository;
-import server.database.TaskRepository;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/boards/{board}")
