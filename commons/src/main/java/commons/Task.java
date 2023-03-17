@@ -22,9 +22,20 @@ public class Task {
     @Column(name = "description")
     private String description;
 
+    @Column(name = "index")
+    private int index;
+
     public Task(Long id, String name, String description) {
         this.id = id;
         this.name = name;
+        this.description = description;
+        this.index = -1;
+    }
+
+    public Task(Long id, String name, int index, String description) {
+        this.id = id;
+        this.name = name;
+        this.index = index;
         this.description = description;
     }
 
@@ -45,6 +56,14 @@ public class Task {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
     }
 
     public void setId(Long id) {
