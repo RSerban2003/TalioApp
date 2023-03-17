@@ -54,7 +54,7 @@ public class BoardInputCtrl {
                 return;
             }
             else if (response.getStatus() != 200) {
-            throw new RuntimeException("Failed to retrieve board: HTTP error code " + response.getStatus());
+                throw new RuntimeException("Failed to retrieve board: HTTP error code " + response.getStatus());
             }
             Board board = response.readEntity(Board.class);
             boardCtrl.updateBoard(board);
@@ -63,6 +63,7 @@ public class BoardInputCtrl {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("Failed to retrieve board: " + e.getMessage());
             alert.showAndWait();
+
         }
     }
 
