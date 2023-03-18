@@ -15,6 +15,7 @@
  */
 package client.scenes;
 
+import commons.Board;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -82,5 +83,8 @@ public class MainCtrl {
     public void showBoardinput() {
         primaryStage.setTitle("Board: select a board id");
         primaryStage.setScene(boardInput);
+    }
+    public void updateBoard(Board board) {
+        boardCtrl.updateBoard(board);
     }
 }
