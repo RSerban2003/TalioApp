@@ -3,6 +3,7 @@ package commons;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ public class Board {
 
     @Column(name = "TITLE")
     private String title;
-
+    @JsonManagedReference
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
     private List<TaskList> listOfTaskList;
 
