@@ -38,7 +38,6 @@ public class TaskListController {
         TaskList savedTaskList = taskListRepository.save(taskList);
         Board board = boardRepository.findById(boardId).orElseThrow(() -> new RuntimeException("Board not found"));
         board.add(savedTaskList);
-        boardRepository.save(board);
         return ResponseEntity.ok(savedTaskList);
     }
 }
