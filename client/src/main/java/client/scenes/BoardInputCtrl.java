@@ -56,9 +56,10 @@ public class BoardInputCtrl {
             else if (response.getStatus() != 200) {
                 throw new RuntimeException("Failed to retrieve board: HTTP error code " + response.getStatus());
             }
-            Board board = response.readEntity(Board.class);
-            boardCtrl.updateBoard(board);
+            Board board = ClientBuilder.newClient(new ClientConfig()).target(server.getServerUrl())
+                    .path("api/boards/" + boardId).request(APPLICATION_JSON).accept(APPLICATION_JSON).get(new GenericType<Board>() {});
             mainCtrl.showBoard();
+            boardCtrl.updateBoard(board);
             } catch (ProcessingException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("Failed to retrieve board: " + e.getMessage());
