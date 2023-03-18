@@ -1,6 +1,7 @@
 package commons;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -22,11 +23,10 @@ public class TaskList {
     @Column(name = "NAME")
     private String name;
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "taskList", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "taskList", cascade = CascadeType.ALL)
     private List<Task> task;
 
-    @JsonBackReference
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "board_id")
     private Board board;

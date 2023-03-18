@@ -21,7 +21,7 @@ public class Board {
 
     @Column(name = "TITLE")
     private String title;
-    @JsonManagedReference
+
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
     private List<TaskList> listOfTaskList;
 
