@@ -11,18 +11,17 @@ import java.util.List;
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
 @Entity
-@Table(name = "Board")
+@Table(name = "BOARD")
 public class Board {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "title")
+    @Column(name = "TITLE")
     private String title;
 
-    @Column(name = "listOfTaskList")
-    @OneToMany(mappedBy = "id", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
     private List<TaskList> listOfTaskList;
 
 
@@ -33,6 +32,7 @@ public class Board {
     }
 
     public Board() {
+        this.listOfTaskList = new ArrayList<>();
     }
 
     public String getTitle() {
