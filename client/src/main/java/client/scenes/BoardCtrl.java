@@ -24,4 +24,7 @@ public class BoardCtrl {
         }
         boardAnchor.getChildren().add(new BoardComponent(board));
     }
+    public void disconnect(){
+        mainCtrl.showConnect();
+    }
 }
