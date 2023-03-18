@@ -1,5 +1,7 @@
 package commons;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -22,6 +24,7 @@ public class Task {
     @Column(name = "DESCRIPTION")
     private String description;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "tasklist_id")
     private TaskList taskList;
