@@ -1,5 +1,8 @@
 package commons;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -11,19 +14,22 @@ import java.util.List;
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
 @Entity
-@Table(name = "TaskList")
+@Table(name = "TASKLIST")
 public class TaskList {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "name")
+    @Column(name = "NAME")
     private String name;
 
-    @Column(name = "task")
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "task")
+    @OneToMany(mappedBy = "taskList", cascade = CascadeType.ALL)
     private List<Task> task;
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "board_id")
+    private Board board;
 
 
     public TaskList(Long id, String name) {
@@ -33,6 +39,7 @@ public class TaskList {
     }
 
     public TaskList() {
+        this.task = new ArrayList<>();
     }
 
     public String getName() {
@@ -57,6 +64,14 @@ public class TaskList {
 
     public Long getId() {
         return id;
+    }
+
+    public Board getBoard() {
+        return board;
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
     }
 
     @Override
