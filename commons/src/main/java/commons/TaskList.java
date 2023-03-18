@@ -33,6 +33,7 @@ public class TaskList {
     }
 
     public TaskList() {
+        this.task = new ArrayList<>();
     }
 
     public String getName() {
