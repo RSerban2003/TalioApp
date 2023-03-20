@@ -36,7 +36,7 @@ public class TaskListController {
         taskListRepository.save(taskList);
         return ResponseEntity.ok(taskList);
     }
-    @PostMapping(path = "/{list}/edit")
+    @PatchMapping(path = "/{list}/edit")
     public ResponseEntity<?> edit(@PathVariable("board") long boardId, @PathVariable("list") long listId, @RequestParam String name) throws RuntimeException {
         if(!boardRepository.existsById(boardId)) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Board not found");
 
