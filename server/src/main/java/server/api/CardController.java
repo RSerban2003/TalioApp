@@ -63,6 +63,7 @@ public class CardController {
 
         // update the taskList and save
         taskList.remove(task);
+        task.setTaskList(null);
         taskListRepository.save(taskList);
 
         return ResponseEntity.ok().build();
