@@ -35,12 +35,12 @@ public class CardController {
     public ResponseEntity<Task> add(@RequestBody String name, @RequestBody String description, @PathVariable("list") long listId,
                                     @PathVariable("board") long boardId) throws RuntimeException {
 
-        Task newtask = new Task(name, description);
+        Task task = new Task(name, description);
         TaskList taskList = taskListRepository.findById(listId).orElseThrow(() -> new RuntimeException("Task list not found"));
-        taskList.add(newtask);
-        newtask.setTaskList(taskList);
-        taskRepository.save(newtask);
-        return ResponseEntity.ok(newtask);
+        taskList.add(task);
+        task.setTaskList(taskList);
+        taskRepository.save(task);
+        return ResponseEntity.ok(task);
     }
 
     @GetMapping("/card")
