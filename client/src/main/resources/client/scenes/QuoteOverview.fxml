@@ -16,5 +16,6 @@
             <TableColumn fx:id="colQuote" prefWidth="344.0" text="Quote" />
         </columns>
       </TableView>
+       <Button mnemonicParsing="false" onAction="#disconnect" style="-fx-background-color: #615f5e;" text="Disconnect" />
    </children>
 </AnchorPane>
