@@ -47,29 +47,19 @@ public class CardController {
         taskListRepository.save(taskList);
         return ResponseEntity.ok(task);
     }
-    @PostMapping("/edit-card")
-    public ResponseEntity<Object> edit(@RequestBody Task task,@PathVariable("board") long boardId, @PathVariable("list") long listId) {
+    @PostMapping("{task}/edit-card")
+    public ResponseEntity<Object> edit(@RequestParam("name") String name, @RequestParam("description") String description,@PathVariable("task") long taskId ,@PathVariable("board") long boardId, @PathVariable("list") long listId) {
         // check if board, list and task exist
-        if (!boardRepository.findById(boardId).isPresent()) return  ResponseEntity.badRequest().build();
-        if (!taskListRepository.findById(listId).isPresent()) return ResponseEntity.badRequest().build();
+        //if (!boardRepository.existsById(boardId)) return  ResponseEntity.badRequest().build();
+        //if (!taskListRepository.existsById(listId)) return ResponseEntity.badRequest().build();
+        if (!taskRepository.existsById(taskId)) return ResponseEntity.ok(1);
+        Task t = taskRepository.getById(taskId);
+        if (name != null) t.setName(name);
+        if (description != null) t.setDescription(description);
 
+        taskRepository.save(t);
 
-
-        var t = taskListRepository.findById(listId);
-        if (!t.isPresent()) return ResponseEntity.badRequest().build();
-        TaskList taskList = t.get();
-
-        for (Task tasky : taskList.getTaskList()) {
-            if (task.getId() == tasky.getId()) {
-                taskList.remove(tasky);
-                taskList.add(task);
-                break;
-            }
-        }
-
-        taskListRepository.save(taskList);
-
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(t);
     }
 
     @GetMapping("/card")
