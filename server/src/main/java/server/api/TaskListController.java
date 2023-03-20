@@ -48,4 +48,25 @@ public class TaskListController {
         taskListRepository.save(taskList);
         return ResponseEntity.ok(taskList);
     }
+    @DeleteMapping("/{list}")
+    public ResponseEntity<?> delete(@PathVariable("board") long boardId, @PathVariable("list") long listId) {
+
+        // check if taskList exists
+        var tL = taskListRepository.findById(listId);
+        if (!tL.isPresent()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Tasklist not found");
+        TaskList taskList = tL.get();
+
+        // check if board exists
+        var b = boardRepository.findById(boardId);
+        if (!b.isPresent()) return  ResponseEntity.status(HttpStatus.NOT_FOUND).body("Board not found");
+
+        if(tL.get().getBoard().getId() != boardId) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Tasklist does not belong to board");
+        Board board = b.get();
+
+        board.remove(taskList);
+        taskList.setBoard(null);
+        boardRepository.save(board);
+
+        return ResponseEntity.ok(board);
+    }
 }
