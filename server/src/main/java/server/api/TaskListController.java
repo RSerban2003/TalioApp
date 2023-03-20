@@ -30,7 +30,7 @@ public class TaskListController {
 
     }
 
-    @PostMapping(path = "/add-taskList")
+    @PostMapping(path = "/tasklist")
     public ResponseEntity<TaskList> add(@RequestBody String name, @PathVariable("board") long boardId) throws RuntimeException {
         TaskList taskList = new TaskList();
         taskList.setName(name);

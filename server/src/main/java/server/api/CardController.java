@@ -31,7 +31,7 @@ public class CardController {
     }
 
 
-    @PostMapping(path = "/add-card")
+    @PostMapping(path = "/card")
     public ResponseEntity<Task> add(@RequestBody String name, @RequestBody String description, @PathVariable("list") long listId,
                                     @PathVariable("board") long boardId) throws RuntimeException {
 
