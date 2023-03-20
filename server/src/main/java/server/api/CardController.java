@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import server.database.BoardRepository;
 import server.database.TaskListRepository;
 import server.database.TaskRepository;
 
@@ -19,8 +20,10 @@ public class CardController {
 
     private TaskListRepository taskListRepository;
     private TaskRepository taskRepository;
+    private BoardRepository boardRepository;
 
-    public CardController(TaskListRepository taskListRepository, TaskRepository taskRepository){
+    public CardController(BoardRepository boardRepository, TaskListRepository taskListRepository, TaskRepository taskRepository){
+        this.boardRepository = boardRepository;
         this.taskListRepository = taskListRepository;
         this.taskRepository = taskRepository;
     }
@@ -45,7 +48,13 @@ public class CardController {
         return ResponseEntity.ok(task);
     }
     @PostMapping("/edit-card")
-    public ResponseEntity<Object> edit(@RequestBody Task task, @PathVariable("list") long listId) {
+    public ResponseEntity<Object> edit(@RequestBody Task task,@PathVariable("board") long boardId, @PathVariable("list") long listId) {
+        // check if board, list and task exist
+        if (!boardRepository.findById(boardId).isPresent()) return  ResponseEntity.badRequest().build();
+        if (!taskListRepository.findById(listId).isPresent()) return ResponseEntity.badRequest().build();
+
+
+
         var t = taskListRepository.findById(listId);
         if (!t.isPresent()) return ResponseEntity.badRequest().build();
         TaskList taskList = t.get();
