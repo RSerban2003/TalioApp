@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import server.database.TaskListRepository;
 import server.database.TaskRepository;
 
+import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -64,6 +66,11 @@ public class CardController {
 
         // update the taskList and save
         taskList.remove(task);
+        List<Task> tasks = taskList.getTaskList();
+        tasks.sort(Comparator.comparing(Task::getIndex));
+        for (int i = 0; i < tasks.size(); i++) {
+            tasks.get(i).setIndex(i);
+        }
         taskListRepository.save(taskList);
 
         return ResponseEntity.ok().build();
