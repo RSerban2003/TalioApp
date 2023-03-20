@@ -4,6 +4,7 @@ import commons.Task;
 import commons.TaskList;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -52,12 +53,13 @@ public class CardController {
     public ResponseEntity<Object> deleteTask(@PathVariable("cardId") long cardId, @PathVariable("list") long listId) {
 
         // check if the task exists
-        if (!taskRepository.existsById(cardId)) return ResponseEntity.badRequest().build();
-        Task task = taskRepository.getById(cardId);
+        if (!taskRepository.existsById(cardId)) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Task not found");
+        Task task = taskRepository.findById(cardId).get();
 
         // check if the listId is valid
-        if (!taskListRepository.existsById(listId)) return ResponseEntity.badRequest().build();
+        if (!taskListRepository.existsById(listId)) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Tasklist not found");
         TaskList taskList = taskListRepository.getById(listId);
+        if (task.getTaskList().getId() != listId) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Task not part of tasklist");
 
         // update the taskList and save
         taskList.remove(task);
