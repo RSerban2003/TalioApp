@@ -42,12 +42,4 @@ public class TaskListController {
         taskListRepository.save(taskList);
         return ResponseEntity.ok(taskList);
     }
-    @GetMapping(path = "/{list}")
-    public ResponseEntity<TaskList> get(@PathVariable("board") long boardId, @PathVariable("list") long listId) {
-        TaskList taskList = taskListRepository.findById(listId).orElse(null);
-        if (taskList == null){
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(taskList);
-    }
 }
