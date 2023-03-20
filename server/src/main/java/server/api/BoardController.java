@@ -38,7 +38,7 @@ public class BoardController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<Board> add(@RequestParam String name){
+    public ResponseEntity<Board> add(@RequestBody String name){
         if(name == null || name.isBlank()){
             return ResponseEntity.badRequest().build();
         }
