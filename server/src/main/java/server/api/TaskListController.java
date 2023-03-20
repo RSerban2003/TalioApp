@@ -26,11 +26,13 @@ public class TaskListController {
     }
 
     @PostMapping(path = "/add-taskList")
-    public ResponseEntity<TaskList> add(@RequestBody TaskList taskList, @PathVariable("board") long boardId) throws RuntimeException {
-
+    public ResponseEntity<TaskList> add(@RequestBody String taskListName, @PathVariable("board") long boardId) throws RuntimeException {
+        TaskList taskList = new TaskList();
+        taskList.setName(taskListName);
         Board board = boardRepository.findById(boardId).orElseThrow(() -> new RuntimeException("Board not found"));
         board.add(taskList);
-        boardRepository.save(board);
+        taskList.setBoard(board);
+        taskListRepository.save(taskList);
         return ResponseEntity.ok(taskList);
     }
     @PostMapping(path = "/{list}/edit")
