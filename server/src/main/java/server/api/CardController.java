@@ -14,7 +14,7 @@ import server.database.TaskRepository;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/boards/{board}/{list}")
+@RequestMapping("/api/boards/{board}/{list}")
 public class CardController {
 
     private TaskListRepository taskListRepository;
