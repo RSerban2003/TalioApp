@@ -40,4 +40,11 @@ public class TaskListController {
         taskListRepository.save(taskList);
         return ResponseEntity.ok(taskList);
     }
+    @PostMapping(path = "/{list}/edit")
+    public ResponseEntity<TaskList> edit(@PathVariable("board") long boardId, @PathVariable("list") long listId, @RequestBody String name) throws RuntimeException {
+        TaskList taskList = taskListRepository.findById(listId).orElseThrow(() -> new RuntimeException("List not found"));
+        taskList.setName(name);
+        taskListRepository.save(taskList);
+        return ResponseEntity.ok(taskList);
+    }
 }
