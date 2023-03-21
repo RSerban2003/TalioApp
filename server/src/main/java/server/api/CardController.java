@@ -2,27 +2,28 @@ package server.api;
 
 import commons.Task;
 import commons.TaskList;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
+
 import org.springframework.http.HttpStatus;
+
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import server.database.BoardRepository;
 import server.database.TaskListRepository;
 import server.database.TaskRepository;
 
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/boards/{board}/{list}")
 public class CardController {
 
-    private TaskListRepository taskListRepository;
-    private TaskRepository taskRepository;
+    private final TaskListRepository taskListRepository;
+    private final TaskRepository taskRepository;
+    private final BoardRepository boardRepository;
 
-    public CardController(TaskListRepository taskListRepository, TaskRepository taskRepository){
+    public CardController(BoardRepository boardRepository, TaskListRepository taskListRepository, TaskRepository taskRepository) {
+        this.boardRepository = boardRepository;
         this.taskListRepository = taskListRepository;
         this.taskRepository = taskRepository;
     }
@@ -34,8 +35,7 @@ public class CardController {
 
 
     @PostMapping(path = "/card")
-    public ResponseEntity<?> add(@RequestBody Map<String, String> body, @PathVariable("list") long listId,
-                                    @PathVariable("board") long boardId) throws RuntimeException {
+    public ResponseEntity<?> add(@RequestBody Map<String, String> body, @PathVariable("list") long listId,                                    @PathVariable("board") long boardId) throws RuntimeException {
         if(body.get("name") == null || body.get("description") == null) return ResponseEntity.badRequest().build();
         Task task = new Task(body.get("name"), body.get("description"));
         TaskList taskList = taskListRepository.findById(listId).orElseThrow(() -> new RuntimeException("Task list not found"));
@@ -43,6 +43,26 @@ public class CardController {
         task.setTaskList(taskList);
         taskRepository.save(task);
         return ResponseEntity.ok(task);
+    }
+
+    @PostMapping("{task}/edit-card")
+    public ResponseEntity<Task> edit(@RequestParam("name") String name, @RequestParam("description") String description, @PathVariable("task") long taskId, @PathVariable("board") long boardId, @PathVariable("list") long listId) {
+        // check if board, list and task exist
+        if (!boardRepository.existsById(boardId)) return ResponseEntity.notFound().build();
+        if (!taskListRepository.existsById(listId)) return ResponseEntity.notFound().build();
+        if (!taskRepository.existsById(taskId)) return ResponseEntity.notFound().build();
+
+        // check if they are in relation
+        Task t = taskRepository.getById(taskId);
+        if (t.getTaskList().getId() != listId) return ResponseEntity.badRequest().build();
+        if (t.getTaskList().getBoard().getId() != boardId) return ResponseEntity.badRequest().build();
+
+        t.setName(name);
+        t.setDescription(description);
+
+        Task ta = taskRepository.save(t);
+
+        return ResponseEntity.ok(ta);
     }
 
     @GetMapping("/card")
@@ -68,14 +88,5 @@ public class CardController {
         taskListRepository.save(taskList);
 
         return ResponseEntity.ok().build();
-    }
-
-    /**
-     * Checks if a sting is null or empty
-     * @param s     The Sting to be checked
-     * @return      Boolean
-     */
-    private static boolean isNullOrEmpty(String s) {
-        return s == null || s.isEmpty();
     }
 }
