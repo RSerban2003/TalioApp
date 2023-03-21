@@ -53,7 +53,7 @@ public class BoardController {
         return s == null || s.isEmpty();
     }
 
-    @GetMapping("/get-all-boards")
+    @GetMapping(path = {"/", ""})
     public ResponseEntity<List<Board>> getAllBoards() {
         List<Board> boards = boardRepository.findAll();
         return ResponseEntity.ok(boards);
