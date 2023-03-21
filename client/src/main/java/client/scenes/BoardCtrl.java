@@ -25,11 +25,7 @@ public class BoardCtrl {
         }
         boardAnchor.getChildren().add(new BoardComponent(board));
     }
-<<<<<<< HEAD
     public void disconnect(){
-        mainCtrl.showConnect();
+        mainCtrl.showBoardinput();
     }
-=======
-
->>>>>>> main
 }
