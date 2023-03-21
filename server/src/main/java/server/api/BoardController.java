@@ -38,7 +38,7 @@ public class BoardController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/")
+    @PostMapping(path ={"/", ""})
     public ResponseEntity<Board> add(@RequestBody Map<String, String> body){
         if(!body.containsKey("name")){
             return ResponseEntity.badRequest().build();

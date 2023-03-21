@@ -27,7 +27,7 @@ public class CardController {
         this.taskRepository = taskRepository;
     }
 
-    @GetMapping("/")
+    @GetMapping(path = {"/", ""})
     public ResponseEntity<Object> showAll() {
         return ResponseEntity.ok(taskRepository.findAll());
     }
