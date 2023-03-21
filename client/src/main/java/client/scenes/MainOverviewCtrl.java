@@ -6,7 +6,7 @@ public class MainOverviewCtrl {
 
     }
 
-    public void buttonAllBoards(){
+    public void onChangeBoardsClicked(){
 
     }
 
