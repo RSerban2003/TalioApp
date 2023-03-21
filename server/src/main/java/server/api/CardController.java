@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import server.database.TaskListRepository;
 import server.database.TaskRepository;
 
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -33,10 +34,10 @@ public class CardController {
 
 
     @PostMapping(path = "/card")
-    public ResponseEntity<Task> add(@RequestBody String name, @RequestBody String description, @PathVariable("list") long listId,
+    public ResponseEntity<?> add(@RequestBody Map<String, String> body, @PathVariable("list") long listId,
                                     @PathVariable("board") long boardId) throws RuntimeException {
-
-        Task task = new Task(name, description);
+        if(body.get("name") == null || body.get("description") == null) return ResponseEntity.badRequest().build();
+        Task task = new Task(body.get("name"), body.get("description"));
         TaskList taskList = taskListRepository.findById(listId).orElseThrow(() -> new RuntimeException("Task list not found"));
         taskList.add(task);
         task.setTaskList(taskList);

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import server.database.BoardRepository;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/boards")
@@ -38,13 +39,13 @@ public class BoardController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<Board> add(@RequestBody String name){
-        if(name == null || name.isBlank()){
+    public ResponseEntity<Board> add(@RequestBody Map<String, String> body){
+        if(!body.containsKey("name")){
             return ResponseEntity.badRequest().build();
         }
 
         Board board = new Board();
-        board.setTitle(name);
+        board.setTitle(body.get("name"));
         Board saved = boardRepository.save(board);
         return ResponseEntity.ok(saved);
     }
