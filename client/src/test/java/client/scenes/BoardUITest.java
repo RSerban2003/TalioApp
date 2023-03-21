@@ -34,7 +34,7 @@ public class BoardUITest extends Application {
         var boardscene = new Scene(board.getValue(), 1900, 1000);
         primaryStage.setScene(boardscene);
         primaryStage.show();
-        Board testBoard = new Board();
+        Board testBoard = new Board(123L,"Title");
         TaskList a = new TaskList(1L, "a");
         TaskList b = new TaskList(2L, "b");
         a.add(new Task(1L, "1", ""));

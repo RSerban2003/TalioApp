@@ -26,7 +26,7 @@ public class ConnectCtrl {
     public void connectServer() {
         server.setHost(hostname.getText());
         if(server.ping()) {
-            mainCtrl.showOverview();
+            mainCtrl.showBoardinput();
         }
         else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
