@@ -42,4 +42,20 @@ public class ListController {
 
         return ResponseEntity.ok(board);
     }
+
+    @PostMapping("/")
+    public ResponseEntity<Board> add(
+            @PathVariable("board") long boardId,
+            @RequestBody TaskList taskList
+    ) {
+        // check if board exists
+        var b = boardRepository.findById(boardId);
+        if (!b.isPresent()) return ResponseEntity.badRequest().build();
+        Board board = b.get();
+
+        board.add(taskList);
+        boardRepository.save(board);
+
+        return ResponseEntity.ok(board);
+    }
 }
