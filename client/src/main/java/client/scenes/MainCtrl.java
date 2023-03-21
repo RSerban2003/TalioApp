@@ -15,6 +15,7 @@
  */
 package client.scenes;
 
+import commons.Board;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -31,11 +32,14 @@ public class MainCtrl {
     private Scene add;
     private ConnectCtrl connectCtrl;
     private Scene connect;
-    private BoardCtrl boardCtrl;
+    private BoardInputCtrl boardInputCtrl;
+    private Scene boardInput;
     private Scene board;
+    private BoardCtrl boardCtrl;
 
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
-            Pair<AddQuoteCtrl, Parent> add, Pair<ConnectCtrl, Parent> connect, Pair<BoardCtrl, Parent> board) {
+            Pair<AddQuoteCtrl, Parent> add, Pair<ConnectCtrl, Parent> connect, Pair<BoardInputCtrl, Parent> boardInput,
+                           Pair<BoardCtrl, Parent> board) {
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
@@ -45,6 +49,9 @@ public class MainCtrl {
 
         this.connectCtrl = connect.getKey();
         this.connect = new Scene(connect.getValue());
+
+        this.boardInputCtrl = boardInput.getKey();
+        this.boardInput = new Scene(boardInput.getValue());
 
         this.boardCtrl = board.getKey();
         this.board = new Scene(board.getValue(), 1900, 1000);
@@ -71,5 +78,13 @@ public class MainCtrl {
     public void showBoard(){
         primaryStage.setTitle("Taskboard");
         primaryStage.setScene(board);
+    }
+
+    public void showBoardinput() {
+        primaryStage.setTitle("Board: select a board id");
+        primaryStage.setScene(boardInput);
+    }
+    public void updateBoard(Board board) {
+        boardCtrl.updateBoard(board);
     }
 }

@@ -17,6 +17,7 @@ public class BoardCtrl {
     @Inject
     public BoardCtrl(MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
+        boardAnchor = new AnchorPane();
     }
     public void updateBoard(Board board) {
         if(boardAnchor.getChildren().size() > 0) {
@@ -24,7 +25,11 @@ public class BoardCtrl {
         }
         boardAnchor.getChildren().add(new BoardComponent(board));
     }
+<<<<<<< HEAD
     public void disconnect(){
         mainCtrl.showConnect();
     }
+=======
+
+>>>>>>> main
 }
