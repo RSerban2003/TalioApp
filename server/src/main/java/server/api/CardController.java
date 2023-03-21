@@ -55,8 +55,6 @@ public class CardController {
         if (!taskRepository.existsById(taskId)) return ResponseEntity.notFound().build();
 
         // check if they are in relation
-
-
         Task t = taskRepository.getById(taskId);
         if (name != null) t.setName(name);
         if (description != null) t.setDescription(description);
