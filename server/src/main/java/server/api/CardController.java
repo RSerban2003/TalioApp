@@ -48,18 +48,22 @@ public class CardController {
         return ResponseEntity.ok(task);
     }
     @PostMapping("{task}/edit-card")
-    public ResponseEntity<Object> edit(@RequestParam("name") String name, @RequestParam("description") String description,@PathVariable("task") long taskId ,@PathVariable("board") long boardId, @PathVariable("list") long listId) {
+    public ResponseEntity<Task> edit(@RequestParam("name") String name, @RequestParam("description") String description,@PathVariable("task") long taskId ,@PathVariable("board") long boardId, @PathVariable("list") long listId) {
         // check if board, list and task exist
-        //if (!boardRepository.existsById(boardId)) return  ResponseEntity.badRequest().build();
-        //if (!taskListRepository.existsById(listId)) return ResponseEntity.badRequest().build();
-        if (!taskRepository.existsById(taskId)) return ResponseEntity.ok(1);
+        if (!boardRepository.existsById(boardId)) return  ResponseEntity.notFound().build();
+        if (!taskListRepository.existsById(listId)) return ResponseEntity.notFound().build();
+        if (!taskRepository.existsById(taskId)) return ResponseEntity.notFound().build();
+
+        // check if they are in relation
+
+
         Task t = taskRepository.getById(taskId);
         if (name != null) t.setName(name);
         if (description != null) t.setDescription(description);
 
-        taskRepository.save(t);
+        Task ta = taskRepository.save(t);
 
-        return ResponseEntity.ok(t);
+        return ResponseEntity.ok(ta);
     }
 
     @GetMapping("/card")
