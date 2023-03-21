@@ -25,7 +25,10 @@ import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.util.List;
 
+import commons.Board;
 import jakarta.ws.rs.ProcessingException;
+import jakarta.ws.rs.client.Client;
+import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
 
 import commons.Quote;
@@ -80,5 +83,26 @@ public class ServerUtils {
         } catch (ProcessingException pe) {
             return false;
         }
+    }
+
+    /**
+     * Checks if a board with a given id is in the database
+     * @param boardId
+     * @return a boolean if the status of the get request is 200
+     */
+    public boolean boardExists(String boardId) {
+        Client client = ClientBuilder.newClient(new ClientConfig());
+        Response response = client.target(SERVER).path("api/boards/" + boardId).request().get();
+        int status = response.getStatus();
+        response.close();
+        return status == 200;
+    }
+
+    /**
+     * getter for the server URL
+     * @return server url
+     */
+    public String getServerUrl() {
+        return SERVER;
     }
 }
