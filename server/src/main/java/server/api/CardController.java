@@ -56,6 +56,9 @@ public class CardController {
 
         // check if they are in relation
         Task t = taskRepository.getById(taskId);
+        if (t.getTaskList().getId() != listId) return ResponseEntity.badRequest().build();
+        if (t.getTaskList.getBoard().getId() != boardId) return ResponseEntity.badRequest().build();
+
         if (name != null) t.setName(name);
         if (description != null) t.setDescription(description);
 
