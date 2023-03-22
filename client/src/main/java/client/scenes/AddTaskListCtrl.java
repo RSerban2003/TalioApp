@@ -22,7 +22,6 @@ import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 public class AddTaskListCtrl {
 
-    private final Long currentBoardId;
     @FXML
     private Text TaskListNameId;
     @FXML
@@ -35,10 +34,9 @@ public class AddTaskListCtrl {
     private MainCtrl mainCtrl;
 
     @Inject
-    public AddTaskListCtrl(ServerUtils server, MainCtrl mainCtrl, BoardCtrl boardCtrl, Long currentBoardId) {
+    public AddTaskListCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
-        this.currentBoardId = currentBoardId;
     }
 
     @FXML
@@ -66,7 +64,7 @@ public class AddTaskListCtrl {
         Response response = null;
         try {
             Client client = ClientBuilder.newClient();
-            response = client.target(server.getServerUrl()).path("api/boards/" + currentBoardId)
+            response = client.target(server.getServerUrl()).path("api/boards/100")
                     .request(APPLICATION_JSON).accept(APPLICATION_JSON)
                     .post(Entity.entity(taskList, APPLICATION_JSON));
 
