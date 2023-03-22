@@ -98,7 +98,7 @@
                                                 <Font name="Arial" size="26.0" />
                                              </font>
                                           </Text>
-                                          <Button fx:id="AddTaskListButton" mnemonicParsing="false" onAction="#addTaskList" text="Button" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                          <Button fx:id="AddTaskListButton" mnemonicParsing="false" onAction="#addTaskList" text="Add tasklist" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                        </children>
                                     </GridPane>
                                  </children>
