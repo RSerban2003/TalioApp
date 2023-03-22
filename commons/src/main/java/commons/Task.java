@@ -35,12 +35,6 @@ public class Task {
         this.description = description;
     }
 
-    public Task(Long id, String name, int index, String description) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-    }
-
     public Task() {
     }
 
