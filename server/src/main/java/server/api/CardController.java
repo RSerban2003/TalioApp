@@ -56,8 +56,6 @@ public class CardController {
         taskList.add(task);
         task.setTaskList(taskList);
 
-        // send update to client using WebSocket
-        msgs.convertAndSend("/topic/"+ String.valueOf(boardId), taskList);
 
         taskRepository.save(task);
         return ResponseEntity.ok(task);
@@ -79,10 +77,7 @@ public class CardController {
         t.setDescription(description);
 
         // send update to client using WebSocket
-        ObjectMapper mapper = new ObjectMapper();
-        Board board = boardRepository.getById(boardId);
-        String json = mapper.writeValueAsString(board);
-        msgs.convertAndSend("/topic", json);
+        msgs.convertAndSend("/topic", t);
 
         Task ta = taskRepository.save(t);
 
@@ -109,8 +104,6 @@ public class CardController {
         // update the taskList and save
         taskList.remove(task);
 
-        // send update to client using WebSocket
-        msgs.convertAndSend("/topic/"+String.valueOf(boardId), taskList);
 
         task.setTaskList(null);
         taskListRepository.save(taskList);

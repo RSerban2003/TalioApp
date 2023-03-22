@@ -41,8 +41,6 @@ public class BoardController {
             return ResponseEntity.badRequest().build();
         }
         boardRepository.deleteById(id);
-
-        msgs.convertAndSend("/topic", "Board "+id+" has been deleted");
         return ResponseEntity.noContent().build();
     }
 
