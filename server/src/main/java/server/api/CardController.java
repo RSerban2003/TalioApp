@@ -2,36 +2,29 @@ package server.api;
 
 import commons.Task;
 import commons.TaskList;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import server.database.BoardRepository;
 import server.database.TaskListRepository;
 import server.database.TaskRepository;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/boards/{board}/{list}")
 public class CardController {
 
-    private TaskListRepository taskListRepository;
-    private TaskRepository taskRepository;
+    private final TaskListRepository taskListRepository;
+    private final TaskRepository taskRepository;
+    private final BoardRepository boardRepository;
 
-    public CardController(TaskListRepository taskListRepository, TaskRepository taskRepository){
+    public CardController(BoardRepository boardRepository, TaskListRepository taskListRepository, TaskRepository taskRepository) {
+        this.boardRepository = boardRepository;
         this.taskListRepository = taskListRepository;
         this.taskRepository = taskRepository;
     }
-
-    @GetMapping("/")
-    public ResponseEntity<Object> showAll() {
-        return ResponseEntity.ok(taskRepository.findAll());
-    }
-
 
     @PostMapping(path = "/add-card")
     public ResponseEntity<Task> add(@RequestBody Task task, @PathVariable("list") long listId,
@@ -42,10 +35,52 @@ public class CardController {
         }
 
         TaskList taskList = taskListRepository.findById(listId).orElseThrow(() -> new RuntimeException("Task list not found"));
-        task.setIndex(taskList.getTaskList().size());
         taskList.add(task);
-        taskListRepository.save(taskList);
+        task.setTaskList(taskList);
+        taskRepository.save(task);
         return ResponseEntity.ok(task);
+    }
+
+    @PostMapping("{task}/edit-card")
+    public ResponseEntity<Task> edit(@RequestParam("name") String name, @RequestParam("description") String description, @PathVariable("task") long taskId, @PathVariable("board") long boardId, @PathVariable("list") long listId) {
+        // check if board, list and task exist
+        if (!boardRepository.existsById(boardId)) return ResponseEntity.notFound().build();
+        if (!taskListRepository.existsById(listId)) return ResponseEntity.notFound().build();
+        if (!taskRepository.existsById(taskId)) return ResponseEntity.notFound().build();
+
+        // check if they are in relation
+        Task t = taskRepository.getById(taskId);
+        if (t.getTaskList().getId() != listId) return ResponseEntity.badRequest().build();
+        if (t.getTaskList().getBoard().getId() != boardId) return ResponseEntity.badRequest().build();
+
+        t.setName(name);
+        t.setDescription(description);
+
+        Task ta = taskRepository.save(t);
+
+        return ResponseEntity.ok(ta);
+    }
+
+    @PostMapping(path = {"{task}/drag_and_drop"})
+    public ResponseEntity<?> drag_drop(@PathVariable("board") long boardId, @PathVariable("list") long listId, @PathVariable("task") long taskId,
+        @RequestParam("new_list") long newListId, @RequestParam("new_index") long newIndex) {
+        // check if board, list and task exist
+        if (!boardRepository.existsById(boardId)) return ResponseEntity.notFound().build();
+        if (!taskListRepository.existsById(listId)) return ResponseEntity.notFound().build();
+        if (!taskRepository.existsById(taskId)) return ResponseEntity.notFound().build();
+
+        // check if they are in relation
+        Task t = taskRepository.getById(taskId);
+        if (t.getTaskList().getId() != listId) return ResponseEntity.badRequest().build();
+        if (t.getTaskList().getBoard().getId() != boardId) return ResponseEntity.badRequest().build();
+
+        TaskList tl = taskListRepository.getById(newListId);
+        t.setTaskList(tl);
+        tl.getTaskList().add((int)newIndex,t);
+
+        taskRepository.save(t);
+
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/card")
@@ -66,22 +101,8 @@ public class CardController {
 
         // update the taskList and save
         taskList.remove(task);
-        List<Task> tasks = taskList.getTaskList();
-        tasks.sort(Comparator.comparing(Task::getIndex));
-        for (int i = 0; i < tasks.size(); i++) {
-            tasks.get(i).setIndex(i);
-        }
         taskListRepository.save(taskList);
 
         return ResponseEntity.ok().build();
-    }
-
-    /**
-     * Checks if a sting is null or empty
-     * @param s     The Sting to be checked
-     * @return      Boolean
-     */
-    private static boolean isNullOrEmpty(String s) {
-        return s == null || s.isEmpty();
     }
 }

@@ -18,15 +18,14 @@ public class BoardController {
     private BoardRepository boardRepository;
 
     @GetMapping("/{id}")
-    public ResponseEntity<BoardWithTaskListDto> getBoardById(@PathVariable Long id){
+    public ResponseEntity<Board> getBoardById(@PathVariable Long id) {
         Board board = boardRepository.findById(id).orElse(null);
-        if (board == null){
+        if (board == null) {
             return ResponseEntity.notFound().build();
         }
-        List<TaskList> listOfTaskList = board.getListOfTaskList();
-        BoardWithTaskListDto dto = new BoardWithTaskListDto(board, listOfTaskList);
-        return ResponseEntity.ok(dto);
+        return ResponseEntity.ok(board);
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBoardById(@PathVariable Long id){
@@ -52,6 +51,12 @@ public class BoardController {
 
     private static boolean isNullOrEmpty(String s) {
         return s == null || s.isEmpty();
+    }
+
+    @GetMapping(path = {"/", ""})
+    public ResponseEntity<List<Board>> getAllBoards() {
+        List<Board> boards = boardRepository.findAll();
+        return ResponseEntity.ok(boards);
     }
 
 }

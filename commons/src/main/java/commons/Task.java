@@ -1,5 +1,7 @@
 package commons;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -10,32 +12,32 @@ import java.util.Objects;
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
 @Entity
-@Table(name = "tasks")
+@Table(name = "TASK")
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "name")
+    @Column(name = "NAME")
     private String name;
 
-    @Column(name = "description")
+    @Column(name = "DESCRIPTION")
     private String description;
 
-    @Column(name = "index")
-    private int index;
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "tasklist_id")
+    private TaskList taskList;
 
     public Task(Long id, String name, String description) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.index = -1;
     }
 
     public Task(Long id, String name, int index, String description) {
         this.id = id;
         this.name = name;
-        this.index = index;
         this.description = description;
     }
 
@@ -58,20 +60,20 @@ public class Task {
         this.description = description;
     }
 
-    public int getIndex() {
-        return index;
-    }
-
-    public void setIndex(int index) {
-        this.index = index;
-    }
-
     public void setId(Long id) {
         this.id = id;
     }
 
     public Long getId() {
         return id;
+    }
+
+    public TaskList getTaskList() {
+        return taskList;
+    }
+
+    public void setTaskList(TaskList taskList) {
+        this.taskList = taskList;
     }
 
     @Override
@@ -88,6 +90,7 @@ public class Task {
     public String toString() {
         return ToStringBuilder.reflectionToString(this, MULTI_LINE_STYLE);
     }
+
 
 
 }
