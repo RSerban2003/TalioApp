@@ -9,9 +9,6 @@ import server.database.BoardRepository;
 import server.database.TaskListRepository;
 import server.database.TaskRepository;
 
-import java.util.Comparator;
-import java.util.List;
-
 @RestController
 @RequestMapping("/boards/{board}/{list}")
 public class CardController {
