@@ -58,7 +58,7 @@ public class CardController {
     }
 
     @DeleteMapping("/{cardId}")
-    public ResponseEntity<Object> deleteTask(@PathVariable("cardId") long cardId, @PathVariable("list") long listId) {
+    public ResponseEntity<Object> deleteTask(@PathVariable("cardId") long cardId, @PathVariable("list") long listId, @PathVariable("board") long boardId) {
 
         // check if the task exists
         if (!taskRepository.existsById(cardId)) return ResponseEntity.badRequest().build();
@@ -70,6 +70,9 @@ public class CardController {
 
         // update the taskList and save
         taskList.remove(task);
+        // send update to client using WebSocket
+        msgs.convertAndSend("/topic/"+String.valueOf(boardId), taskList);
+
         taskListRepository.save(taskList);
 
         return ResponseEntity.ok().build();
