@@ -4,6 +4,7 @@ import commons.Task;
 import commons.TaskList;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -19,10 +20,12 @@ public class CardController {
 
     private TaskListRepository taskListRepository;
     private TaskRepository taskRepository;
+    private SimpMessagingTemplate msgs;
 
-    public CardController(TaskListRepository taskListRepository, TaskRepository taskRepository){
+    public CardController(TaskListRepository taskListRepository, TaskRepository taskRepository, SimpMessagingTemplate msgs){
         this.taskListRepository = taskListRepository;
         this.taskRepository = taskRepository;
+        this.msgs = msgs;
     }
 
     @GetMapping("/")
@@ -42,6 +45,9 @@ public class CardController {
         TaskList taskList = taskListRepository.findById(listId).orElseThrow(() -> new RuntimeException("Task list not found"));
         taskList.add(task);
         task.setTaskList(taskList);
+
+        msgs.convertAndSend("/topic/"+ String.valueOf(boardId), taskList);
+
         taskRepository.save(task);
         return ResponseEntity.ok(task);
     }

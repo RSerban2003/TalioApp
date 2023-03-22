@@ -141,6 +141,7 @@ public class ServerUtils {
             }
 
             @Override
+            @SuppressWarnings("unchecked")
             public void handleFrame(StompHeaders headers, Object payload) {
                 consumer.accept((T) payload);
             }
