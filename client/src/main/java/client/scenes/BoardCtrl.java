@@ -32,4 +32,12 @@ public class BoardCtrl {
     public void disconnectServer(){
         mainCtrl.showConnect();
     }
+
+    public void buttonEditBoardName(){
+
+    }
+    public void buttonCopyInvite(){
+
+    }
+
 }
