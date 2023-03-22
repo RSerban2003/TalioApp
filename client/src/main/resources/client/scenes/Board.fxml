@@ -6,12 +6,12 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.ScrollBar?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
 
 <AnchorPane maxWidth="1.7976931348623157E308" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.BoardCtrl">
    <children>
@@ -77,15 +77,15 @@
                            <children>
                               <HBox alignment="BOTTOM_LEFT" prefHeight="107.2" prefWidth="735.2" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="{Name of Board}">
+                                    <TextField fx:id="boardName" disable="true" editable="false" onKeyReleased="#saveNewBoardName" prefHeight="40.0" prefWidth="224.0" promptText="{Board Name}" text="Board name">
                                        <HBox.margin>
-                                          <Insets bottom="5.0" left="10.0" right="15.0" />
+                                          <Insets right="20.0" />
                                        </HBox.margin>
                                        <font>
-                                          <Font name="Arial" size="26.0" />
+                                          <Font size="20.0" />
                                        </font>
-                                    </Text>
-                                    <Button mnemonicParsing="false" text="Edit">
+                                    </TextField>
+                                    <Button mnemonicParsing="false" onAction="#changeName" prefHeight="26.0" prefWidth="50.0" text="Edit">
                                        <HBox.margin>
                                           <Insets bottom="5.0" />
                                        </HBox.margin>
