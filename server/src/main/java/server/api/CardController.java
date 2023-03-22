@@ -33,6 +33,14 @@ public class CardController {
         return ResponseEntity.ok(taskRepository.findAll());
     }
 
+    @GetMapping(path = "/{card}/get")
+    public ResponseEntity<?> getById(@PathVariable("card") long cardId) {
+        //TODO : do the check if parents are good
+        var TL = taskRepository.findById(cardId);
+        if (TL.isPresent()) return ResponseEntity.ok(taskRepository.findById(cardId).get());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Task not found");
+    }
+
 
     @PostMapping(path = "/card")
     public ResponseEntity<?> add(@RequestBody Map<String, String> body, @PathVariable("list") long listId,                                    @PathVariable("board") long boardId) throws RuntimeException {
@@ -64,7 +72,6 @@ public class CardController {
 
         return ResponseEntity.ok(ta);
     }
-
 
     @DeleteMapping("/{cardId}")
     public ResponseEntity<Object> deleteTask(@PathVariable("cardId") long cardId, @PathVariable("list") long listId) {

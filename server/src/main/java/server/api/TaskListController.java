@@ -18,9 +18,9 @@ import java.util.Map;
 
 public class TaskListController {
 
-    private BoardRepository boardRepository;
+    private final BoardRepository boardRepository;
 
-    private TaskListRepository taskListRepository;
+    private final TaskListRepository taskListRepository;
 
     public TaskListController(TaskListRepository taskListRepository, BoardRepository boardRepository){
 
