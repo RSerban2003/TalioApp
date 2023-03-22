@@ -40,12 +40,6 @@ public class AddTaskListCtrl {
     }
 
     @FXML
-    public void initialize() {
-        // Set up the event handlers for the buttons
-        submitButton.setOnAction(event -> onSubmitButtonClicked());
-        CancelButtonId.setOnAction(event -> onCancelButtonClicked());
-    }
-    @FXML
     private void onCancelButtonClicked() {
         mainCtrl.showBoard();
     }
