@@ -56,6 +56,9 @@ public class CardController {
         taskList.add(task);
         task.setTaskList(taskList);
 
+        // send update to client using WebSocket
+        TaskList taskList1 = taskListRepository.findById(listId).get();
+        msgs.convertAndSend("/topic/" + boardId, taskList1);
 
         taskRepository.save(task);
         return ResponseEntity.ok(task);
@@ -69,7 +72,7 @@ public class CardController {
         if (!taskRepository.existsById(taskId)) return ResponseEntity.notFound().build();
 
         // check if they are in relation
-        Task t = taskRepository.getById(taskId);
+        Task t = taskRepository.findById(taskId).get();
         if (t.getTaskList().getId() != listId) return ResponseEntity.badRequest().build();
         if (t.getTaskList().getBoard().getId() != boardId) return ResponseEntity.badRequest().build();
 
@@ -77,7 +80,8 @@ public class CardController {
         t.setDescription(description);
 
         // send update to client using WebSocket
-        msgs.convertAndSend("/topic", t);
+        TaskList taskList = taskListRepository.findById(listId).get();
+        msgs.convertAndSend("/topic/" + boardId, taskList);
 
         Task ta = taskRepository.save(t);
 
@@ -98,7 +102,7 @@ public class CardController {
 
         // check if the listId is valid
         if (!taskListRepository.existsById(listId)) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Tasklist not found");
-        TaskList taskList = taskListRepository.getById(listId);
+        TaskList taskList = taskListRepository.findById(listId).get();
         if (task.getTaskList().getId() != listId) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Task not part of tasklist");
 
         // update the taskList and save
@@ -106,6 +110,9 @@ public class CardController {
 
 
         task.setTaskList(null);
+        // send updated list to client using WebSocket
+        msgs.convertAndSend("/topic/" + boardId, taskList);
+
         taskListRepository.save(taskList);
 
         return ResponseEntity.ok().build();

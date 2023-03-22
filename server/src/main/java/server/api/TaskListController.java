@@ -5,6 +5,7 @@ import commons.Board;
 import commons.TaskList;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import server.database.BoardRepository;
 import server.database.TaskListRepository;
@@ -20,12 +21,12 @@ public class TaskListController {
     private BoardRepository boardRepository;
 
     private TaskListRepository taskListRepository;
+    private SimpMessagingTemplate msgs;
 
-    public TaskListController(TaskListRepository taskListRepository, BoardRepository boardRepository){
-
+    public TaskListController(TaskListRepository taskListRepository, BoardRepository boardRepository, SimpMessagingTemplate msgs){
         this.boardRepository = boardRepository;
         this.taskListRepository = taskListRepository;
-
+        this.msgs = msgs;
     }
 
     @PostMapping(path = "/tasklist")
@@ -36,6 +37,9 @@ public class TaskListController {
         Board board = boardRepository.findById(boardId).orElseThrow(() -> new RuntimeException("Board not found"));
         board.add(taskList);
         taskList.setBoard(board);
+
+        // send update to client using WebSocket
+        msgs.convertAndSend("/topic/" + boardId, taskList);
         taskListRepository.save(taskList);
         return ResponseEntity.ok(taskList);
     }
@@ -49,6 +53,10 @@ public class TaskListController {
 
         if(taskList.getBoard().getId() != boardId) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("List not part of board");
         taskList.setName(body.get("name"));
+
+        // send update to client using WebSocket
+        msgs.convertAndSend("/topic/" + boardId, taskList);
+
         taskListRepository.save(taskList);
         return ResponseEntity.ok(taskList);
     }
@@ -69,6 +77,11 @@ public class TaskListController {
 
         board.remove(taskList);
         taskList.setBoard(null);
+        taskListRepository.deleteById(listId);
+
+        // send update to client using WebSocket
+        msgs.convertAndSend("/topic/" + boardId, board);
+
         boardRepository.save(board);
 
         return ResponseEntity.ok(board);
