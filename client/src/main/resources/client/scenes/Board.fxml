@@ -39,7 +39,7 @@
                            <children>
                               <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="119.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
-                                    <Button mnemonicParsing="false" onAction="#disconnect" prefWidth="112.0" text="Change Board">
+                                    <Button mnemonicParsing="false" onAction="#disconnectBoard" prefWidth="112.0" text="Change Board">
                                        <VBox.margin>
                                           <Insets left="5.0" right="5.0" top="20.0" />
                                        </VBox.margin>
@@ -55,7 +55,7 @@
                            <children>
                               <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="119.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
-                                    <Button mnemonicParsing="false" prefWidth="112.0" text="Disconnect Server">
+                                    <Button mnemonicParsing="false" onAction="#disconnectServer" prefWidth="112.0" text="Disconnect Server">
                                        <VBox.margin>
                                           <Insets bottom="20.0" top="5.0" />
                                        </VBox.margin>

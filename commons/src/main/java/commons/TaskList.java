@@ -38,6 +38,14 @@ public class TaskList {
         this.task = new ArrayList<>();
     }
 
+    public List<Task> getTask() {
+        return task;
+    }
+
+    public void setTask(List<Task> task) {
+        this.task = task;
+    }
+
     public TaskList() {
         this.task = new ArrayList<>();
     }
