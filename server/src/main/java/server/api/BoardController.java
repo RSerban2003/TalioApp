@@ -5,6 +5,7 @@ import commons.Board;
 import commons.TaskList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import server.database.BoardRepository;
 
@@ -17,6 +18,12 @@ public class BoardController {
 
     @Autowired
     private BoardRepository boardRepository;
+    private SimpMessagingTemplate msgs;
+
+    public BoardController(BoardRepository boardRepository, SimpMessagingTemplate msgs) {
+        this.boardRepository = boardRepository;
+        this.msgs = msgs;
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<Board> getBoardById(@PathVariable Long id) {
@@ -34,6 +41,8 @@ public class BoardController {
             return ResponseEntity.badRequest().build();
         }
         boardRepository.deleteById(id);
+
+        msgs.convertAndSend("/topic", "Board "+id+" has been deleted");
         return ResponseEntity.noContent().build();
     }
 

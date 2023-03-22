@@ -77,11 +77,12 @@ public class CardController {
 
         t.setName(name);
         t.setDescription(description);
+
         // send update to client using WebSocket
         ObjectMapper mapper = new ObjectMapper();
         Board board = boardRepository.getById(boardId);
-//        mapper.registerModule(new Hibernate5Module());
-        msgs.convertAndSend("/topic", board);
+        String json = mapper.writeValueAsString(board);
+        msgs.convertAndSend("/topic", json);
 
         Task ta = taskRepository.save(t);
 
@@ -107,6 +108,7 @@ public class CardController {
 
         // update the taskList and save
         taskList.remove(task);
+
         // send update to client using WebSocket
         msgs.convertAndSend("/topic/"+String.valueOf(boardId), taskList);
 
