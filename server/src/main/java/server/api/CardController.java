@@ -2,6 +2,9 @@ package server.api;
 
 import commons.Task;
 import commons.TaskList;
+
+import org.springframework.http.HttpStatus;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,8 +12,10 @@ import server.database.BoardRepository;
 import server.database.TaskListRepository;
 import server.database.TaskRepository;
 
+import java.util.Map;
+
 @RestController
-@RequestMapping("/boards/{board}/{list}")
+@RequestMapping("/api/boards/{board}/{list}")
 public class CardController {
 
     private final TaskListRepository taskListRepository;
@@ -23,14 +28,16 @@ public class CardController {
         this.taskRepository = taskRepository;
     }
 
-    @PostMapping(path = "/add-card")
-    public ResponseEntity<Task> add(@RequestBody Task task, @PathVariable("list") long listId,
-                                    @PathVariable("board") long boardId) throws RuntimeException {
+    @GetMapping(path = {"/", ""})
+    public ResponseEntity<Object> showAll() {
+        return ResponseEntity.ok(taskRepository.findAll());
+    }
 
-        if (task.getName() == null || task.getDescription() == null) {
-            return ResponseEntity.badRequest().build();
-        }
 
+    @PostMapping(path = "/card")
+    public ResponseEntity<?> add(@RequestBody Map<String, String> body, @PathVariable("list") long listId,                                    @PathVariable("board") long boardId) throws RuntimeException {
+        if(body.get("name") == null || body.get("description") == null) return ResponseEntity.badRequest().build();
+        Task task = new Task(body.get("name"), body.get("description"));
         TaskList taskList = taskListRepository.findById(listId).orElseThrow(() -> new RuntimeException("Task list not found"));
         taskList.add(task);
         task.setTaskList(taskList);
@@ -67,15 +74,17 @@ public class CardController {
     public ResponseEntity<Object> deleteTask(@PathVariable("cardId") long cardId, @PathVariable("list") long listId) {
 
         // check if the task exists
-        if (!taskRepository.existsById(cardId)) return ResponseEntity.badRequest().build();
-        Task task = taskRepository.getById(cardId);
+        if (!taskRepository.existsById(cardId)) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Task not found");
+        Task task = taskRepository.findById(cardId).get();
 
         // check if the listId is valid
-        if (!taskListRepository.existsById(listId)) return ResponseEntity.badRequest().build();
+        if (!taskListRepository.existsById(listId)) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Tasklist not found");
         TaskList taskList = taskListRepository.getById(listId);
+        if (task.getTaskList().getId() != listId) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Task not part of tasklist");
 
         // update the taskList and save
         taskList.remove(task);
+        task.setTaskList(null);
         taskListRepository.save(taskList);
 
         return ResponseEntity.ok().build();
