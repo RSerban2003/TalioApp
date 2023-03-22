@@ -18,7 +18,7 @@ public class BoardController {
     @Autowired
     private BoardRepository boardRepository;
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id}/get")
     public ResponseEntity<Board> getBoardById(@PathVariable Long id) {
         Board board = boardRepository.findById(id).orElse(null);
         if (board == null) {

@@ -45,7 +45,7 @@ public class CardController {
         return ResponseEntity.ok(task);
     }
 
-    @PostMapping("{task}/edit-card")
+    @PostMapping("/{task}/edit-card")
     public ResponseEntity<Task> edit(@RequestParam("name") String name, @RequestParam("description") String description, @PathVariable("task") long taskId, @PathVariable("board") long boardId, @PathVariable("list") long listId) {
         // check if board, list and task exist
         if (!boardRepository.existsById(boardId)) return ResponseEntity.notFound().build();
@@ -65,10 +65,6 @@ public class CardController {
         return ResponseEntity.ok(ta);
     }
 
-    @GetMapping("/card")
-    public ResponseEntity<Object> get() {
-        return ResponseEntity.ok(taskRepository.findAll());
-    }
 
     @DeleteMapping("/{cardId}")
     public ResponseEntity<Object> deleteTask(@PathVariable("cardId") long cardId, @PathVariable("list") long listId) {
