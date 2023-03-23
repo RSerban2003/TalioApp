@@ -18,6 +18,9 @@ import javafx.scene.text.TextFlow;
 
 import javax.inject.Inject;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 public class AddTaskListCtrl {
@@ -53,14 +56,15 @@ public class AddTaskListCtrl {
             alert.showAndWait();
             return;
         }
-        TaskList taskList = new TaskList(null, name);
+        Map<String, String> body = new HashMap<>();
+        body.put("name", name);
         // Send a POST request to add the task list to the board
         Response response = null;
         try {
             Client client = ClientBuilder.newClient();
-            response = client.target(server.getServerUrl()).path("api/boards/100")
+            response = client.target(server.getServerUrl()).path("api/boards/100/tasklist")
                     .request(APPLICATION_JSON).accept(APPLICATION_JSON)
-                    .post(Entity.entity(taskList, APPLICATION_JSON));
+                    .post(Entity.entity(body, APPLICATION_JSON));
 
             if (response.getStatus() != 201) {
                 // Display an error message if the request was unsuccessful
