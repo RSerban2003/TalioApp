@@ -57,6 +57,7 @@ public class BoardCtrl  {
 
     public void disconnectServer(){
         mainCtrl.showConnect();
+        server.unregisterForMessages("/topic/"+this.boardID);
     }
 
 }
