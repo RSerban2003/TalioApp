@@ -57,7 +57,14 @@ public class AddTaskListCtrl {
             return;
         }
         Map<String, String> body = new HashMap<>();
-        body.put("name", name);
+        if (name.trim().isEmpty()) {
+            // Display a warning if the name field in the map is empty
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setContentText("The task list name in the request body cannot be empty");
+            alert.showAndWait();
+            return;
+        }
+        body.put("name", name.trim());
         // Send a POST request to add the task list to the board
         Response response = null;
         try {
@@ -66,14 +73,14 @@ public class AddTaskListCtrl {
                     .request(APPLICATION_JSON).accept(APPLICATION_JSON)
                     .post(Entity.entity(body, APPLICATION_JSON));
 
-            if (response.getStatus() != 201) {
+            if (response.getStatus() != 200) {
+                System.out.println(response.getStatus());
                 // Display an error message if the request was unsuccessful
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setContentText("Was not able to make request to add the tasklist");
                 alert.showAndWait();
                 return;
             }
-
             // Show the board with the updated task list
             Board board = response.readEntity(Board.class);
             mainCtrl.showBoard();
