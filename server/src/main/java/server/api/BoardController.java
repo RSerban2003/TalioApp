@@ -2,13 +2,12 @@ package server.api;
 
 
 import commons.Board;
-import commons.TaskList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.database.BoardRepository;
 
-import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/boards")
@@ -17,7 +16,12 @@ public class BoardController {
     @Autowired
     private BoardRepository boardRepository;
 
-    @GetMapping("/{id}")
+    @GetMapping(path = {"","/"})
+    public ResponseEntity<?> getAll() {
+        return ResponseEntity.ok(boardRepository.findAll());
+    }
+
+    @GetMapping("/{id}/get")
     public ResponseEntity<Board> getBoardById(@PathVariable Long id) {
         Board board = boardRepository.findById(id).orElse(null);
         if (board == null) {
@@ -36,14 +40,14 @@ public class BoardController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/")
-    public ResponseEntity<Board> add(@RequestParam String name){
-        if(name == null || name.isBlank()){
+    @PostMapping(path ={"/", ""})
+    public ResponseEntity<Board> add(@RequestBody Map<String, String> body){
+        if(!body.containsKey("name")){
             return ResponseEntity.badRequest().build();
         }
 
         Board board = new Board();
-        board.setTitle(name);
+        board.setTitle(body.get("name"));
         Board saved = boardRepository.save(board);
         return ResponseEntity.ok(saved);
     }
@@ -52,5 +56,4 @@ public class BoardController {
     private static boolean isNullOrEmpty(String s) {
         return s == null || s.isEmpty();
     }
-
 }
