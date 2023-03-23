@@ -42,7 +42,7 @@ public class TaskListController {
     }
 
     @PostMapping(path = "/tasklist")
-    public ResponseEntity<TaskList> add(@RequestBody Map<String, String> body, @PathVariable("board") long boardId) throws RuntimeException {
+    public ResponseEntity<Board> add(@RequestBody Map<String, String> body, @PathVariable("board") long boardId) throws RuntimeException {
         if(!body.containsKey("name")) return ResponseEntity.badRequest().build();
         TaskList taskList = new TaskList();
         taskList.setName(body.get("name"));
@@ -50,7 +50,7 @@ public class TaskListController {
         board.add(taskList);
         taskList.setBoard(board);
         taskListRepository.save(taskList);
-        return ResponseEntity.ok(taskList);
+        return ResponseEntity.ok(board);
     }
     @PatchMapping(path = "/{list}/edit")
     public ResponseEntity<?> edit(@PathVariable("board") long boardId, @PathVariable("list") long listId, @RequestBody Map<String, String> body) throws RuntimeException {

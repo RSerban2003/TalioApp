@@ -85,6 +85,6 @@ public class BoardCtrl {
     }
 
     public void addTaskList(){
-        mainCtrl.showOverview();
+        mainCtrl.showAddTaskList();
     }
 }
