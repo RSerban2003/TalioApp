@@ -60,9 +60,7 @@ public class MainCtrl {
         this.board = new Scene(board.getValue(), 1900, 1000);
 
         this.server = server;
-        server.registerForMessages("/topic/"+board.getKey().getBoardID(), Board.class, q ->{
-            updateBoard(q);
-        });
+
         showConnect();
         primaryStage.show();
     }

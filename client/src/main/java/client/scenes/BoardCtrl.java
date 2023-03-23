@@ -5,12 +5,15 @@ import client.utils.ServerUtils;
 import commons.Board;
 import commons.TaskList;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 
 import javax.inject.Inject;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class BoardCtrl {
+public class BoardCtrl implements Initializable {
     @FXML
     private VBox boardVBox;
     @FXML
@@ -46,5 +49,12 @@ public class BoardCtrl {
 
     public void disconnectServer(){
         mainCtrl.showConnect();
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        server.registerForMessages("/topic/"+String.valueOf(boardID), Board.class, q ->{
+            mainCtrl.updateBoard(q);
+        });
     }
 }
