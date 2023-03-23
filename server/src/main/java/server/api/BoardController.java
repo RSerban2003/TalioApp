@@ -2,13 +2,11 @@ package server.api;
 
 
 import commons.Board;
-import commons.TaskList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.database.BoardRepository;
 
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -18,7 +16,12 @@ public class BoardController {
     @Autowired
     private BoardRepository boardRepository;
 
-    @GetMapping("/{id}")
+    @GetMapping(path = {"","/"})
+    public ResponseEntity<?> getAll() {
+        return ResponseEntity.ok(boardRepository.findAll());
+    }
+
+    @GetMapping("/{id}/get")
     public ResponseEntity<Board> getBoardById(@PathVariable Long id) {
         Board board = boardRepository.findById(id).orElse(null);
         if (board == null) {
@@ -52,11 +55,4 @@ public class BoardController {
     private static boolean isNullOrEmpty(String s) {
         return s == null || s.isEmpty();
     }
-
-    @GetMapping(path = {"/", ""})
-    public ResponseEntity<List<Board>> getAllBoards() {
-        List<Board> boards = boardRepository.findAll();
-        return ResponseEntity.ok(boards);
-    }
-
 }

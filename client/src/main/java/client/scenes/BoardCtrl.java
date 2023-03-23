@@ -20,7 +20,7 @@ public class BoardCtrl {
     @FXML
     private VBox boardVBox;
     @FXML
-    private AnchorPane boardAnchor;
+    private AnchorPane TaskListAnchorPaneID;
     private MainCtrl mainCtrl;
     @FXML
     private Text textBoardName;
@@ -35,13 +35,13 @@ public class BoardCtrl {
     @Inject
     public BoardCtrl(MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
-        boardAnchor = new AnchorPane();
+        TaskListAnchorPaneID = new AnchorPane();
     }
     public void updateBoard(Board board) {
-        if(boardAnchor.getChildren().size() > 0) {
-            boardAnchor.getChildren().clear();
+        if(TaskListAnchorPaneID.getChildren().size() > 0) {
+            TaskListAnchorPaneID.getChildren().clear();
         }
-        boardAnchor.getChildren().add(new BoardComponent(board));
+        TaskListAnchorPaneID.getChildren().add(new BoardComponent(board));
     }
     // after switching boards, this method updates the appointed board in this class
     public void currentBoard(Board board){
@@ -84,4 +84,7 @@ public class BoardCtrl {
         clipboard.setContent(clipboardContent);
     }
 
+    public void addTaskList(){
+        mainCtrl.showOverview();
+    }
 }

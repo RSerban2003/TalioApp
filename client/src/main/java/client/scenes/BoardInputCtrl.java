@@ -49,7 +49,7 @@ public class BoardInputCtrl {
         try {
             // If there is an input make a get request with the board id to retrieve it
             Client client = ClientBuilder.newClient();
-            response = client.target(server.getServerUrl()).path("api/boards/" + boardId).request().get();
+            response = client.target(server.getServerUrl()).path("api/boards/" + boardId + "/get/").request().get();
             // if there is no board with such id, put up a warning and wait for another input
             if (response.getStatus() == 404) {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -61,7 +61,7 @@ public class BoardInputCtrl {
                 throw new RuntimeException("Failed to retrieve board: HTTP error code " + response.getStatus());
             }
             Board board = ClientBuilder.newClient(new ClientConfig()).target(server.getServerUrl())
-                    .path("api/boards/" + boardId).request(APPLICATION_JSON).accept(APPLICATION_JSON).get(new GenericType<Board>() {});
+                    .path("api/boards/" + boardId + "/get").request(APPLICATION_JSON).accept(APPLICATION_JSON).get(new GenericType<Board>() {});
             mainCtrl.showBoard();
             mainCtrl.updateBoard(board);
             mainCtrl.currentBoard(board);
