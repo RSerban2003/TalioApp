@@ -1,5 +1,6 @@
 package server.api;
 
+import commons.Board;
 import commons.Task;
 import commons.TaskList;
 
@@ -13,6 +14,7 @@ import server.database.TaskListRepository;
 import server.database.TaskRepository;
 
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/boards/{board}/{list}")
@@ -88,5 +90,31 @@ public class CardController {
         taskListRepository.save(taskList);
 
         return ResponseEntity.ok().build();
+    }
+    @PatchMapping("/{card}/move")
+    public ResponseEntity<?> move(@PathVariable("card") long cardId, @PathVariable("list") long listId,
+                                  @PathVariable("board") long boardId, @RequestBody Map<String, Object> body) {
+        if(!body.containsKey("listTo") || !body.containsKey("index")) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("no");
+        Optional<Task> task = taskRepository.findById(cardId);
+        Optional<TaskList> taskListFrom = taskListRepository.findById(listId);
+        long listToId = Long.valueOf((int) body.get("listTo"));
+        int index = (int) body.get("index");
+        Optional<TaskList> taskListTo = taskListRepository.findById(listToId);
+        Optional<Board> board = boardRepository.findById(boardId);
+
+        if (task.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Task not found");
+        if (taskListFrom.isEmpty() || taskListTo.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Tasklist not found");
+        if (task.get().getTaskList().getId() != listId) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Task not part of tasklist");
+
+        if(board.isEmpty()) return ResponseEntity.badRequest().build();
+        if(taskListFrom.get().getBoard().getId() != boardId || taskListTo.get().getBoard().getId() != boardId) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("List not part of board");
+        if(listId == listToId && taskListFrom.get().getTaskList().indexOf(task.get()) < index) {
+            taskListFrom.get().getTaskList().remove(task.get());
+            taskListTo.get().getTaskList().add(index - 1, task.get());
+        } else {
+            taskListTo.get().getTaskList().add(index, task.get());
+            task.get().setTaskList(taskListTo.get());
+        }
+        return ResponseEntity.ok(taskListTo);
     }
 }
