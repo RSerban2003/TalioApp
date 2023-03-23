@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import server.database.BoardRepository;
 import server.database.TaskListRepository;
 
+import java.util.List;
 import java.util.Map;
 
 
@@ -17,15 +18,27 @@ import java.util.Map;
 
 public class TaskListController {
 
-    private BoardRepository boardRepository;
+    private final BoardRepository boardRepository;
 
-    private TaskListRepository taskListRepository;
+    private final TaskListRepository taskListRepository;
 
     public TaskListController(TaskListRepository taskListRepository, BoardRepository boardRepository){
 
         this.boardRepository = boardRepository;
         this.taskListRepository = taskListRepository;
 
+    }
+
+    @GetMapping(path = {"","/"})
+    public ResponseEntity<List<TaskList>> getAll() {
+        return ResponseEntity.ok(taskListRepository.findAll());
+    }
+
+    @GetMapping(path = "/{list}/get")
+    public ResponseEntity<?> getById(@PathVariable("list") long listId) {
+        var TL = taskListRepository.findById(listId);
+        if (TL.isPresent()) return ResponseEntity.ok(taskListRepository.findById(listId).get());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("List not found");
     }
 
     @PostMapping(path = "/tasklist")
