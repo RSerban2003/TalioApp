@@ -29,7 +29,7 @@
       <TextArea layoutX="42.0" layoutY="134.0" prefHeight="177.0" prefWidth="500.0" style="-fx-border-color: transparent; -fx-background-color: transparent; -fx-control-inner-background: #8c8886;" wrapText="true" />
       <ImageView fitHeight="15.0" fitWidth="15.0" layoutX="132.0" layoutY="114.0">
          <image>
-            <Image url="@oopp-team-16/client/src/main/resources/client/images" />
+            <Image url="@client/src/main/resources/client/images/EditIcon.png" />
          </image>
       </ImageView>
    </children>
