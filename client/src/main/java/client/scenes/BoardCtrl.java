@@ -13,7 +13,7 @@ import javax.inject.Inject;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class BoardCtrl implements Initializable {
+public class BoardCtrl  {
     @FXML
     private VBox boardVBox;
     @FXML
@@ -40,21 +40,23 @@ public class BoardCtrl implements Initializable {
     }
 
     public void setBoardID(long boardID) {
+        if(boardID != 0){
+            System.out.println("/topic/"+boardID);
+            server.registerForMessages("/topic/100", Board.class, q ->{
+                System.out.println(q.toString());
+                this.updateBoard(q);
+            });
+        }
         this.boardID = boardID;
     }
 
     public void disconnectBoard(){
         mainCtrl.showBoardinput();
+        server.unregisterForMessages("/topic/"+this.boardID);
     }
 
     public void disconnectServer(){
         mainCtrl.showConnect();
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        server.registerForMessages("/topic/"+String.valueOf(boardID), Board.class, q ->{
-            mainCtrl.updateBoard(q);
-        });
-    }
 }

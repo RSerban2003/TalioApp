@@ -24,7 +24,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 import java.net.SocketTimeoutException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 
@@ -117,8 +119,8 @@ public class ServerUtils {
     public String getServerUrl() {
         return SERVER;
     }
-    private StompSession session = connect(WSSERVER + "websocket");
-
+    private StompSession session = connect("ws://localhost:8080/websocket");
+    private Map<String, StompSession.Subscription> subscriptions = new HashMap<>();
     private StompSession connect(String url){
         var client = new StandardWebSocketClient();
         var stomp = new WebSocketStompClient(client);
@@ -134,7 +136,7 @@ public class ServerUtils {
     }
 
     public <T> void registerForMessages(String dest, Class<T> type, Consumer<T> consumer){
-        session.subscribe(dest, new StompFrameHandler() {
+        StompSession.Subscription subscription = session.subscribe(dest, new StompFrameHandler() {
             @Override
             public Type getPayloadType(StompHeaders headers) {
                 return type;
@@ -146,6 +148,15 @@ public class ServerUtils {
                 consumer.accept((T) payload);
             }
         });
+        subscriptions.put(dest, subscription);
+    }
+
+    public void unregisterForMessages(String dest) {
+        StompSession.Subscription subscription = subscriptions.get(dest);
+        if (subscription != null) {
+            subscription.unsubscribe();
+            subscriptions.remove(dest);
+        }
     }
 
     public void send(String dest, Object o){
