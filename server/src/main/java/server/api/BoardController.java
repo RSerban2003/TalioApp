@@ -43,7 +43,7 @@ public class BoardController {
         boardRepository.deleteById(id);
 
         // send update to client using WebSocket
-        msgs.convertAndSend("/topic/" + id, "Board removed");
+        msgs.convertAndSend("/topic/" + id, new Board());
 
         return ResponseEntity.noContent().build();
     }

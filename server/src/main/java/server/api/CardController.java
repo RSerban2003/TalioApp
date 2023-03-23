@@ -56,11 +56,12 @@ public class CardController {
         taskList.add(task);
         task.setTaskList(taskList);
 
-        // send update to client using WebSocket
-        TaskList taskList1 = taskListRepository.findById(listId).get();
-        msgs.convertAndSend("/topic/" + boardId, taskList1);
-
         taskRepository.save(task);
+
+        Board board1 = boardRepository.findById(boardId).get();
+        // send update to client using WebSocket
+        msgs.convertAndSend("/topic/" + boardId, board1);
+
         return ResponseEntity.ok(task);
     }
 
@@ -78,12 +79,11 @@ public class CardController {
 
         t.setName(name);
         t.setDescription(description);
-
-        // send update to client using WebSocket
-        TaskList taskList = taskListRepository.findById(listId).get();
-        msgs.convertAndSend("/topic/" + boardId, taskList);
-
         Task ta = taskRepository.save(t);
+
+        Board board1 = boardRepository.findById(boardId).get();
+        // send update to client using WebSocket
+        msgs.convertAndSend("/topic/" + boardId, board1);
 
         return ResponseEntity.ok(ta);
     }
@@ -107,13 +107,15 @@ public class CardController {
 
         // update the taskList and save
         taskList.remove(task);
-
-
         task.setTaskList(null);
-        // send updated list to client using WebSocket
-        msgs.convertAndSend("/topic/" + boardId, taskList);
+
+        taskRepository.deleteById(cardId);
 
         taskListRepository.save(taskList);
+
+        Board board1 = boardRepository.findById(boardId).get();
+        // send update to client using WebSocket
+        msgs.convertAndSend("/topic/" + boardId, board1);
 
         return ResponseEntity.ok().build();
     }

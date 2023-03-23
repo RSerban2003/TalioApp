@@ -15,6 +15,8 @@
  */
 package client.scenes;
 
+import client.components.BoardComponent;
+import client.utils.ServerUtils;
 import commons.Board;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -35,11 +37,12 @@ public class MainCtrl {
     private BoardInputCtrl boardInputCtrl;
     private Scene boardInput;
     private Scene board;
+    private ServerUtils server;
     private BoardCtrl boardCtrl;
 
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
             Pair<AddQuoteCtrl, Parent> add, Pair<ConnectCtrl, Parent> connect, Pair<BoardInputCtrl, Parent> boardInput,
-                           Pair<BoardCtrl, Parent> board) {
+                           Pair<BoardCtrl, Parent> board, ServerUtils server) {
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
@@ -56,6 +59,10 @@ public class MainCtrl {
         this.boardCtrl = board.getKey();
         this.board = new Scene(board.getValue(), 1900, 1000);
 
+        this.server = server;
+        server.registerForMessages("/topic/"+board.getKey().getBoardID(), Board.class, q ->{
+            updateBoard(q);
+        });
         showConnect();
         primaryStage.show();
     }
