@@ -80,6 +80,8 @@ public class MainCtrl {
     public void showConnect() {
         primaryStage.setTitle("Connect: select a hostname");
         primaryStage.setScene(connect);
+        connect.setOnKeyPressed(e -> connectCtrl.keyPressed(e));
+
     }
     public void showBoard(){
         primaryStage.setTitle("Taskboard");
@@ -90,6 +92,7 @@ public class MainCtrl {
     public void showBoardinput() {
         primaryStage.setTitle("Board: select a board id");
         primaryStage.setScene(boardInput);
+        boardInput.setOnKeyPressed(e -> boardInputCtrl.keyPressed(e));
     }
     public void updateBoard(Board board) {
         boardCtrl.updateBoard(board);
@@ -97,6 +100,7 @@ public class MainCtrl {
     public void showAddTaskList() {
         primaryStage.setTitle("Create a new TaskList");
         primaryStage.setScene(tasklist1);
+        tasklist1.setOnKeyPressed(e -> addTaskListCtrl.keyPressed(e));
     }
 
     // Method that takes the board entity into BoardCtrl
