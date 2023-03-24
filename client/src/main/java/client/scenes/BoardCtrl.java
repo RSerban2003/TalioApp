@@ -42,7 +42,7 @@ public class BoardCtrl {
 
     public void setBoardID(long boardID) {
         if(boardID != 0){
-            server.registerForMessages("/topic/100", Board.class, q -> {
+            server.registerForMessages("/topic/"+boardID, Board.class, q -> {
                 observableBoard.set(q);
             });
         }
