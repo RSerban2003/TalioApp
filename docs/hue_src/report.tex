@@ -1,0 +1,31 @@
+\documentclass[sigconf]{acmart}
+
+% meta-data
+\title{OOP Heuristic Usability Evaluation -- Group 16}
+\author{Alexis Fimeyer, Max Eradus, Ewout de Dobbelaar, Rares Şerban,}
+\author{Farhan Taufiqillah Lingga Djaya, Samuel van den Houten}
+
+% remove overhead that is used in regular ACM papers
+\settopmatter{printacmref=false} % box after abstract
+\renewcommand\footnotetextcopyrightpermission[1]{} % copyright on first page
+\pagestyle{plain} % running headers
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[final]{pdfpages}
+\begin{document}
+
+\maketitle
+\tableofcontents
+\input{content/introduction}
+%\input{content/citations}
+\input{content/methods}
+\input{content/results}
+\input{content/conclusion_improvements}
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{references}
+\appendix
+\input{content/before}
+\input{content/after}
+\end{document}
+\endinput
