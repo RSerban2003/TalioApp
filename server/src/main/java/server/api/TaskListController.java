@@ -89,7 +89,6 @@ public class TaskListController {
         Board board1 = boardRepository.findById(boardId).get();
         // send update to client using WebSocket
         msgs.convertAndSend("/topic/" + boardId, board1);
-        System.out.println("/topic/" + boardId+", "+ board1.toString());
         return ResponseEntity.ok(board);
     }
 }
