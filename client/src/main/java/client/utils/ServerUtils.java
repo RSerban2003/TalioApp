@@ -26,8 +26,10 @@ import java.net.URL;
 import java.util.List;
 
 import commons.Board;
+import jakarta.ws.rs.PATCH;
 import jakarta.ws.rs.ProcessingException;
 import jakarta.ws.rs.client.Client;
+import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
 
@@ -104,5 +106,23 @@ public class ServerUtils {
      */
     public String getServerUrl() {
         return SERVER;
+    }
+
+    public void changeBoardName(String name, long boardId) {
+        System.out.println("client2");
+        Response response = null;
+        //try {
+            response = ClientBuilder.newClient()
+                    .target(SERVER).path("api/boards/" + boardId + "/patch")
+                    .request(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+                    //.method("PATCH", Entity.entity(name, MediaType.APPLICATION_JSON_TYPE));
+
+                    .put(Entity.entity("name = " + name, APPLICATION_JSON)); // fix this and make it send the new name
+        //}
+        //catch (Exception e) {
+        //    System.out.println("error");
+        //}
+        System.out.println(response);;
     }
 }

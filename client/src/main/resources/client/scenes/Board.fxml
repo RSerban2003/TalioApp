@@ -90,7 +90,12 @@
                                           <Insets bottom="5.0" />
                                        </HBox.margin>
                                     </Button>
-                                    <Region prefHeight="107.0" prefWidth="364.0" HBox.hgrow="ALWAYS" />
+                                    <Region prefHeight="68.0" prefWidth="38.0" HBox.hgrow="ALWAYS" />
+                                    <Label fx:id="boardIdLabel" prefHeight="23.0" prefWidth="118.0" text="BoardId : ">
+                                       <HBox.margin>
+                                          <Insets bottom="5.0" right="10.0" />
+                                       </HBox.margin>
+                                    </Label>
                                     <Button mnemonicParsing="false" text="Copy Invite Key" HBox.hgrow="ALWAYS">
                                        <HBox.margin>
                                           <Insets bottom="5.0" right="15.0" />

@@ -20,11 +20,20 @@ public class BoardController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Board> getBoardById(@PathVariable Long id) {
+        System.out.println("1");
         Board board = boardRepository.findById(id).orElse(null);
+        System.out.println("2");
         if (board == null) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(board);
+    }
+
+    @PutMapping(path = {"{board}/patch"})
+    public ResponseEntity<?> changeName(@RequestBody Map<String, String> body) {
+        System.out.println(body);
+        System.out.println("oi");
+        return ResponseEntity.ok().build();
     }
 
 
