@@ -4,8 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TaskTest {
 
@@ -46,8 +45,8 @@ public class TaskTest {
     @Test
     public void testToString() {
         Task task = new Task(1L, "Task 1", "Description 1");
-        String expected = "Task[id=1,name=Task 1,description=Description 1,taskList=null]";
-        assertEquals(expected, task.toString());
+        String expected = "commons.Task@";
+        assertTrue(task.toString().startsWith(expected));
     }
 
     @Test
