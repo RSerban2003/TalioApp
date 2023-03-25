@@ -5,6 +5,7 @@ import client.utils.ServerUtils;
 import commons.Board;
 import commons.TaskList;
 import jakarta.ws.rs.client.ClientBuilder;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -37,21 +38,26 @@ public class BoardCtrl {
     private Button buttonSaveBoardName;
     private Board board;
 
+    private SimpleObjectProperty<Board> observableBoard;
+    private BoardComponent boardComponent;
+
     @Inject
     public BoardCtrl(MainCtrl mainCtrl, ServerUtils server) {
         this.mainCtrl = mainCtrl;
         this.server = server;
         boardAnchor = new AnchorPane();
         TaskListAnchorPaneID = new AnchorPane();
+        observableBoard = new SimpleObjectProperty<Board>();
+        boardComponent = new BoardComponent(observableBoard);
     }
+    
     public void updateBoard(Board board) {
-        if(TaskListAnchorPaneID.getChildren().size() > 0) {
-            TaskListAnchorPaneID.getChildren().clear();
-        }
+        observableBoard.set(board);
         setBoardID(board.getId());
-        boardAnchor.getChildren().add(new BoardComponent(board));
-        TaskListAnchorPaneID.getChildren().add(new BoardComponent(board));
+        boardAnchor.getChildren().clear();
+        boardAnchor.getChildren().add(boardComponent);
     }
+
     // after switching boards, this method updates the appointed board in this class
     public void currentBoard(Board board){
         this.board = board;
@@ -62,15 +68,22 @@ public class BoardCtrl {
     }
 
     public void setBoardID(long boardID) {
+        if(boardID != 0){
+            server.registerForMessages("/topic/"+boardID, Board.class, q -> {
+                observableBoard.set(q);
+            });
+        }
         this.boardID = boardID;
     }
 
     public void disconnectBoard(){
         mainCtrl.showBoardinput();
+        server.unregisterForMessages("/topic/"+this.boardID);
     }
 
     public void disconnectServer(){
         mainCtrl.showConnect();
+        server.unregisterForMessages("/topic/"+this.boardID);
     }
 
     public void hideEditFields(){
