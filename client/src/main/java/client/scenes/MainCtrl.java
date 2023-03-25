@@ -36,13 +36,16 @@ public class MainCtrl {
     private Scene connect;
     private BoardInputCtrl boardInputCtrl;
     private Scene boardInput;
+    private Scene taskList1;
+    private AddTaskListCtrl addTaskListCtrl;
     private Scene board;
     private ServerUtils server;
     private BoardCtrl boardCtrl;
 
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
             Pair<AddQuoteCtrl, Parent> add, Pair<ConnectCtrl, Parent> connect, Pair<BoardInputCtrl, Parent> boardInput,
-                           Pair<BoardCtrl, Parent> board, ServerUtils server) {
+                           Pair<BoardCtrl, Parent> board, Pair<AddTaskListCtrl, Parent> taskList1, ServerUtils server) {
+
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
@@ -63,6 +66,10 @@ public class MainCtrl {
         server.registerForMessages("/topic/"+board.getKey().getBoardID(), Board.class, q ->{
             updateBoard(q);
         });
+
+        this.addTaskListCtrl = taskList1.getKey();
+        this.taskList1 = new Scene(taskList1.getValue());
+
         showConnect();
         primaryStage.show();
     }
@@ -78,6 +85,7 @@ public class MainCtrl {
         primaryStage.setScene(add);
         add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
     }
+
     public void showConnect() {
         primaryStage.setTitle("Connect: select a hostname");
         primaryStage.setScene(connect);
@@ -85,6 +93,7 @@ public class MainCtrl {
     public void showBoard(){
         primaryStage.setTitle("Taskboard");
         primaryStage.setScene(board);
+        boardCtrl.hideEditFields();
     }
 
     public void showBoardinput() {
@@ -93,5 +102,14 @@ public class MainCtrl {
     }
     public void updateBoard(Board board) {
         boardCtrl.updateBoard(board);
+    }
+    public void showAddTaskList() {
+        primaryStage.setTitle("Create a new TaskList");
+        primaryStage.setScene(taskList1);
+    }
+
+    // Method that takes the board entity into BoardCtrl
+    public void currentBoard(Board board){
+        boardCtrl.currentBoard(board);
     }
 }

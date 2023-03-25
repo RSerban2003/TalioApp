@@ -104,7 +104,7 @@ public class ServerUtils {
      */
     public boolean boardExists(String boardId) {
         Client client = ClientBuilder.newClient(new ClientConfig());
-        Response response = client.target(SERVER).path("api/boards/" + boardId).request().get();
+        Response response = client.target(SERVER).path("api/boards/" + boardId + "/get").request().get();
         int status = response.getStatus();
         response.close();
         return status == 200;

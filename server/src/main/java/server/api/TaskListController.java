@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import server.database.BoardRepository;
 import server.database.TaskListRepository;
 
+import java.util.List;
 import java.util.Map;
 
 
@@ -18,8 +19,7 @@ import java.util.Map;
 
 public class TaskListController {
 
-    private BoardRepository boardRepository;
-
+    private final BoardRepository boardRepository;
     private TaskListRepository taskListRepository;
     private SimpMessagingTemplate msgs;
 
@@ -29,22 +29,31 @@ public class TaskListController {
         this.msgs = msgs;
     }
 
+    @GetMapping(path = {"","/"})
+    public ResponseEntity<List<TaskList>> getAll() {
+        return ResponseEntity.ok(taskListRepository.findAll());
+    }
+
+    @GetMapping(path = "/{list}/get")
+    public ResponseEntity<?> getById(@PathVariable("list") long listId) {
+        var TL = taskListRepository.findById(listId);
+        if (TL.isPresent()) return ResponseEntity.ok(taskListRepository.findById(listId).get());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("List not found");
+    }
+
     @PostMapping(path = "/tasklist")
-    public ResponseEntity<TaskList> add(@RequestBody Map<String, String> body, @PathVariable("board") long boardId) throws RuntimeException {
+    public ResponseEntity<Board> add(@RequestBody Map<String, String> body, @PathVariable("board") long boardId) throws RuntimeException {
         if(!body.containsKey("name")) return ResponseEntity.badRequest().build();
         TaskList taskList = new TaskList();
         taskList.setName(body.get("name"));
         Board board = boardRepository.findById(boardId).orElseThrow(() -> new RuntimeException("Board not found"));
         board.add(taskList);
         taskList.setBoard(board);
-
         taskListRepository.save(taskList);
-
         Board board1 = boardRepository.findById(boardId).get();
         // send update to client using WebSocket
         msgs.convertAndSend("/topic/" + boardId, board1);
-
-        return ResponseEntity.ok(taskList);
+        return ResponseEntity.ok(board);
     }
     @PatchMapping(path = "/{list}/edit")
     public ResponseEntity<?> edit(@PathVariable("board") long boardId, @PathVariable("list") long listId, @RequestBody Map<String, String> body) throws RuntimeException {
