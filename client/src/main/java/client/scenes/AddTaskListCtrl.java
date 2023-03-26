@@ -3,6 +3,7 @@ package client.scenes;
 import client.utils.ServerUtils;
 import commons.Board;
 import commons.TaskList;
+import javafx.scene.input.KeyEvent;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
@@ -12,6 +13,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
@@ -83,6 +85,7 @@ public class AddTaskListCtrl {
             }
             // Show the board with the updated task list
             Board board = response.readEntity(Board.class);
+            clearFields();
             mainCtrl.showBoard();
             mainCtrl.updateBoard(board);
         } catch (Exception e) {
@@ -96,8 +99,23 @@ public class AddTaskListCtrl {
             }
         }
     }
-
-
-
-
+    public void keyPressed(KeyEvent e) {
+        switch (e.getCode()) {
+            case ENTER:
+                onSubmitButtonClicked();
+                break;
+            case ESCAPE:
+                cancel();
+                break;
+            default:
+                break;
+        }
+    }
+    public void cancel() {
+        clearFields();
+        mainCtrl.showBoard();
+    }
+    private void clearFields() {
+        TextFieldId.clear();
+    }
 }
