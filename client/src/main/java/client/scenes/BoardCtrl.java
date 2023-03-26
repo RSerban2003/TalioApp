@@ -43,7 +43,6 @@ public class BoardCtrl {
         this.mainCtrl = mainCtrl;
         this.server = server;
         boardAnchor = new AnchorPane();
-        TaskListAnchorPaneID = new AnchorPane();
         observableBoard = new SimpleObjectProperty<Board>();
         boardComponent = new BoardComponent(observableBoard);
     }
