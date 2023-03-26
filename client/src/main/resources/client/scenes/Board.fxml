@@ -141,7 +141,7 @@
                                  <children>
                                     <ScrollPane hbarPolicy="ALWAYS">
                                       <content>
-                                        <AnchorPane fx:id="TaskListAnchorPaneID" />
+                                        <AnchorPane fx:id="boardAnchor" />
                                       </content>
                                     </ScrollPane>
                                  </children>

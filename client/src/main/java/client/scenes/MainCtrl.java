@@ -64,10 +64,6 @@ public class MainCtrl {
 
         this.server = server;
 
-        server.registerForMessages("/topic/"+board.getKey().getBoardID(), Board.class, q ->{
-            updateBoard(q);
-        });
-
         this.addTaskListCtrl = taskList1.getKey();
         this.taskList1 = new Scene(taskList1.getValue());
 

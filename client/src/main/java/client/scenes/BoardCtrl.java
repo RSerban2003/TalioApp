@@ -21,13 +21,10 @@ import javax.inject.Inject;
 
 public class BoardCtrl {
     @FXML
-    private VBox boardVBox;
-    @FXML
     private AnchorPane boardAnchor;
     private final ServerUtils server;
     private MainCtrl mainCtrl;
     private long boardID;
-    private AnchorPane TaskListAnchorPaneID;
     @FXML
     private Text textBoardName;
     @FXML
