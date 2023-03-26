@@ -21,11 +21,14 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Type;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.function.Consumer;
 
 import commons.Board;
 import commons.TaskList;
@@ -39,12 +42,21 @@ import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
 import org.glassfish.jersey.client.ClientProperties;
+import org.springframework.messaging.converter.MappingJackson2MessageConverter;
+import org.springframework.messaging.simp.stomp.StompFrameHandler;
+import org.springframework.messaging.simp.stomp.StompHeaders;
+import org.springframework.messaging.simp.stomp.StompSession;
+import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
+import org.springframework.web.socket.client.standard.StandardWebSocketClient;
+import org.springframework.web.socket.messaging.WebSocketStompClient;
 
 public class ServerUtils {
     private static String SERVER = "http://localhost:8080/";
+    private static String WSSERVER = "ws://localhost:8080/";
 
     public static void setHost(String hostname) {
         SERVER = "http://" + hostname + ":8080/";
+        WSSERVER = "ws://" + hostname + ":8080/";
     }
     public void getQuotesTheHardWay() throws IOException {
         var url = new URL("http://localhost:8080/api/quotes");
@@ -102,7 +114,7 @@ public class ServerUtils {
      */
     public boolean boardExists(String boardId) {
         Client client = ClientBuilder.newClient(new ClientConfig());
-        Response response = client.target(SERVER).path("api/boards/" + boardId).request().get();
+        Response response = client.target(SERVER).path("api/boards/" + boardId + "/get").request().get();
         int status = response.getStatus();
         response.close();
         return status == 200;
@@ -114,5 +126,48 @@ public class ServerUtils {
      */
     public String getServerUrl() {
         return SERVER;
+    }
+    private StompSession session = connect("ws://localhost:8080/websocket");
+    private Map<String, StompSession.Subscription> subscriptions = new HashMap<>();
+    private StompSession connect(String url){
+        var client = new StandardWebSocketClient();
+        var stomp = new WebSocketStompClient(client);
+        stomp.setMessageConverter(new MappingJackson2MessageConverter());
+        try{
+            return stomp.connect(url, new StompSessionHandlerAdapter() {}).get();
+        } catch (InterruptedException e){
+            Thread.currentThread().interrupt();
+        } catch (ExecutionException e){
+            throw new RuntimeException(e);
+        }
+        throw new IllegalStateException();
+    }
+
+    public <T> void registerForMessages(String dest, Class<T> type, Consumer<T> consumer){
+        StompSession.Subscription subscription = session.subscribe(dest, new StompFrameHandler() {
+            @Override
+            public Type getPayloadType(StompHeaders headers) {
+                return type;
+            }
+
+            @Override
+            @SuppressWarnings("unchecked")
+            public void handleFrame(StompHeaders headers, Object payload) {
+                consumer.accept((T) payload);
+            }
+        });
+        subscriptions.put(dest, subscription);
+    }
+
+    public void unregisterForMessages(String dest) {
+        StompSession.Subscription subscription = subscriptions.get(dest);
+        if (subscription != null) {
+            subscription.unsubscribe();
+            subscriptions.remove(dest);
+        }
+    }
+
+    public void send(String dest, Object o){
+        session.send(dest, o);
     }
 }
