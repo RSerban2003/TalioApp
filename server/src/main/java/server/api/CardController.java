@@ -1,12 +1,9 @@
 package server.api;
 
-<<<<<<< HEAD
-=======
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 //import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 
->>>>>>> main
 import commons.Board;
 import commons.Task;
 import commons.TaskList;
