@@ -23,9 +23,12 @@ import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import commons.Board;
+import commons.TaskList;
 import jakarta.ws.rs.ProcessingException;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.core.Response;
@@ -83,6 +86,13 @@ public class ServerUtils {
         } catch (ProcessingException pe) {
             return false;
         }
+    }
+    public TaskList moveTask(long boardId, long taskListIdFrom, long taskListIdTo, long taskId, int index) {
+        return ClientBuilder.newClient(new ClientConfig())
+            .target(SERVER).path(String.format("/api/boards/%s/%s/$s/move", boardId, taskListIdFrom, taskId)) //
+            .request(APPLICATION_JSON) //
+            .accept(APPLICATION_JSON) //
+            .method("PATCH", Entity.entity(Map.of("index", index, "listTo", taskListIdTo), APPLICATION_JSON), TaskList.class);
     }
 
     /**
