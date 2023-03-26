@@ -5,6 +5,7 @@ import commons.Board;
 import commons.TaskList;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import server.database.BoardRepository;
 import server.database.TaskListRepository;
@@ -19,14 +20,13 @@ import java.util.Map;
 public class TaskListController {
 
     private final BoardRepository boardRepository;
+    private TaskListRepository taskListRepository;
+    private SimpMessagingTemplate msgs;
 
-    private final TaskListRepository taskListRepository;
-
-    public TaskListController(TaskListRepository taskListRepository, BoardRepository boardRepository){
-
+    public TaskListController(TaskListRepository taskListRepository, BoardRepository boardRepository, SimpMessagingTemplate msgs){
         this.boardRepository = boardRepository;
         this.taskListRepository = taskListRepository;
-
+        this.msgs = msgs;
     }
 
     @GetMapping(path = {"","/"})
@@ -50,6 +50,9 @@ public class TaskListController {
         board.add(taskList);
         taskList.setBoard(board);
         taskListRepository.save(taskList);
+        Board board1 = boardRepository.findById(boardId).get();
+        // send update to client using WebSocket
+        msgs.convertAndSend("/topic/" + boardId, board1);
         return ResponseEntity.ok(board);
     }
     @PatchMapping(path = "/{list}/edit")
@@ -62,7 +65,13 @@ public class TaskListController {
 
         if(taskList.getBoard().getId() != boardId) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("List not part of board");
         taskList.setName(body.get("name"));
+
         taskListRepository.save(taskList);
+
+        Board board = boardRepository.findById(boardId).get();
+        // send update to client using WebSocket
+        msgs.convertAndSend("/topic/" + boardId, board);
+
         return ResponseEntity.ok(taskList);
     }
     @DeleteMapping("/{list}")
@@ -82,8 +91,13 @@ public class TaskListController {
 
         board.remove(taskList);
         taskList.setBoard(null);
+        taskListRepository.deleteById(listId);
+
         boardRepository.save(board);
 
+        Board board1 = boardRepository.findById(boardId).get();
+        // send update to client using WebSocket
+        msgs.convertAndSend("/topic/" + boardId, board1);
         return ResponseEntity.ok(board);
     }
 }

@@ -66,7 +66,6 @@ public class BoardInputCtrl {
             clearFields();
             mainCtrl.showBoard();
             mainCtrl.updateBoard(board);
-            mainCtrl.currentBoard(board);
             } catch (ProcessingException e) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setContentText("Failed to retrieve board: " + e.getMessage());
