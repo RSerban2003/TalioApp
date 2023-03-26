@@ -104,9 +104,4 @@ public class MainCtrl {
         primaryStage.setTitle("Create a new TaskList");
         primaryStage.setScene(taskList1);
     }
-
-    // Method that takes the board entity into BoardCtrl
-    public void currentBoard(Board board){
-        boardCtrl.currentBoard(board);
-    }
 }

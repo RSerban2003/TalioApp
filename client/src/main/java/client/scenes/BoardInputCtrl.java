@@ -64,7 +64,6 @@ public class BoardInputCtrl {
                     .path("api/boards/" + boardId + "/get").request(APPLICATION_JSON).accept(APPLICATION_JSON).get(new GenericType<Board>() {});
             mainCtrl.showBoard();
             mainCtrl.updateBoard(board);
-            mainCtrl.currentBoard(board);
             } catch (ProcessingException e) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setContentText("Failed to retrieve board: " + e.getMessage());

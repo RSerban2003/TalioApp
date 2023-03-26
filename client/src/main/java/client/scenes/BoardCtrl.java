@@ -54,11 +54,6 @@ public class BoardCtrl {
         boardAnchor.getChildren().add(boardComponent);
     }
 
-    // after switching boards, this method updates the appointed board in this class
-    public void currentBoard(Board board){
-        this.board = board;
-    }
-
     public long getBoardID() {
         return boardID;
     }
@@ -102,7 +97,7 @@ public class BoardCtrl {
         buttonSaveBoardName.setVisible(false);
     }
     public void onCopyInviteKeyClicked(){
-        Long invite = board.getId();
+        Long invite = observableBoard.get().getId();
         String inviteString = invite.toString();
 
         Clipboard clipboard = Clipboard.getSystemClipboard();
