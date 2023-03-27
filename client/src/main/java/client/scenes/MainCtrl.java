@@ -47,8 +47,8 @@ public class MainCtrl {
     private Scene addTask;
     private AddTaskCtrl addTaskCtrl;
 
-    private Board boardObject;
-    private TaskList taskListObject;
+    private long boardID;
+    private long taskListID;
 
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
             Pair<AddQuoteCtrl, Parent> add, Pair<ConnectCtrl, Parent> connect, Pair<BoardInputCtrl, Parent> boardInput,
@@ -112,7 +112,7 @@ public class MainCtrl {
         boardInput.setOnKeyPressed(e -> boardInputCtrl.keyPressed(e));
     }
     public void updateBoard(Board board) {
-        this.boardObject = board;
+        this.boardID = board.getId();
         boardCtrl.updateBoard(board);
     }
     public void showAddTaskList() {
@@ -123,11 +123,11 @@ public class MainCtrl {
     public void updateTaskList(TaskList taskList) {
         //any suggestions on this?
     }
-    public void getTaskList(TaskList taskList) {
-        this.taskListObject = taskList;
+    public void getTaskList(long taskListID) {
+        this.taskListID = taskListID;
     }
     public void showAddTask() {
-        addTaskCtrl.getIDs(boardObject.getId(), taskListObject.getId());
+        addTaskCtrl.getIDs(boardID, taskListID);
         primaryStage.setTitle("Add a new task");
         primaryStage.setScene(addTask);
         addTask.setOnKeyPressed(e -> addTaskCtrl.keyPressed(e));

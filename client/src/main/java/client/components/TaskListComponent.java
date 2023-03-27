@@ -1,5 +1,6 @@
 package client.components;
 
+import client.Main;
 import client.utils.ServerUtils;
 import client.scenes.MainCtrl;
 import commons.Board;
@@ -16,8 +17,9 @@ public class TaskListComponent extends VBox {
     private static final String style = "-fx-background-color: #c7c7c7; -fx-border-width: 2; -fx-border-color: gray; -fx-font-weight: bold; -fx-border-radius: 10 10 10 10; -fx-background-radius: 10 10 10 10;";
     private MainCtrl mainCtrl;
     private TaskList taskListObject;
-    public TaskListComponent(TaskList taskList, Board board, ServerUtils server) {
+    public TaskListComponent(TaskList taskList, Board board, ServerUtils server, MainCtrl mainCtrl) {
         super();
+        this.mainCtrl = mainCtrl;
         Node[] tasks = taskList.getTask().stream().map((Task task) -> new TaskComponent(task, taskList, board, server)).toArray(Node[]::new);
 
         // Create label for task list name
@@ -31,8 +33,13 @@ public class TaskListComponent extends VBox {
         HBox buttonBox = new HBox(button);
         buttonBox.setAlignment(Pos.TOP_RIGHT);
 
-        // Add nameBox and buttonBox to top row
-        HBox topRow = new HBox(nameBox, buttonBox);
+        // Create button for adding tasks
+        Button addButton = new Button("Add Task");
+        addButton.setOnAction(event -> {mainCtrl.showAddTask();mainCtrl.getTaskList(taskList.getId());});
+        HBox addButtonBox = new HBox(addButton);
+
+        // Add nameBox, buttonBox and taskBox to top row
+        HBox topRow = new HBox(nameBox, buttonBox, addButtonBox);
         topRow.setSpacing(20.0);
         topRow.setAlignment(Pos.TOP_CENTER);
 
@@ -44,11 +51,5 @@ public class TaskListComponent extends VBox {
         setAlignment(Pos.TOP_CENTER);
         setPrefSize(270, 700);
         setSpacing(20.0);
-    }
-    public void addTask(MainCtrl mainCtrl) {
-        mainCtrl.getTaskList(taskListObject);
-        Button button = new Button("Add task");
-        button.setOnAction(event -> mainCtrl.showAddTask());
-        getChildren().add(button);
     }
 }
