@@ -57,8 +57,8 @@ public class CreateBoardCtrl {
         // Send a POST request to add the task list to the board
         Response response = null;
         try {
-            Client client = ClientBuilder.newClient();
-            response = client.target(server.getServerUrl()).path("/api/boards/")
+            Client clientBuilder = ClientBuilder.newClient();
+            response = clientBuilder.target(server.getServerUrl()).path("/api/boards/")
                     .request(APPLICATION_JSON).accept(APPLICATION_JSON)
                     .post(Entity.entity(body, APPLICATION_JSON));
 
@@ -72,6 +72,8 @@ public class CreateBoardCtrl {
             }
             Board boardCreated = response.readEntity(Board.class);
             Long boardId = boardCreated.getId();
+            String boardIdString = boardId.toString();
+            client.utils.SingletonUtils.getParametersScene().put("boardId", boardIdString);
             clearFields();
             mainCtrl.showBoard();
             mainCtrl.updateBoard(boardCreated);

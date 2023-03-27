@@ -69,8 +69,12 @@ public class AddTaskListCtrl {
         // Send a POST request to add the task list to the board
         Response response = null;
         try {
-            Client client = ClientBuilder.newClient();
-            response = client.target(server.getServerUrl()).path("api/boards/100/tasklist")
+            Client clientbuilder = ClientBuilder.newClient();
+
+            String boardId = client.utils.SingletonUtils.getParametersScene().get("boardId");
+
+
+            response = clientbuilder.target(server.getServerUrl()).path("api/boards/" + boardId + "/tasklist")
                     .request(APPLICATION_JSON).accept(APPLICATION_JSON)
                     .post(Entity.entity(body, APPLICATION_JSON));
             if (response.getStatus() != 200) {
