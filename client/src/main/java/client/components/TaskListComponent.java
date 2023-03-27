@@ -15,7 +15,7 @@ public class TaskListComponent extends VBox {
     private static final String style = "-fx-background-color: #c7c7c7; -fx-border-width: 2; -fx-border-color: gray; -fx-font-weight: bold; -fx-border-radius: 10 10 10 10; -fx-background-radius: 10 10 10 10;";
     public TaskListComponent(TaskList taskList, Board board, ServerUtils server) {
         super();
-        Node[] tasks = taskList.getTaskList().stream().map((Task task) -> new TaskComponent(task, taskList, board, server)).toArray(Node[]::new);
+        Node[] tasks = taskList.getTask().stream().map((Task task) -> new TaskComponent(task, taskList, board, server)).toArray(Node[]::new);
 
         // Create label for task list name
         Label nameLabel = new Label(taskList.getName());
@@ -35,6 +35,7 @@ public class TaskListComponent extends VBox {
 
         // Add topRow and tasks to TaskListComponent
         getChildren().add(topRow);
+
         getChildren().addAll(tasks);
         setStyle(style);
         setAlignment(Pos.TOP_CENTER);

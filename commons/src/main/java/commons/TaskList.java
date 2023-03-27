@@ -58,14 +58,6 @@ public class TaskList {
         this.name = name;
     }
 
-    public List<Task> getTaskList() {
-        return task;
-    }
-
-    public void setTaskList(List<Task> task) {
-        this.task = task;
-    }
-
     public void setId(Long id) {
         this.id = id;
     }
