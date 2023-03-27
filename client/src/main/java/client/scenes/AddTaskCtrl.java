@@ -109,6 +109,11 @@ public class AddTaskCtrl {
 
             if (response.getStatus() != 200) {
                 System.out.println(response.getStatus());
+                System.out.println(boardID + " " + tasklistID);
+                System.out.println("Status Code: " + response.getStatus());
+                System.out.println("Response Message: " + response.getStatusInfo().getReasonPhrase());
+                String responseBody = response.readEntity(String.class);
+                System.out.println("Response Body: " + responseBody);
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setContentText("Failed to add the task: Unable to send the request.");
                 alert.showAndWait();
@@ -133,8 +138,7 @@ public class AddTaskCtrl {
 
     @FXML
     private void onCancelButtonClicked() {
-        titleTextArea.clear();
-        descriptionTextArea.clear();
+        resetFields();
         mainCtrl.showBoard();
     }
 
@@ -175,6 +179,8 @@ public class AddTaskCtrl {
 
     private void resetFields() {
         titleTextArea.setText("New Task");
+        titleTextArea.setEditable(false);
+        descriptionTextArea.setEditable(false);
         descriptionTextArea.clear();
     }
 

@@ -20,10 +20,11 @@ public class BoardComponent extends AnchorPane {
     private SimpleObjectProperty<Board> board;
     private ServerUtils server;
     private MainCtrl mainCtrl;
-    public BoardComponent(SimpleObjectProperty<Board> board, ServerUtils server) {
+    public BoardComponent(SimpleObjectProperty<Board> board, ServerUtils server, MainCtrl mainCtrl) {
         super();
         this.board = board;
         this.server = server;
+        this.mainCtrl = mainCtrl;
         board.addListener((observable, oldValue, newValue) -> update(newValue, server));
     }
     public void update(Board board, ServerUtils server) {

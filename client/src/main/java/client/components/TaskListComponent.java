@@ -16,7 +16,6 @@ import javafx.scene.layout.VBox;
 public class TaskListComponent extends VBox {
     private static final String style = "-fx-background-color: #c7c7c7; -fx-border-width: 2; -fx-border-color: gray; -fx-font-weight: bold; -fx-border-radius: 10 10 10 10; -fx-background-radius: 10 10 10 10;";
     private MainCtrl mainCtrl;
-    private TaskList taskListObject;
     public TaskListComponent(TaskList taskList, Board board, ServerUtils server, MainCtrl mainCtrl) {
         super();
         this.mainCtrl = mainCtrl;
@@ -35,7 +34,10 @@ public class TaskListComponent extends VBox {
 
         // Create button for adding tasks
         Button addButton = new Button("Add Task");
-        addButton.setOnAction(event -> {mainCtrl.showAddTask();mainCtrl.getTaskList(taskList.getId());});
+        addButton.setOnAction(event -> {
+            mainCtrl.getTaskList(taskList.getId());
+            mainCtrl.showAddTask();
+        });
         HBox addButtonBox = new HBox(addButton);
 
         // Add nameBox, buttonBox and taskBox to top row
