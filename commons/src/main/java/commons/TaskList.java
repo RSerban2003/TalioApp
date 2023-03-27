@@ -24,6 +24,7 @@ public class TaskList {
     private String name;
 
     @OneToMany(mappedBy = "taskList", cascade = CascadeType.ALL)
+    @OrderColumn(name = "index")
     private List<Task> task;
 
     @JsonIgnore
@@ -96,5 +97,8 @@ public class TaskList {
     public void remove(Task taskItem) {
         if (!task.contains(taskItem)) return;
         this.task.remove(taskItem);
+    }
+    public void add(int index, Task taskItem) {
+        task.add(index, taskItem);
     }
 }

@@ -148,9 +148,15 @@ public class CardController {
         if(taskListFrom.get().getBoard().getId() != boardId || taskListTo.get().getBoard().getId() != boardId) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("List not part of board");
 
         taskListFrom.get().remove(task.get());
-        taskListTo.get().add(task.get());
+        task.get().setTaskList(null);
+        if (index > taskListTo.get().getTask().size()) {
+            index = taskListTo.get().getTask().size();
+        }
+        taskListTo.get().add(index, task.get());
         task.get().setTaskList(taskListTo.get());
-        taskRepository.save(task.get());
+        taskListRepository.save(taskListFrom.get());
+        taskListRepository.save(taskListTo.get());
+
 
         Board board1 = boardRepository.findById(boardId).get();
         // send update to client using WebSocket

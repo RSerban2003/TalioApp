@@ -51,13 +51,9 @@ import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
-<<<<<<< HEAD
+
+
 @Service
-=======
-
-import javax.swing.*;
-
->>>>>>> main
 public class ServerUtils {
     private static String SERVER = "http://localhost:8080/";
     private static String WSSERVER = "ws://localhost:8080/";
