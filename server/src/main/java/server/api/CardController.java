@@ -1,29 +1,16 @@
 package server.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-//import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
-
 import commons.Board;
 import commons.Task;
 import commons.TaskList;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
-import org.springframework.messaging.Message;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-
 import org.springframework.http.HttpStatus;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import server.database.BoardRepository;
 import server.database.TaskListRepository;
 import server.database.TaskRepository;
-
-import javax.websocket.OnMessage;
 import java.util.Map;
 import java.util.Optional;
 
