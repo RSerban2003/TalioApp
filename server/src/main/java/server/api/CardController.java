@@ -43,7 +43,7 @@ public class CardController {
     }
 
     @GetMapping(path = {"/", ""})
-    public ResponseEntity<Object> showAll() {
+    public ResponseEntity<?> showAll() {
         return ResponseEntity.ok(taskRepository.findAll());
     }
 
@@ -63,6 +63,7 @@ public class CardController {
         TaskList taskList = taskListRepository.findById(listId).orElseThrow(() -> new RuntimeException("Task list not found"));
         taskList.add(task);
         task.setTaskList(taskList);
+        task.setIndex(taskList.getTaskList().size() - 1);
 
         taskRepository.save(task);
 
@@ -107,6 +108,11 @@ public class CardController {
         if (!taskListRepository.existsById(listId)) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Tasklist not found");
         TaskList taskList = taskListRepository.findById(listId).get();
         if (task.getTaskList().getId() != listId) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Task not part of tasklist");
+
+        int pos = task.getIndex();
+        for (Task t : taskList.getTaskList()) {
+            if (t.getIndex() > pos) t.setIndex(t.getIndex()-1);
+        }
 
         // update the taskList and save
         taskList.remove(task);
