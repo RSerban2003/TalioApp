@@ -1,6 +1,7 @@
 package client.components;
 
 import client.utils.ServerUtils;
+import client.scenes.MainCtrl;
 import commons.Board;
 import commons.Task;
 import commons.TaskList;
@@ -13,6 +14,8 @@ import javafx.scene.layout.VBox;
 
 public class TaskListComponent extends VBox {
     private static final String style = "-fx-background-color: #c7c7c7; -fx-border-width: 2; -fx-border-color: gray; -fx-font-weight: bold; -fx-border-radius: 10 10 10 10; -fx-background-radius: 10 10 10 10;";
+    private MainCtrl mainCtrl;
+    private TaskList taskListObject;
     public TaskListComponent(TaskList taskList, Board board, ServerUtils server) {
         super();
         Node[] tasks = taskList.getTask().stream().map((Task task) -> new TaskComponent(task, taskList, board, server)).toArray(Node[]::new);
@@ -41,5 +44,11 @@ public class TaskListComponent extends VBox {
         setAlignment(Pos.TOP_CENTER);
         setPrefSize(270, 700);
         setSpacing(20.0);
+    }
+    public void addTask(MainCtrl mainCtrl) {
+        mainCtrl.getTaskList(taskListObject);
+        Button button = new Button("Add task");
+        button.setOnAction(event -> mainCtrl.showAddTask());
+        getChildren().add(button);
     }
 }

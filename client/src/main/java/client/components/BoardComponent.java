@@ -1,6 +1,7 @@
 package client.components;
 
 import client.utils.ServerUtils;
+import client.scenes.MainCtrl;
 import commons.Board;
 import commons.TaskList;
 import javafx.application.Platform;
@@ -18,7 +19,8 @@ import javafx.scene.layout.TilePane;
 public class BoardComponent extends AnchorPane {
     private SimpleObjectProperty<Board> board;
     private ServerUtils server;
-    public BoardComponent(SimpleObjectProperty<Board> board, ServerUtils server) {
+    private MainCtrl mainCtrl;
+    public BoardComponent(SimpleObjectProperty<Board> board, ServerUtils server, MainCtrl mainCtrl) {
         super();
         this.board = board;
         this.server = server;
@@ -27,7 +29,7 @@ public class BoardComponent extends AnchorPane {
     public void update(Board board, ServerUtils server) {
         Platform.runLater(
             () -> {
-                Node[] taskLists = board.getListOfTaskList().stream().map((TaskList taskList) -> new TaskListComponent(taskList, board, server)).toArray(Node[]::new);
+                Node[] taskLists = board.getListOfTaskList().stream().map((TaskList taskList) -> {TaskListComponent taskListComponent = new TaskListComponent(taskList, board, server); taskListComponent.addTask(mainCtrl); return taskListComponent;}).toArray(Node[]::new);
                 HBox taskListContainer = new HBox(taskLists);
                 taskListContainer.setSpacing(45.0);
                 AnchorPane.setTopAnchor(taskListContainer, 150.0);
