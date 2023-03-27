@@ -20,6 +20,11 @@ public class BoardComponent extends AnchorPane {
     private SimpleObjectProperty<Board> board;
     private ServerUtils server;
     private MainCtrl mainCtrl;
+
+    private final int TASKLISTOFFSET = 250;
+
+    private final int TASKHEIGHT = 100;
+
     public BoardComponent(SimpleObjectProperty<Board> board, ServerUtils server, MainCtrl mainCtrl) {
         super();
         this.board = board;
