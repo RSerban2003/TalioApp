@@ -5,16 +5,16 @@ import client.scenes.MainCtrl;
 import commons.Board;
 import commons.TaskList;
 import javafx.application.Platform;
-import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.beans.value.ObservableValueBase;
-import javafx.scene.Node;
+
+
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.TilePane;
+import javafx.scene.input.Dragboard;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import java.util.Map;
 
 public class BoardComponent extends AnchorPane {
     private SimpleObjectProperty<Board> board;
@@ -32,7 +32,7 @@ public class BoardComponent extends AnchorPane {
         this.mainCtrl = mainCtrl;
         board.addListener((observable, oldValue, newValue) -> update(newValue, server));
     }
-    public void update(Board board, ServerUtils server) {
+    public void update(Board board) {
         Platform.runLater(
             () -> {
                 TaskListComponent[] taskLists = board.getListOfTaskList().stream().map((TaskList taskList) -> new TaskListComponent(taskList, board, server, mainCtrl)).toArray(TaskListComponent[]::new);
@@ -42,8 +42,26 @@ public class BoardComponent extends AnchorPane {
                 AnchorPane.setLeftAnchor(taskListContainer, 150.0);
                 getChildren().clear();
                 getChildren().add(taskListContainer);
+                for (TaskListComponent taskListComponent : taskLists) {
+                    taskListComponent.setOnDragOver(event -> {
+                        event.acceptTransferModes(TransferMode.ANY);
+                        event.consume();
+                    });
+                    taskListComponent.setOnDragDropped(event -> {
+                        Dragboard db = event.getDragboard();
+                        event.setDropCompleted(db.hasString());
+                        AnnotationConfigApplicationContext context
+                            = new AnnotationConfigApplicationContext();
+                        context.scan("client");
+                        context.refresh();
+                        ServerUtils server = context.getBean(ServerUtils.class);
+                        Map<String, Long> params = (Map<String, Long>) db.getContent(TaskListComponent.mapFormat);
+                        int index = (int) ((event.getSceneY() - TASKLISTOFFSET) / TASKHEIGHT);
+                        server.moveTask(board.getId(), params.get("taskListId"), taskListComponent.getTaskList().getId(), params.get("taskId"), index);
+                        event.consume();
+                    });
+                }
             }
         );
-
     }
 }

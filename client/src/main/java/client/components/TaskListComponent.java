@@ -7,15 +7,15 @@ import commons.Board;
 import commons.Task;
 import commons.TaskList;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.DataFormat;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.TransferMode;
+import javafx.scene.input.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+import java.util.Map;
+
 
 import java.util.Map;
 
@@ -38,7 +38,6 @@ public class TaskListComponent extends VBox {
             });
         }
 
-
         // Create label for task list name
         Label nameLabel = new Label(taskList.getName());
         VBox nameBox = new VBox(nameLabel);
@@ -46,6 +45,11 @@ public class TaskListComponent extends VBox {
 
         // Create button
         Button button = new Button("Delete");
+        AnnotationConfigApplicationContext context
+            = new AnnotationConfigApplicationContext();
+        context.scan("client");
+        context.refresh();
+        ServerUtils server = context.getBean(ServerUtils.class);
         button.setOnAction(event -> server.deleteTaskList(board.getId(), taskList.getId()));
         HBox buttonBox = new HBox(button);
         buttonBox.setAlignment(Pos.TOP_RIGHT);
@@ -65,11 +69,14 @@ public class TaskListComponent extends VBox {
 
         // Add topRow and tasks to TaskListComponent
         getChildren().add(topRow);
-
         getChildren().addAll(tasks);
         setStyle(style);
         setAlignment(Pos.TOP_CENTER);
         setPrefSize(270, 700);
         setSpacing(20.0);
+        this.taskList = taskList;
+    }
+    public TaskList getTaskList() {
+        return taskList;
     }
 }
