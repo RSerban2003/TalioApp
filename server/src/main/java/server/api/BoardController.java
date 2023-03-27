@@ -30,9 +30,12 @@ public class BoardController {
     }
 
     @PutMapping(path = {"{board}/patch"})
-    public ResponseEntity<?> changeName(@RequestBody Map<String, String> body) {
-        System.out.println(body);
-        System.out.println("oi");
+    public ResponseEntity<?> changeName(@RequestBody String name, @PathVariable("board") long boardId) {
+        Board board = boardRepository.getById(boardId);
+        board.setTitle(name);
+
+        boardRepository.save(board);
+
         return ResponseEntity.ok().build();
     }
 

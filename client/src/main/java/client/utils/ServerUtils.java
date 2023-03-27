@@ -111,18 +111,15 @@ public class ServerUtils {
     public void changeBoardName(String name, long boardId) {
         System.out.println("client2");
         Response response = null;
-        //try {
+        try {
             response = ClientBuilder.newClient()
                     .target(SERVER).path("api/boards/" + boardId + "/patch")
                     .request(APPLICATION_JSON)
                     .accept(APPLICATION_JSON)
                     //.method("PATCH", Entity.entity(name, MediaType.APPLICATION_JSON_TYPE));
-
-                    .put(Entity.entity("name = " + name, APPLICATION_JSON)); // fix this and make it send the new name
-        //}
-        //catch (Exception e) {
-        //    System.out.println("error");
-        //}
-        System.out.println(response);;
+                    .put(Entity.entity(name, MediaType.APPLICATION_JSON_TYPE)); // fix this and make it send the new name
+        } catch (Exception e) {
+            System.out.println(response);
+        }
     }
 }
