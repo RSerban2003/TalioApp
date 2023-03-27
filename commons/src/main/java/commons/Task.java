@@ -38,6 +38,12 @@ public class Task {
         this.description = description;
         this.index = -1;
     }
+    public Task(Long id, String name, String description, int index) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.index = index;
+    }
 
     public Task() {
     }
