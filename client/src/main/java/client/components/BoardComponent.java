@@ -30,7 +30,7 @@ public class BoardComponent extends AnchorPane {
         this.board = board;
         this.server = server;
         this.mainCtrl = mainCtrl;
-        board.addListener((observable, oldValue, newValue) -> update(newValue, server));
+        board.addListener((observable, oldValue, newValue) -> update(newValue));
     }
     public void update(Board board) {
         Platform.runLater(

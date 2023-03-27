@@ -27,7 +27,7 @@ public class TaskListComponent extends VBox {
     public TaskListComponent(TaskList taskList, Board board, ServerUtils server, MainCtrl mainCtrl) {
         super();
         this.mainCtrl = mainCtrl;
-        TaskComponent[] tasks = taskList.getTask().stream().map((Task task) -> new TaskComponent(task, taskList, board, server)).toArray(TaskComponent[]::new);
+        TaskComponent[] tasks = taskList.getTask().stream().map((Task task) -> new TaskComponent(task, taskList, board)).toArray(TaskComponent[]::new);
         for (TaskComponent task: tasks) {
             task.setOnDragDetected(event -> {
                 Dragboard db = task.startDragAndDrop(TransferMode.ANY);
@@ -49,8 +49,9 @@ public class TaskListComponent extends VBox {
             = new AnnotationConfigApplicationContext();
         context.scan("client");
         context.refresh();
-        ServerUtils server = context.getBean(ServerUtils.class);
-        button.setOnAction(event -> server.deleteTaskList(board.getId(), taskList.getId()));
+        server = context.getBean(ServerUtils.class);
+        ServerUtils finalServer = server;
+        button.setOnAction(event -> finalServer.deleteTaskList(board.getId(), taskList.getId()));
         HBox buttonBox = new HBox(button);
         buttonBox.setAlignment(Pos.TOP_RIGHT);
 
