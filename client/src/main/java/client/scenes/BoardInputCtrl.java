@@ -87,6 +87,10 @@ public class BoardInputCtrl {
         }
     }
 
+    public void createBoardButton(){
+        mainCtrl.showCreateBoard();
+    }
+
     public void cancel() {
         clearFields();
         mainCtrl.showConnect();

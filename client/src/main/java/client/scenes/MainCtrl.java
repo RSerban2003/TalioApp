@@ -37,11 +37,14 @@ public class MainCtrl {
     private Scene tasklist1;
     private AddTaskListCtrl addTaskListCtrl;
     private Scene board;
+    private Scene createBoard;
     private BoardCtrl boardCtrl;
+    private CreateBoardCtrl createBoardCtrl;
 
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
             Pair<AddQuoteCtrl, Parent> add, Pair<ConnectCtrl, Parent> connect, Pair<BoardInputCtrl, Parent> boardInput,
-                           Pair<BoardCtrl, Parent> board, Pair<AddTaskListCtrl, Parent> tasklist1) {
+                           Pair<BoardCtrl, Parent> board, Pair<AddTaskListCtrl, Parent> tasklist1,
+            Pair<CreateBoardCtrl, Parent> createBoard) {
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
@@ -57,6 +60,9 @@ public class MainCtrl {
 
         this.boardCtrl = board.getKey();
         this.board = new Scene(board.getValue(), 1900, 1000);
+
+        this.createBoardCtrl = createBoard.getKey();
+        this.createBoard = new Scene(createBoard.getValue());
 
         this.addTaskListCtrl = tasklist1.getKey();
         this.tasklist1 = new Scene(tasklist1.getValue());
@@ -87,6 +93,11 @@ public class MainCtrl {
         primaryStage.setTitle("Taskboard");
         primaryStage.setScene(board);
         boardCtrl.hideEditFields();
+    }
+
+    public void showCreateBoard(){
+        primaryStage.setTitle("Create a Board");
+        primaryStage.setScene(createBoard);
     }
 
     public void showBoardinput() {
