@@ -19,8 +19,7 @@ import javafx.scene.layout.TilePane;
 public class BoardComponent extends AnchorPane {
     private SimpleObjectProperty<Board> board;
     private ServerUtils server;
-    private MainCtrl mainCtrl;
-    public BoardComponent(SimpleObjectProperty<Board> board, ServerUtils server, MainCtrl mainCtrl) {
+    public BoardComponent(SimpleObjectProperty<Board> board, ServerUtils server) {
         super();
         this.board = board;
         this.server = server;

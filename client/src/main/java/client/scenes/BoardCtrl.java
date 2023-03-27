@@ -44,7 +44,7 @@ public class BoardCtrl {
         this.server = server;
         boardAnchor = new AnchorPane();
         observableBoard = new SimpleObjectProperty<Board>();
-        boardComponent = new BoardComponent(observableBoard, server, mainCtrl);
+        boardComponent = new BoardComponent(observableBoard, server);
     }
     
     public void updateBoard(Board board) {
