@@ -49,6 +49,8 @@ import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
 
+import javax.swing.*;
+
 public class ServerUtils {
     private static String SERVER = "http://localhost:8080/";
     private static String WSSERVER = "ws://localhost:8080/";
@@ -161,5 +163,21 @@ public class ServerUtils {
 
     public void send(String dest, Object o){
         session.send(dest, o);
+    }
+
+    public boolean deleteTaskList(Long boardId, Long taskListId){
+        Client client = ClientBuilder.newClient(new ClientConfig());
+        Response response = client.target(SERVER).path("api/boards/" + boardId + "/"+taskListId).request().delete();
+        int status = response.getStatus();
+        response.close();
+        return status == 200;
+    }
+
+    public boolean deleteTask(Long boardId, Long taskListId, Long taskId){
+        Client client = ClientBuilder.newClient(new ClientConfig());
+        Response response = client.target(SERVER).path("api/boards/" + boardId + "/"+taskListId+"/"+taskId).request().delete();
+        int status = response.getStatus();
+        response.close();
+        return status == 200;
     }
 }
