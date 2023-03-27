@@ -120,9 +120,6 @@ public class MainCtrl {
         primaryStage.setScene(taskList1);
         taskList1.setOnKeyPressed(e -> addTaskListCtrl.keyPressed(e));
     }
-    public void updateTaskList(TaskList taskList) {
-        //any suggestions on this?
-    }
     public void getTaskList(long taskListID) {
         this.taskListID = taskListID;
     }

@@ -136,6 +136,7 @@ public class AddTaskCtrl {
                 return;
             }
             mainCtrl.showBoard();
+            resetFields();
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("Failed to add task:" + e.getMessage());
