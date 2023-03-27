@@ -1,0 +1,63 @@
+% !TEX root =  ../report.tex
+\newpage
+\section{Results}
+In total we received 21 problems from our experts. The problems can be roughly categorized into the following categories:
+\begin{itemize}
+    \item Lack of functionality/UI
+    \item Bad terminology
+    \item Lack of descriptive error messages
+    \item Function of UI element is unclear
+    \item Miscellaneous
+\end{itemize}
+We received 8 problems describing missing UI elements or scenes. Some important examples are screens for tag management and appearance customization. Various navigation buttons are also still missing.
+
+We also received 5 problems describing bad or confusing terminology. Some, like "TaskList" and "Board ID" make sense in the context of software development, but are confusing when used in a user-facing application. Others, like "choose" and "select" become confusing when paired with the wrong input type, like a textfield.
+
+3 issues describe the lack of (descriptive) error messages. They mention only 1 generic error message being present in the prototype, which could create confusion about the type of error that has appeared.
+
+We received 4 problem describing unclear functions of UI elements (1 of is also included in "Bad terminology"). These describe UI elements that look like other UI elements, which makes their use ambiguous. Some examples include button that looks like tags and underlined text that doesn't function like a link.
+
+Finally, we received 2 miscellaneous problems: the app mostly uses low-contrast shades of gray which makes the application difficult to use for visually impaired people and there does not exist a confirmation screen for deleting cards, which may lead to accidental deletions.
+
+
+We placed the problems we received into a priority matrix, which gives us a clear view of ones that need to be fixed most urgently.
+
+\textbf{Identified problems:}
+
+\begin{itemize}
+\item1.	Unclear error message (Heuristic 1)
+\item2.	TaskList deletion option missing (Heuristic 3)
+\item3.	Confusing "Finished" \& "Delete" buttons (Heuristic 3)
+\item4.	No board editing overview (Heuristic 3)
+\item5.	Inconsistent TaskList naming (Heuristic 4)
+\item6.	Board deletion option missing (Heuristic 3)
+\item7.	Missing "Cancel" button (Heuristic 3)
+\item8.	Confusing "Choose" term (Heuristic 4)
+\item9.	Ambiguous "board ID" (Heuristic 4)
+\item10.	Confusing "Change" \& "Disconnect" buttons (Heuristic 4)
+\item11.	No error message for empty input (Heuristic 5)
+\item12.	Vague error message (Heuristic 9)
+\item13.	Ambiguous underline function (Heuristic 6)
+\item14.	Unclear "Edit" buttons (Heuristic 4)
+\item15.	Missing color/tag modification (Heuristic 6)
+\item16.	Unclear "Select a board ID" message (Heuristic 6)
+\item17.	No customization option (Heuristic 7)
+\item18.	Missing subtasks \& tags section (Heuristic 7)
+\item19.	No Tag Management page (Heuristic 7)
+\item20.	Low contrast gray shades (Heuristic 8)
+\item21.	No deletion prevention (Heuristic 9)
+\end{itemize}
+\begin{table}[h!]
+\centering
+\caption{Priority Matrix}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline 
+\textit{Frequency} \backslash Impact & 1 & 2 & 3 & 4 & 5   \\ \hline
+1 & \textbf{13} & \textbf{11} & --- & --- & ---   \\ \hline
+2 & \textbf{5} & \textbf{12,} \textbf{14,} \textbf{19} & \textbf{15,} \textbf{16} & --- & ---   \\ \hline
+3 & \textbf{10} & \textbf{3,} \textbf{4,} \textbf{7,} \textbf{8} & \textbf{9} & --- & \textbf{21}    \\ \hline
+4 & --- & \textbf{17} & \textbf{2,} \textbf{6,} \textbf{18} & \textbf{1} & ---   \\ \hline
+5 & --- & \textbf{20} & --- & --- & ---   \\ \hline
+
+\end{tabular}
+\end{table}

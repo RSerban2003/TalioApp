@@ -36,6 +36,10 @@ public class Board {
         this.listOfTaskList = new ArrayList<>();
     }
 
+    public void setListOfTaskList(List<TaskList> listOfTaskList) {
+        this.listOfTaskList = listOfTaskList;
+    }
+
     public String getTitle() {
         return title;
     }

@@ -30,7 +30,7 @@ public class Task {
     private TaskList taskList;
 
     @Column
-    private int index;
+    private Integer index;
 
     public Task(Long id, String name, String description) {
         this.id = id;
@@ -40,6 +40,10 @@ public class Task {
     }
 
     public Task() {
+    }
+    public Task(String name, String description) {
+        this.name = name;
+        this.description = description;
     }
 
     public String getName() {
@@ -90,6 +94,7 @@ public class Task {
     }
 
     public int getIndex() {
+        if (index == null) return -1;
         return this.index;
     }
 

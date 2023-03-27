@@ -11,6 +11,7 @@ import jakarta.ws.rs.core.Response;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
 import org.glassfish.jersey.client.ClientConfig;
 
 import java.util.ArrayList;
@@ -49,7 +50,7 @@ public class BoardInputCtrl {
         try {
             // If there is an input make a get request with the board id to retrieve it
             Client client = ClientBuilder.newClient();
-            response = client.target(server.getServerUrl()).path("api/boards/" + boardId).request().get();
+            response = client.target(server.getServerUrl()).path("api/boards/" + boardId + "/get/").request().get();
             // if there is no board with such id, put up a warning and wait for another input
             if (response.getStatus() == 404) {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -61,7 +62,8 @@ public class BoardInputCtrl {
                 throw new RuntimeException("Failed to retrieve board: HTTP error code " + response.getStatus());
             }
             Board board = ClientBuilder.newClient(new ClientConfig()).target(server.getServerUrl())
-                    .path("api/boards/" + boardId).request(APPLICATION_JSON).accept(APPLICATION_JSON).get(new GenericType<Board>() {});
+                    .path("api/boards/" + boardId + "/get").request(APPLICATION_JSON).accept(APPLICATION_JSON).get(new GenericType<Board>() {});
+            clearFields();
             mainCtrl.showBoard();
             mainCtrl.updateBoard(board);
             } catch (ProcessingException e) {
@@ -69,6 +71,28 @@ public class BoardInputCtrl {
                 alert.setContentText("Failed to retrieve board: " + e.getMessage());
                 alert.showAndWait();
         }
+    }
+
+    public void keyPressed(KeyEvent e) {
+        switch (e.getCode()) {
+            case ENTER:
+                retrieveBoard();
+                break;
+            case ESCAPE:
+                cancel();
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void cancel() {
+        clearFields();
+        mainCtrl.showConnect();
+    }
+
+    private void clearFields() {
+        boardIdTextField.clear();
     }
 
 
