@@ -56,7 +56,6 @@ public class BoardCtrl {
     public void saveNewBoardName(KeyEvent key) {
         if (key.getCode().equals(KeyCode.ENTER)) {
             // save the new boardName
-            System.out.println("client1");
             server.changeBoardName(boardName.getText(),Long.parseLong(boardIdLabel.getText().split(" ")[1]));
 
             // set Disables

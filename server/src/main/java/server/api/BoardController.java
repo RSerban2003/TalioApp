@@ -4,6 +4,7 @@ package server.api;
 import commons.Board;
 import commons.TaskList;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.database.BoardRepository;
@@ -20,9 +21,7 @@ public class BoardController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Board> getBoardById(@PathVariable Long id) {
-        System.out.println("1");
         Board board = boardRepository.findById(id).orElse(null);
-        System.out.println("2");
         if (board == null) {
             return ResponseEntity.notFound().build();
         }
@@ -31,12 +30,13 @@ public class BoardController {
 
     @PutMapping(path = {"{board}/patch"})
     public ResponseEntity<?> changeName(@RequestBody String name, @PathVariable("board") long boardId) {
-        Board board = boardRepository.getById(boardId);
+        Board board = boardRepository.findById(boardId).orElse(null);
+        if (board == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Board not found");
         board.setTitle(name);
 
         boardRepository.save(board);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(board);
     }
 
 
