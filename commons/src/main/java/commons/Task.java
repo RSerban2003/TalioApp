@@ -98,13 +98,4 @@ public class Task {
     public String toString() {
         return ToStringBuilder.reflectionToString(this, MULTI_LINE_STYLE);
     }
-
-    public int getIndex() {
-        if (index == null) return -1;
-        return this.index;
-    }
-
-    public void setIndex(int index) {
-        this.index = index;
-    }
 }

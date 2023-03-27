@@ -9,10 +9,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class TaskComponent extends VBox {
     private static final String style = "-fx-background-color: #f7f7f5; -fx-border-width: 2; -fx-border-color: gray;  -fx-border-radius: 10 10 10 10;-fx-background-radius: 10 10 10 10;";
-    public TaskComponent(Task task, TaskList taskList, Board board, ServerUtils server) {
+    private final long taskId;
+    public TaskComponent(Task task, TaskList taskList, Board board) {
         super();
         Label nameLabel = new Label(task.getName());
         VBox nameBox = new VBox(nameLabel);
@@ -20,6 +22,11 @@ public class TaskComponent extends VBox {
 
 
         Button button = new Button("Delete");
+        AnnotationConfigApplicationContext context
+            = new AnnotationConfigApplicationContext();
+        context.scan("client");
+        context.refresh();
+        ServerUtils server = context.getBean(ServerUtils.class);
         button.setOnAction(event -> server.deleteTask(board.getId(), taskList.getId(), task.getId()));
         HBox buttonBox = new HBox(button);
         buttonBox.setAlignment(Pos.CENTER);
@@ -34,5 +41,9 @@ public class TaskComponent extends VBox {
         setMinSize(200, 80);
         setStyle(style);
         setAlignment(Pos.CENTER);
+        this.taskId = task.getId();
+    }
+    public long getTaskId() {
+        return taskId;
     }
 }
