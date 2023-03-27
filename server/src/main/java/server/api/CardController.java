@@ -109,12 +109,9 @@ public class CardController {
         TaskList taskList = taskListRepository.findById(listId).get();
         if (task.getTaskList().getId() != listId) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Task not part of tasklist");
 
-        int tSize = taskList.getTaskList().size() - 1;
         int pos = task.getIndex();
-        int i = pos;
-        for (Task t : taskList.getTaskList().subList(pos,tSize)) {
-            t.setIndex(i);
-            i++;
+        for (Task t : taskList.getTaskList()) {
+            if (t.getIndex() > pos) t.setIndex(t.getIndex()-1);
         }
 
         // update the taskList and save
