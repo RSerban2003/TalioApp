@@ -50,7 +50,7 @@ public class Main extends Application {
         var server = new ServerUtils();
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        mainCtrl.initialize(primaryStage, overview, add, connect, boardInput, board, taskList1,creatBoard, server);
+        mainCtrl.initialize(primaryStage, overview, add, connect, boardInput, board, taskList1, server, creatBoard);
 
     }
 }

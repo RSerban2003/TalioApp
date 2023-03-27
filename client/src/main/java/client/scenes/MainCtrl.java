@@ -67,11 +67,10 @@ public class MainCtrl {
 
         this.addTaskListCtrl = taskList1.getKey();
         this.taskList1 = new Scene(taskList1.getValue());
+
         this.createBoardCtrl = createBoard.getKey();
         this.createBoard = new Scene(createBoard.getValue());
 
-        this.addTaskListCtrl = taskList1.getKey();
-        this.taskList1 = new Scene(taskList1.getValue());
 
         showConnect();
         primaryStage.show();

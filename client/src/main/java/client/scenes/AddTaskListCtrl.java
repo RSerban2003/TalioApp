@@ -73,7 +73,6 @@ public class AddTaskListCtrl {
             response = client.target(server.getServerUrl()).path("api/boards/100/tasklist")
                     .request(APPLICATION_JSON).accept(APPLICATION_JSON)
                     .post(Entity.entity(body, APPLICATION_JSON));
-
             if (response.getStatus() != 200) {
                 System.out.println(response.getStatus());
                 // Display an error message if the request was unsuccessful

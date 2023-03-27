@@ -75,7 +75,6 @@ public class CreateBoardCtrl {
             clearFields();
             mainCtrl.showBoard();
             mainCtrl.updateBoard(boardCreated);
-            mainCtrl.currentBoard(boardCreated);
         } catch (Exception e) {
             // Display an error message if the request failed
             Alert alert = new Alert(Alert.AlertType.ERROR);
