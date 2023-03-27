@@ -29,7 +29,7 @@ public class Task {
     @JoinColumn(name = "tasklist_id")
     private TaskList taskList;
 
-    @Column
+    @OrderColumn
     private Integer index;
 
     public Task(Long id, String name, String description) {
