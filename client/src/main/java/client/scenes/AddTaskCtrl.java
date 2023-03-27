@@ -14,6 +14,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
+import org.glassfish.jersey.client.ClientConfig;
 
 
 import javax.inject.Inject;
@@ -113,7 +114,7 @@ public class AddTaskCtrl {
             alert.showAndWait();
             return;
         }
-        body.put("title", title.trim());
+        body.put("name", title.trim());
         body.put("description", description.trim());
         Response response = null;
         try {
@@ -134,11 +135,6 @@ public class AddTaskCtrl {
                 alert.showAndWait();
                 return;
             }
-            Board board = response.readEntity(Board.class);
-            TaskList taskList = response.readEntity(TaskList.class);
-            resetFields();
-            mainCtrl.updateBoard(board);
-            mainCtrl.updateTaskList(taskList);
             mainCtrl.showBoard();
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
