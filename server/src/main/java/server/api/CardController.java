@@ -123,14 +123,14 @@ public class CardController {
 
         return ResponseEntity.ok().build();
     }
-    @PatchMapping("/{card}/move")
+    @PostMapping("/{card}/move")
     public ResponseEntity<?> move(@PathVariable("card") long cardId, @PathVariable("list") long listId,
-                                  @PathVariable("board") long boardId, @RequestBody Map<String, Object> body) {
+                                  @PathVariable("board") long boardId, @RequestBody Map<String, Long> body) {
         if(!body.containsKey("listTo") || !body.containsKey("index")) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("no");
         Optional<Task> task = taskRepository.findById(cardId);
         Optional<TaskList> taskListFrom = taskListRepository.findById(listId);
-        long listToId = Long.valueOf((int) body.get("listTo"));
-        int index = (int) body.get("index");
+        long listToId = body.get("listTo");
+        int index = body.get("index").intValue();
         Optional<TaskList> taskListTo = taskListRepository.findById(listToId);
         Optional<Board> board = boardRepository.findById(boardId);
 
@@ -140,13 +140,16 @@ public class CardController {
 
         if(board.isEmpty()) return ResponseEntity.badRequest().build();
         if(taskListFrom.get().getBoard().getId() != boardId || taskListTo.get().getBoard().getId() != boardId) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("List not part of board");
-        if(listId == listToId && taskListFrom.get().getTaskList().indexOf(task.get()) < index) {
-            taskListFrom.get().getTaskList().remove(task.get());
-            taskListTo.get().getTaskList().add(index - 1, task.get());
-        } else {
-            taskListTo.get().getTaskList().add(index, task.get());
-            task.get().setTaskList(taskListTo.get());
-        }
+
+        taskListFrom.get().remove(task.get());
+        taskListTo.get().add(task.get());
+        task.get().setTaskList(taskListTo.get());
+        taskRepository.save(task.get());
+
+        Board board1 = boardRepository.findById(boardId).get();
+        // send update to client using WebSocket
+        msgs.convertAndSend("/topic/" + boardId, board1);
+
         return ResponseEntity.ok(taskListTo);
     }
 }

@@ -53,8 +53,7 @@ public class BoardComponent extends AnchorPane {
                             context.refresh();
                             ServerUtils server = context.getBean(ServerUtils.class);
                             Map params = (Map) db.getContent(TaskListComponent.mapFormat);
-                            System.out.println((Long) params.get("taskId"));
-                            System.out.println("enddrag");
+                            server.moveTask(board.getId(), (Long) params.get("taskListId"), taskListComponent.getTaskList().getId(), (Long) params.get("taskId"), 0);
                             event.consume();
                         }
                     });

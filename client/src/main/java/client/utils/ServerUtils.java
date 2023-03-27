@@ -42,6 +42,7 @@ import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
 import org.glassfish.jersey.client.ClientProperties;
+import org.glassfish.jersey.client.HttpUrlConnectorProvider;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompHeaders;
@@ -102,10 +103,11 @@ public class ServerUtils {
     }
     public TaskList moveTask(long boardId, long taskListIdFrom, long taskListIdTo, long taskId, int index) {
         return ClientBuilder.newClient(new ClientConfig())
-            .target(SERVER).path(String.format("/api/boards/%s/%s/$s/move", boardId, taskListIdFrom, taskId)) //
+            .property(HttpUrlConnectorProvider.SET_METHOD_WORKAROUND, true)
+            .target(SERVER).path(String.format("/api/boards/%s/%s/%s/move", boardId, taskListIdFrom, taskId)) //
             .request(APPLICATION_JSON) //
             .accept(APPLICATION_JSON) //
-            .method("PATCH", Entity.entity(Map.of("index", index, "listTo", taskListIdTo), APPLICATION_JSON), TaskList.class);
+            .post(Entity.entity(Map.of("index", index, "listTo", taskListIdTo), APPLICATION_JSON), TaskList.class);
     }
 
     /**
