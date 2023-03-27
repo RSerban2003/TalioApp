@@ -4,6 +4,7 @@ import client.utils.ServerUtils;
 import commons.Board;
 import commons.TaskList;
 import javafx.scene.control.TextArea;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
@@ -75,6 +76,20 @@ public class AddTaskCtrl {
     }
 
     @FXML
+    private void initialize() {
+        titleTextArea.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.length() > 30) {
+                titleTextArea.setText(oldValue);
+            }
+        });
+        titleTextArea.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                event.consume();
+            }
+        });
+    }
+
+    @FXML
     private void onEditDescriptionButtonClicked() {
         initialDescription = descriptionTextArea.getText();
         descriptionTextArea.setEditable(true);
@@ -138,11 +153,31 @@ public class AddTaskCtrl {
 
     @FXML
     private void onCancelButtonClicked() {
-        resetFields();
+        this.resetFields();
         mainCtrl.showBoard();
     }
 
+    private void removeFocus() {
+        anchorPane.requestFocus();
+    }
+
+    private void resetFields() {
+        titleTextArea.setText("New Task");
+        titleTextArea.setEditable(false);
+        descriptionTextArea.setEditable(false);
+        descriptionTextArea.clear();
+    }
+
     public void keyPressed(KeyEvent e) {
+        if(e.isControlDown() && e.getCode() == KeyCode.S) {
+            if (titleTextArea.isFocused()) {
+                titleTextArea.setEditable(false);
+                removeFocus();
+            } else if (descriptionTextArea.isFocused()) {
+                descriptionTextArea.setEditable(false);
+                removeFocus();
+            }
+        }
         switch (e.getCode()) {
             case ENTER:
                 if (titleTextArea.isFocused()) {
@@ -172,16 +207,4 @@ public class AddTaskCtrl {
                 break;
         }
     }
-
-    private void removeFocus() {
-        anchorPane.requestFocus();
-    }
-
-    private void resetFields() {
-        titleTextArea.setText("New Task");
-        titleTextArea.setEditable(false);
-        descriptionTextArea.setEditable(false);
-        descriptionTextArea.clear();
-    }
-
 }

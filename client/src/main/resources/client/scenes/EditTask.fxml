@@ -22,7 +22,7 @@
     <Button fx:id="cancelButton" layoutX="520.0" layoutY="359.0" mnemonicParsing="false" onAction="#onCancelButtonClicked" style="-fx-background-color: #454342; -fx-text-fill: #FFFFFF;" text="Cancel" />
       <Button fx:id="editDescriptionButton" layoutX="127.0" layoutY="112.0" maxHeight="40.0" maxWidth="113.0" minHeight="25.0" minWidth="15.0" mnemonicParsing="false" onAction="#onEditDescriptionButtonClicked" prefHeight="25.0" prefWidth="42.0" style="-fx-background-color: #454342; -fx-border-width: 0;" text="Edit" textFill="WHITE" />
       <Text fill="WHITE" layoutX="42.0" layoutY="130.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 15;" text="Description" />
-      <TextArea fx:id="descriptionTextArea" editable="false" layoutX="42.0" layoutY="144.0" prefHeight="177.0" prefWidth="500.0" promptText="Add description" style="-fx-border-color: transparent; -fx-background-color: transparent; -fx-control-inner-background: #8c8886;" wrapText="true">
+      <TextArea fx:id="descriptionTextArea" editable="false" layoutX="42.0" layoutY="144.0" prefHeight="177.0" prefWidth="500.0" promptText="" style="-fx-border-color: transparent; -fx-background-color: transparent; -fx-control-inner-background: #8c8886;" wrapText="true">
          <font>
             <Font size="14.0" />
          </font></TextArea>
