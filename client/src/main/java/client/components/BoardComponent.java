@@ -2,6 +2,7 @@ package client.components;
 
 import client.utils.ServerUtils;
 import commons.Board;
+import commons.Task;
 import javafx.event.EventHandler;
 import commons.TaskList;
 import javafx.application.Platform;
@@ -22,17 +23,17 @@ import java.util.Map;
 
 public class BoardComponent extends AnchorPane {
     private SimpleObjectProperty<Board> board;
-    private ServerUtils server;
-    public BoardComponent(SimpleObjectProperty<Board> board, ServerUtils server) {
+    private final int TASKLISTOFFSET = 250;
+    private final int TASKHEIGHT = 100;
+    public BoardComponent(SimpleObjectProperty<Board> board) {
         super();
         this.board = board;
-        this.server = server;
-        board.addListener((observable, oldValue, newValue) -> update(newValue, server));
+        board.addListener((observable, oldValue, newValue) -> update(newValue));
     }
-    public void update(Board board, ServerUtils server) {
+    public void update(Board board) {
         Platform.runLater(
             () -> {
-                TaskListComponent[] taskLists = board.getListOfTaskList().stream().map((TaskList taskList) -> new TaskListComponent(taskList, board, server)).toArray(TaskListComponent[]::new);
+                TaskListComponent[] taskLists = board.getListOfTaskList().stream().map((TaskList taskList) -> new TaskListComponent(taskList, board)).toArray(TaskListComponent[]::new);
                 HBox taskListContainer = new HBox(taskLists);
                 taskListContainer.setSpacing(45.0);
                 AnchorPane.setTopAnchor(taskListContainer, 150.0);
@@ -56,7 +57,8 @@ public class BoardComponent extends AnchorPane {
                             context.refresh();
                             ServerUtils server = context.getBean(ServerUtils.class);
                             Map params = (Map) db.getContent(TaskListComponent.mapFormat);
-                            server.moveTask(board.getId(), (Long) params.get("taskListId"), taskListComponent.getTaskList().getId(), (Long) params.get("taskId"), 0);
+                            int index = (int) ((event.getSceneY() - TASKLISTOFFSET) / TASKHEIGHT);
+                            server.moveTask(board.getId(), (Long) params.get("taskListId"), taskListComponent.getTaskList().getId(), (Long) params.get("taskId"), index);
                             event.consume();
                         }
                     });

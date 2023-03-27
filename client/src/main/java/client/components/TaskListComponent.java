@@ -12,6 +12,7 @@ import javafx.scene.control.Label;
 import javafx.scene.input.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.util.Map;
 
@@ -21,9 +22,9 @@ public class TaskListComponent extends VBox {
     public static final DataFormat mapFormat = new DataFormat("map");
     private TaskList taskList;
 
-    public TaskListComponent(TaskList taskList, Board board, ServerUtils server) {
+    public TaskListComponent(TaskList taskList, Board board) {
         super();
-        TaskComponent[] tasks = taskList.getTask().stream().map((Task task) -> new TaskComponent(task, taskList, board, server)).toArray(TaskComponent[]::new);
+        TaskComponent[] tasks = taskList.getTask().stream().map((Task task) -> new TaskComponent(task, taskList, board)).toArray(TaskComponent[]::new);
         for (TaskComponent task: tasks) {
             task.setOnDragDetected(new EventHandler<MouseEvent>() {
                 public void handle(MouseEvent event) {
@@ -43,6 +44,11 @@ public class TaskListComponent extends VBox {
 
         // Create button
         Button button = new Button("Delete");
+        AnnotationConfigApplicationContext context
+            = new AnnotationConfigApplicationContext();
+        context.scan("client");
+        context.refresh();
+        ServerUtils server = context.getBean(ServerUtils.class);
         button.setOnAction(event -> server.deleteTaskList(board.getId(), taskList.getId()));
         HBox buttonBox = new HBox(button);
         buttonBox.setAlignment(Pos.TOP_RIGHT);
