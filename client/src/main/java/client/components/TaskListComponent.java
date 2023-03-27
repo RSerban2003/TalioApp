@@ -18,7 +18,7 @@ public class TaskListComponent extends VBox {
     private TaskList taskList;
     public TaskListComponent(TaskList taskList) {
         super();
-        TaskComponent[] tasks = taskList.getTaskList().stream().map(TaskComponent::new).toArray(TaskComponent[]::new);
+        TaskComponent[] tasks = taskList.getTask().stream().map(TaskComponent::new).toArray(TaskComponent[]::new);
         for (TaskComponent task: tasks) {
             task.setOnDragDetected(new EventHandler<MouseEvent>() {
                 public void handle(MouseEvent event) {

@@ -29,10 +29,14 @@ public class Task {
     @JoinColumn(name = "tasklist_id")
     private TaskList taskList;
 
+    @Column
+    private Integer index;
+
     public Task(Long id, String name, String description) {
         this.id = id;
         this.name = name;
         this.description = description;
+        this.index = -1;
     }
 
     public Task() {
@@ -89,6 +93,12 @@ public class Task {
         return ToStringBuilder.reflectionToString(this, MULTI_LINE_STYLE);
     }
 
+    public int getIndex() {
+        if (index == null) return -1;
+        return this.index;
+    }
 
-
+    public void setIndex(int index) {
+        this.index = index;
+    }
 }
