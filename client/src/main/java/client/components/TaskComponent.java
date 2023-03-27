@@ -9,12 +9,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class TaskComponent extends VBox {
     private static final String style = "-fx-background-color: #f7f7f5; -fx-border-width: 2; -fx-border-color: gray;  -fx-border-radius: 10 10 10 10;-fx-background-radius: 10 10 10 10;";
-    private long taskId;
+    private final long taskId;
     public TaskComponent(Task task, TaskList taskList, Board board) {
         super();
         Label nameLabel = new Label(task.getName());
