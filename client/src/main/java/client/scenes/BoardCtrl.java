@@ -1,8 +1,11 @@
 package client.scenes;
 
 import client.components.BoardComponent;
+import client.utils.ServerUtils;
 import commons.Board;
+import commons.TaskList;
 import jakarta.ws.rs.client.ClientBuilder;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -18,10 +21,10 @@ import javax.inject.Inject;
 
 public class BoardCtrl {
     @FXML
-    private VBox boardVBox;
-    @FXML
-    private AnchorPane TaskListAnchorPaneID;
+    private AnchorPane boardAnchor;
+    private final ServerUtils server;
     private MainCtrl mainCtrl;
+    private long boardID;
     @FXML
     private Text textBoardName;
     @FXML
@@ -32,27 +35,46 @@ public class BoardCtrl {
     private Button buttonSaveBoardName;
     private Board board;
 
+    private SimpleObjectProperty<Board> observableBoard;
+    private BoardComponent boardComponent;
+
     @Inject
-    public BoardCtrl(MainCtrl mainCtrl) {
+    public BoardCtrl(MainCtrl mainCtrl, ServerUtils server) {
         this.mainCtrl = mainCtrl;
-        TaskListAnchorPaneID = new AnchorPane();
+        this.server = server;
+        boardAnchor = new AnchorPane();
+        observableBoard = new SimpleObjectProperty<Board>();
+        boardComponent = new BoardComponent(observableBoard);
     }
+    
     public void updateBoard(Board board) {
-        if(TaskListAnchorPaneID.getChildren().size() > 0) {
-            TaskListAnchorPaneID.getChildren().clear();
+        observableBoard.set(board);
+        setBoardID(board.getId());
+        boardAnchor.getChildren().clear();
+        boardAnchor.getChildren().add(boardComponent);
+    }
+
+    public long getBoardID() {
+        return boardID;
+    }
+
+    public void setBoardID(long boardID) {
+        if(boardID != 0){
+            server.registerForMessages("/topic/"+boardID, Board.class, q -> {
+                observableBoard.set(q);
+            });
         }
-        TaskListAnchorPaneID.getChildren().add(new BoardComponent(board));
+        this.boardID = boardID;
     }
-    // after switching boards, this method updates the appointed board in this class
-    public void currentBoard(Board board){
-        this.board = board;
-    }
+
     public void disconnectBoard(){
         mainCtrl.showBoardinput();
+        server.unregisterForMessages("/topic/"+this.boardID);
     }
 
     public void disconnectServer(){
         mainCtrl.showConnect();
+        server.unregisterForMessages("/topic/"+this.boardID);
     }
 
     public void hideEditFields(){
@@ -75,7 +97,7 @@ public class BoardCtrl {
         buttonSaveBoardName.setVisible(false);
     }
     public void onCopyInviteKeyClicked(){
-        Long invite = board.getId();
+        Long invite = observableBoard.get().getId();
         String inviteString = invite.toString();
 
         Clipboard clipboard = Clipboard.getSystemClipboard();

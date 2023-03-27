@@ -3,7 +3,6 @@ package client.scenes;
 import client.utils.ServerUtils;
 import commons.Board;
 import commons.TaskList;
-import javafx.scene.input.KeyEvent;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
@@ -85,7 +84,6 @@ public class AddTaskListCtrl {
             }
             // Show the board with the updated task list
             Board board = response.readEntity(Board.class);
-            clearFields();
             mainCtrl.showBoard();
             mainCtrl.updateBoard(board);
         } catch (Exception e) {

@@ -4,6 +4,7 @@ package server.api;
 import commons.Board;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import server.database.BoardRepository;
 
@@ -15,6 +16,12 @@ public class BoardController {
 
     @Autowired
     private BoardRepository boardRepository;
+    private SimpMessagingTemplate msgs;
+
+    public BoardController(BoardRepository boardRepository, SimpMessagingTemplate msgs) {
+        this.boardRepository = boardRepository;
+        this.msgs = msgs;
+    }
 
     @GetMapping(path = {"","/"})
     public ResponseEntity<?> getAll() {
@@ -37,6 +44,10 @@ public class BoardController {
             return ResponseEntity.badRequest().build();
         }
         boardRepository.deleteById(id);
+
+        // send update to client using WebSocket
+        msgs.convertAndSend("/topic/" + id, new Board());
+
         return ResponseEntity.noContent().build();
     }
 

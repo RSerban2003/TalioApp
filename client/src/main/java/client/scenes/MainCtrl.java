@@ -15,6 +15,8 @@
  */
 package client.scenes;
 
+import client.components.BoardComponent;
+import client.utils.ServerUtils;
 import commons.Board;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -34,17 +36,17 @@ public class MainCtrl {
     private Scene connect;
     private BoardInputCtrl boardInputCtrl;
     private Scene boardInput;
-    private Scene tasklist1;
+    private Scene taskList1;
     private AddTaskListCtrl addTaskListCtrl;
     private Scene board;
     private Scene createBoard;
+    private ServerUtils server;
     private BoardCtrl boardCtrl;
     private CreateBoardCtrl createBoardCtrl;
 
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
             Pair<AddQuoteCtrl, Parent> add, Pair<ConnectCtrl, Parent> connect, Pair<BoardInputCtrl, Parent> boardInput,
-                           Pair<BoardCtrl, Parent> board, Pair<AddTaskListCtrl, Parent> tasklist1,
-            Pair<CreateBoardCtrl, Parent> createBoard) {
+                           Pair<BoardCtrl, Parent> board, Pair<AddTaskListCtrl, Parent> taskList1, ServerUtils server, Pair<CreateBoardCtrl, Parent> createBoard) {
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
@@ -61,11 +63,15 @@ public class MainCtrl {
         this.boardCtrl = board.getKey();
         this.board = new Scene(board.getValue(), 1900, 1000);
 
+        this.server = server;
+
+        this.addTaskListCtrl = taskList1.getKey();
+        this.taskList1 = new Scene(taskList1.getValue());
         this.createBoardCtrl = createBoard.getKey();
         this.createBoard = new Scene(createBoard.getValue());
 
-        this.addTaskListCtrl = tasklist1.getKey();
-        this.tasklist1 = new Scene(tasklist1.getValue());
+        this.addTaskListCtrl = taskList1.getKey();
+        this.taskList1 = new Scene(taskList1.getValue());
 
         showConnect();
         primaryStage.show();
@@ -110,12 +116,9 @@ public class MainCtrl {
     }
     public void showAddTaskList() {
         primaryStage.setTitle("Create a new TaskList");
-        primaryStage.setScene(tasklist1);
-        tasklist1.setOnKeyPressed(e -> addTaskListCtrl.keyPressed(e));
+        primaryStage.setScene(taskList1);
+        taskList1.setOnKeyPressed(e -> addTaskListCtrl.keyPressed(e));
     }
 
-    // Method that takes the board entity into BoardCtrl
-    public void currentBoard(Board board){
-        boardCtrl.currentBoard(board);
-    }
+
 }
