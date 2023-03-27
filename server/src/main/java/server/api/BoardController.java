@@ -2,14 +2,13 @@ package server.api;
 
 
 import commons.Board;
-import commons.TaskList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import server.database.BoardRepository;
 
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -18,8 +17,19 @@ public class BoardController {
 
     @Autowired
     private BoardRepository boardRepository;
+    private SimpMessagingTemplate msgs;
 
-    @GetMapping("/{id}")
+    public BoardController(BoardRepository boardRepository, SimpMessagingTemplate msgs) {
+        this.boardRepository = boardRepository;
+        this.msgs = msgs;
+    }
+
+    @GetMapping(path = {"","/"})
+    public ResponseEntity<?> getAll() {
+        return ResponseEntity.ok(boardRepository.findAll());
+    }
+
+    @GetMapping("/{id}/get")
     public ResponseEntity<Board> getBoardById(@PathVariable Long id) {
         Board board = boardRepository.findById(id).orElse(null);
         if (board == null) {
@@ -29,10 +39,10 @@ public class BoardController {
     }
 
     @PutMapping(path = {"{board}/patch"})
-    public ResponseEntity<?> changeName(@RequestBody String name, @PathVariable("board") long boardId) {
+    public ResponseEntity<?> changeName(@RequestBody Map<String,String> body, @PathVariable("board") long boardId) {
         Board board = boardRepository.findById(boardId).orElse(null);
         if (board == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Board not found");
-        board.setTitle(name);
+        board.setTitle(body.get("name"));
 
         boardRepository.save(board);
 
@@ -46,6 +56,10 @@ public class BoardController {
             return ResponseEntity.badRequest().build();
         }
         boardRepository.deleteById(id);
+
+        // send update to client using WebSocket
+        msgs.convertAndSend("/topic/" + id, new Board());
+
         return ResponseEntity.noContent().build();
     }
 
@@ -61,15 +75,7 @@ public class BoardController {
         return ResponseEntity.ok(saved);
     }
 
-
     private static boolean isNullOrEmpty(String s) {
         return s == null || s.isEmpty();
     }
-
-    @GetMapping(path = {"/", ""})
-    public ResponseEntity<List<Board>> getAllBoards() {
-        List<Board> boards = boardRepository.findAll();
-        return ResponseEntity.ok(boards);
-    }
-
 }
