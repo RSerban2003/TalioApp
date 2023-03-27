@@ -46,6 +46,13 @@ public class BoardInputCtrl {
             alert.showAndWait();
             return;
         }
+        else if (!boardId.matches("\\d+")) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setContentText("Board ID can only contain numbers");
+            alert.showAndWait();
+            return;
+        }
+
         Response response;
         try {
             // If there is an input make a get request with the board id to retrieve it
