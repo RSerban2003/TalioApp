@@ -30,8 +30,8 @@ public class AdminDashboardCtrl {
         boardComponent = new ListBoardComponent(observableList, server, mainCtrl);
     }
 
-    public void updateAdmin(List<Board> board) {
-        observableList.set(board);
+    public void updateAdmin(List<Board> boardList) {
+        observableList.set(boardList);
         boardAnchor.getChildren().clear();
         boardAnchor.getChildren().add(boardComponent);
     }
@@ -39,7 +39,9 @@ public class AdminDashboardCtrl {
     public void getUpdates(){
         server.registerForMessages("/topic/admin", ListOfBoards.class, q ->{
             System.out.println(q.getClass());
-            observableList.set(q.getBoardList());
+            List<Board> boardList = q.getBoardList();
+            System.out.println(boardList);
+            observableList.set(boardList);
         });
     }
 
