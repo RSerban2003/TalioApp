@@ -15,7 +15,9 @@
  */
 package client.scenes;
 
+import client.components.TaskListComponent;
 import client.components.BoardComponent;
+import commons.TaskList;
 import client.utils.ServerUtils;
 import commons.Board;
 import javafx.scene.Parent;
@@ -42,9 +44,15 @@ public class MainCtrl {
     private ServerUtils server;
     private BoardCtrl boardCtrl;
 
+    private Scene addTask;
+    private AddTaskCtrl addTaskCtrl;
+
+    private long boardID;
+    private long taskListID;
+
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
             Pair<AddQuoteCtrl, Parent> add, Pair<ConnectCtrl, Parent> connect, Pair<BoardInputCtrl, Parent> boardInput,
-                           Pair<BoardCtrl, Parent> board, Pair<AddTaskListCtrl, Parent> taskList1, ServerUtils server) {
+                           Pair<BoardCtrl, Parent> board, Pair<AddTaskListCtrl, Parent> taskList1, Pair<AddTaskCtrl, Parent> addTask, ServerUtils server) {
 
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
@@ -66,6 +74,9 @@ public class MainCtrl {
 
         this.addTaskListCtrl = taskList1.getKey();
         this.taskList1 = new Scene(taskList1.getValue());
+
+        this.addTaskCtrl = addTask.getKey();
+        this.addTask = new Scene(addTask.getValue());
 
         showConnect();
         primaryStage.show();
@@ -101,6 +112,7 @@ public class MainCtrl {
         boardInput.setOnKeyPressed(e -> boardInputCtrl.keyPressed(e));
     }
     public void updateBoard(Board board) {
+        this.boardID = board.getId();
         boardCtrl.updateBoard(board);
     }
     public void showAddTaskList() {
@@ -108,5 +120,13 @@ public class MainCtrl {
         primaryStage.setScene(taskList1);
         taskList1.setOnKeyPressed(e -> addTaskListCtrl.keyPressed(e));
     }
-
+    public void setTaskList(long taskListID) {
+        this.taskListID = taskListID;
+    }
+    public void showAddTask() {
+        addTaskCtrl.setIDs(boardID, taskListID);
+        primaryStage.setTitle("Add a new task");
+        primaryStage.setScene(addTask);
+        addTask.setOnKeyPressed(e -> addTaskCtrl.keyPressed(e));
+    }
 }

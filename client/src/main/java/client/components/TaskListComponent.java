@@ -1,6 +1,8 @@
 package client.components;
 
+import client.Main;
 import client.utils.ServerUtils;
+import client.scenes.MainCtrl;
 import commons.Board;
 import commons.Task;
 import commons.TaskList;
@@ -15,13 +17,16 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import java.util.Map;
 
 
+import java.util.Map;
+
 public class TaskListComponent extends VBox {
     private static final String style = "-fx-background-color: #c7c7c7; -fx-border-width: 2; -fx-border-color: gray; -fx-font-weight: bold; -fx-border-radius: 10 10 10 10; -fx-background-radius: 10 10 10 10;";
+    private MainCtrl mainCtrl;
     public static final DataFormat mapFormat = new DataFormat("map");
     private final TaskList taskList;
-
-    public TaskListComponent(TaskList taskList, Board board) {
+    public TaskListComponent(TaskList taskList, Board board, ServerUtils server, MainCtrl mainCtrl) {
         super();
+        this.mainCtrl = mainCtrl;
         TaskComponent[] tasks = taskList.getTask().stream().map((Task task) -> new TaskComponent(task, taskList, board)).toArray(TaskComponent[]::new);
         for (TaskComponent task: tasks) {
             task.setOnDragDetected(event -> {
@@ -44,13 +49,22 @@ public class TaskListComponent extends VBox {
             = new AnnotationConfigApplicationContext();
         context.scan("client");
         context.refresh();
-        ServerUtils server = context.getBean(ServerUtils.class);
-        button.setOnAction(event -> server.deleteTaskList(board.getId(), taskList.getId()));
+        server = context.getBean(ServerUtils.class);
+        ServerUtils finalServer = server;
+        button.setOnAction(event -> finalServer.deleteTaskList(board.getId(), taskList.getId()));
         HBox buttonBox = new HBox(button);
         buttonBox.setAlignment(Pos.TOP_RIGHT);
 
-        // Add nameBox and buttonBox to top row
-        HBox topRow = new HBox(nameBox, buttonBox);
+        // Create button for adding tasks
+        Button addButton = new Button("Add Task");
+        addButton.setOnAction(event -> {
+            mainCtrl.setTaskList(taskList.getId());
+            mainCtrl.showAddTask();
+        });
+        HBox addButtonBox = new HBox(addButton);
+
+        // Add nameBox, buttonBox and taskBox to top row
+        HBox topRow = new HBox(nameBox, buttonBox, addButtonBox);
         topRow.setSpacing(20.0);
         topRow.setAlignment(Pos.TOP_CENTER);
 
