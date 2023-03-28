@@ -36,6 +36,7 @@ public class AddTaskListCtrl {
     private Button CancelButtonId;
     private ServerUtils server;
     private MainCtrl mainCtrl;
+    private Long boardID;
 
 
     @Inject
@@ -43,8 +44,6 @@ public class AddTaskListCtrl {
         this.mainCtrl = mainCtrl;
         this.server = server;
     }
-
-
     @FXML
     private void onCancelButtonClicked() {
         mainCtrl.showBoard();
@@ -73,9 +72,7 @@ public class AddTaskListCtrl {
         try {
             Client clientbuilder = ClientBuilder.newClient();
 
-            String boardId = client.utils.SingletonUtils.getParametersScene().get("boardId");
-
-            response = clientbuilder.target(server.getServerUrl()).path("api/boards/" + boardId + "/tasklist")
+            response = clientbuilder.target(server.getServerUrl()).path("api/boards/" + boardID + "/tasklist")
                     .request(APPLICATION_JSON).accept(APPLICATION_JSON)
                     .post(Entity.entity(body, APPLICATION_JSON));
             if (response.getStatus() != 200) {
@@ -119,5 +116,9 @@ public class AddTaskListCtrl {
     }
     private void clearFields() {
         TextFieldId.clear();
+    }
+
+    public void setIDs(long boardID) {
+        this.boardID = boardID;
     }
 }

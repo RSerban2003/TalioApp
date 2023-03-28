@@ -31,6 +31,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 
 import commons.Board;
+import commons.TaskList;
 import jakarta.ws.rs.ProcessingException;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.core.Response;
@@ -41,14 +42,18 @@ import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
 import org.glassfish.jersey.client.ClientProperties;
+import org.glassfish.jersey.client.HttpUrlConnectorProvider;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
+import org.springframework.stereotype.Service;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
 
+
+@Service
 public class ServerUtils {
     private static String SERVER = "http://localhost:8080/";
     private static String WSSERVER = "ws://localhost:8080/";
@@ -97,6 +102,14 @@ public class ServerUtils {
         } catch (ProcessingException pe) {
             return false;
         }
+    }
+    public TaskList moveTask(long boardId, long taskListIdFrom, long taskListIdTo, long taskId, int index) {
+        return ClientBuilder.newClient(new ClientConfig())
+            .property(HttpUrlConnectorProvider.SET_METHOD_WORKAROUND, true)
+            .target(SERVER).path(String.format("/api/boards/%s/%s/%s/move", boardId, taskListIdFrom, taskId)) //
+            .request(APPLICATION_JSON) //
+            .accept(APPLICATION_JSON) //
+            .post(Entity.entity(Map.of("index", index, "listTo", taskListIdTo), APPLICATION_JSON), TaskList.class);
     }
 
     /**
@@ -161,5 +174,21 @@ public class ServerUtils {
 
     public void send(String dest, Object o){
         session.send(dest, o);
+    }
+
+    public boolean deleteTaskList(Long boardId, Long taskListId){
+        Client client = ClientBuilder.newClient(new ClientConfig());
+        Response response = client.target(SERVER).path("api/boards/" + boardId + "/"+taskListId).request().delete();
+        int status = response.getStatus();
+        response.close();
+        return status == 200;
+    }
+
+    public boolean deleteTask(Long boardId, Long taskListId, Long taskId){
+        Client client = ClientBuilder.newClient(new ClientConfig());
+        Response response = client.target(SERVER).path("api/boards/" + boardId + "/"+taskListId+"/"+taskId).request().delete();
+        int status = response.getStatus();
+        response.close();
+        return status == 200;
     }
 }

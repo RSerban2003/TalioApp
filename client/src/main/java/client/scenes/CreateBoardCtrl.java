@@ -74,7 +74,6 @@ public class CreateBoardCtrl {
             System.out.println(boardCreated);
             Long boardId = boardCreated.getId();
             String boardIdString = boardId.toString();
-            client.utils.SingletonUtils.getParametersScene().put("boardId", boardIdString);
             clearFields();
             mainCtrl.showBoard();
             mainCtrl.updateBoard(boardCreated);
