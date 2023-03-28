@@ -71,6 +71,7 @@ public class CreateBoardCtrl {
                 return;
             }
             Board boardCreated = response.readEntity(Board.class);
+            System.out.println(boardCreated);
             Long boardId = boardCreated.getId();
             String boardIdString = boardId.toString();
             client.utils.SingletonUtils.getParametersScene().put("boardId", boardIdString);

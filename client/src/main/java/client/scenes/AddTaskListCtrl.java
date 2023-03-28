@@ -37,11 +37,13 @@ public class AddTaskListCtrl {
     private ServerUtils server;
     private MainCtrl mainCtrl;
 
+
     @Inject
     public AddTaskListCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
     }
+
 
     @FXML
     private void onCancelButtonClicked() {
@@ -72,7 +74,6 @@ public class AddTaskListCtrl {
             Client clientbuilder = ClientBuilder.newClient();
 
             String boardId = client.utils.SingletonUtils.getParametersScene().get("boardId");
-
 
             response = clientbuilder.target(server.getServerUrl()).path("api/boards/" + boardId + "/tasklist")
                     .request(APPLICATION_JSON).accept(APPLICATION_JSON)
