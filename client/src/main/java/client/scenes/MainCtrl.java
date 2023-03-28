@@ -120,11 +120,11 @@ public class MainCtrl {
         primaryStage.setScene(taskList1);
         taskList1.setOnKeyPressed(e -> addTaskListCtrl.keyPressed(e));
     }
-    public void getTaskList(long taskListID) {
+    public void setTaskList(long taskListID) {
         this.taskListID = taskListID;
     }
     public void showAddTask() {
-        addTaskCtrl.getIDs(boardID, taskListID);
+        addTaskCtrl.setIDs(boardID, taskListID);
         primaryStage.setTitle("Add a new task");
         primaryStage.setScene(addTask);
         addTask.setOnKeyPressed(e -> addTaskCtrl.keyPressed(e));

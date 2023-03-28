@@ -64,7 +64,7 @@ public class AddTaskCtrl {
         this.server = server;
     }
 
-    public void getIDs(long boardID, long tasklistID) {
+    public void setIDs(long boardID, long tasklistID) {
         this.boardID = boardID;
         this.tasklistID = tasklistID;
     }
@@ -124,12 +124,6 @@ public class AddTaskCtrl {
                     .post(Entity.entity(body, APPLICATION_JSON));
 
             if (response.getStatus() != 200) {
-                System.out.println(response.getStatus());
-                System.out.println(boardID + " " + tasklistID);
-                System.out.println("Status Code: " + response.getStatus());
-                System.out.println("Response Message: " + response.getStatusInfo().getReasonPhrase());
-                String responseBody = response.readEntity(String.class);
-                System.out.println("Response Body: " + responseBody);
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setContentText("Failed to add the task: Unable to send the request.");
                 alert.showAndWait();

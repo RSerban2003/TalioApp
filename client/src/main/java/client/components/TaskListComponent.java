@@ -58,7 +58,7 @@ public class TaskListComponent extends VBox {
         // Create button for adding tasks
         Button addButton = new Button("Add Task");
         addButton.setOnAction(event -> {
-            mainCtrl.getTaskList(taskList.getId());
+            mainCtrl.setTaskList(taskList.getId());
             mainCtrl.showAddTask();
         });
         HBox addButtonBox = new HBox(addButton);
