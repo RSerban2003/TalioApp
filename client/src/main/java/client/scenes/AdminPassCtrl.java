@@ -2,17 +2,22 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import commons.Board;
+import jakarta.ws.rs.ProcessingException;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
+import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.Response;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
+import org.glassfish.jersey.client.ClientConfig;
 
 import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -75,7 +80,7 @@ public class AdminPassCtrl {
                 return;
             }
 
-            mainCtrl.showBoard();
+            retrieveAllBoards();
 
         } catch (Exception e){
             // Display an error message if the request failed
@@ -88,6 +93,30 @@ public class AdminPassCtrl {
             }
         }
 
+    }
+
+    public void retrieveAllBoards(){
+        Response response;
+        try {
+            // If there is an input make a get request with the board id to retrieve it
+            Client client = ClientBuilder.newClient();
+            response = client.target(server.getServerUrl()).path("api/boards/").request().get();
+            if (response.getStatus() == 404) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setContentText("Failed to retrieve board: HTTP error code " + response.getStatus());
+                alert.showAndWait();
+                return;
+            }
+            List<Board> boardList = ClientBuilder.newClient(new ClientConfig()).target(server.getServerUrl())
+                    .path("api/boards/").request(APPLICATION_JSON).accept(APPLICATION_JSON).get(new GenericType<List<Board>>() {});
+            clearFields();
+            mainCtrl.showAdminDash();
+            mainCtrl.updateAdminDash(boardList);
+        } catch (ProcessingException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("Failed to retrieve board: " + e.getMessage());
+            alert.showAndWait();
+        }
     }
     public void keyPressed(KeyEvent e) {
         switch (e.getCode()) {

@@ -191,4 +191,12 @@ public class ServerUtils {
         response.close();
         return status == 200;
     }
+
+    public boolean deleteBoard(Long boardId) {
+        Client client = ClientBuilder.newClient(new ClientConfig());
+        Response response = client.target(SERVER).path("api/boards/" + boardId).request().delete();
+        int status = response.getStatus();
+        response.close();
+        return status == 200;
+    }
 }

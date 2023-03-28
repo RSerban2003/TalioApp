@@ -47,6 +47,7 @@ public class BoardController {
 
         // send update to client using WebSocket
         msgs.convertAndSend("/topic/" + id, new Board());
+        msgs.convertAndSend("/topic/admin", boardRepository.findAll());
 
         return ResponseEntity.noContent().build();
     }
