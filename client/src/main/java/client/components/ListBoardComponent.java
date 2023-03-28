@@ -5,6 +5,7 @@ import client.scenes.MainCtrl;
 import commons.Board;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
+import java.util.Map;
 
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -32,7 +33,9 @@ public class ListBoardComponent extends AnchorPane {
 
     public void update(List<Board> boardList){
         Platform.runLater(() -> {
-            SubListBoardComponent[] taskLists = listBoard.get().stream().map((Board board) -> new SubListBoardComponent(board, mainCtrl, server)).toArray(SubListBoardComponent[]::new);
+            SubListBoardComponent[] taskLists = boardList.stream()
+                    .map((board) -> new SubListBoardComponent(board, mainCtrl, server))
+                    .toArray(SubListBoardComponent[]::new);
             VBox taskListContainer = new VBox(taskLists);
             taskListContainer.setSpacing(45.0);
             AnchorPane.setTopAnchor(taskListContainer, 150.0);

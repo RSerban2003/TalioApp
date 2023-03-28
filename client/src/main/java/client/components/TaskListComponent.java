@@ -1,6 +1,7 @@
 package client.components;
 
 import client.Main;
+import java.util.Map;
 import client.utils.ServerUtils;
 import client.scenes.MainCtrl;
 import commons.Board;

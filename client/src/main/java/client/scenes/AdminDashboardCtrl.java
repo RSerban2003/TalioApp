@@ -3,6 +3,7 @@ package client.scenes;
 import client.components.ListBoardComponent;
 import client.utils.ServerUtils;
 import commons.Board;
+import commons.ListOfBoards;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.scene.layout.AnchorPane;
@@ -36,9 +37,9 @@ public class AdminDashboardCtrl {
     }
 
     public void getUpdates(){
-        server.registerForMessages("/topic/admin", List.class, q ->{
+        server.registerForMessages("/topic/admin", ListOfBoards.class, q ->{
             System.out.println(q.getClass());
-            observableList.set(q);
+            observableList.set(q.getBoardList());
         });
     }
 
