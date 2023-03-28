@@ -191,4 +191,13 @@ public class ServerUtils {
         response.close();
         return status == 200;
     }
+
+    public boolean renameTaskList(Long boardId, Long taskListId, String newLabel){
+        Client client = ClientBuilder.newClient(new ClientConfig());
+        Entity<String> stringEntity = Entity.json(newLabel);
+        Response response = client.target(SERVER).path("api/boards/" + boardId + "/" + taskListId + "/edit").request().post(stringEntity);
+        int status = response.getStatus();
+        response.close();
+        return status == 200;
+    }
 }

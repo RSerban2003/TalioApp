@@ -37,6 +37,7 @@ public class TaskListComponent extends VBox {
             });
         }
 
+        // enables server functions
         AnnotationConfigApplicationContext context
                 = new AnnotationConfigApplicationContext();
         context.scan("client");
@@ -46,9 +47,6 @@ public class TaskListComponent extends VBox {
         // Create label for task list name
         Label nameLabel = new Label(taskList.getName());
         nameLabel.setAlignment(Pos.CENTER);
-
-        //VBox nameBox = new VBox(nameLabel);
-        //nameBox.setAlignment(Pos.TOP_CENTER);
 
         // Create Edit button to edit label
         Button editButton = new Button("Edit");
@@ -65,8 +63,6 @@ public class TaskListComponent extends VBox {
         // Create delete button
         Button deleteButton = new Button("Delete");
         deleteButton.setOnAction(event -> server.deleteTaskList(board.getId(), taskList.getId()));
-        //HBox buttonBox = new HBox(deleteButton);
-        //buttonBox.setAlignment(Pos.TOP_RIGHT);
 
         // puts all top elements in a GridPane
         GridPane gridPane = new GridPane();
@@ -89,14 +85,19 @@ public class TaskListComponent extends VBox {
             saveButton.setVisible(true);
         });
 
+        // saves changes to task list name
         saveButton.setOnAction(e ->{
             if (!(nameField.getText().trim().isEmpty() || nameField.getText() == null)){
-                nameLabel.setText(nameField.getText());
+                String nameString = nameField.getText();
+                nameLabel.setText(nameString);
+                server.renameTaskList(board.getId(), taskList.getId(), nameString);
             }
             nameLabel.setVisible(true);
             editButton.setVisible(true);
             nameField.setVisible(false);
             saveButton.setVisible(false);
+
+
         });
 
         getChildren().add(gridPane);
