@@ -47,12 +47,16 @@ public class MainCtrl {
     private Scene addTask;
     private AddTaskCtrl addTaskCtrl;
 
+    private Scene adminPass;
+    private AdminPassCtrl adminPassCtrl;
+
     private long boardID;
     private long taskListID;
 
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
             Pair<AddQuoteCtrl, Parent> add, Pair<ConnectCtrl, Parent> connect, Pair<BoardInputCtrl, Parent> boardInput,
-                           Pair<BoardCtrl, Parent> board, Pair<AddTaskListCtrl, Parent> taskList1, Pair<AddTaskCtrl, Parent> addTask, ServerUtils server) {
+                           Pair<BoardCtrl, Parent> board, Pair<AddTaskListCtrl, Parent> taskList1, Pair<AddTaskCtrl, Parent> addTask, ServerUtils server,
+                           Pair<AdminPassCtrl, Parent> adminPass) {
 
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
@@ -77,6 +81,9 @@ public class MainCtrl {
 
         this.addTaskCtrl = addTask.getKey();
         this.addTask = new Scene(addTask.getValue());
+
+        this.adminPassCtrl = adminPass.getKey();
+        this.adminPass = new Scene(adminPass.getValue());
 
         showConnect();
         primaryStage.show();
@@ -128,5 +135,11 @@ public class MainCtrl {
         primaryStage.setTitle("Add a new task");
         primaryStage.setScene(addTask);
         addTask.setOnKeyPressed(e -> addTaskCtrl.keyPressed(e));
+    }
+    public void showAdminPass(){
+        primaryStage.setTitle("Enter admin password");
+        primaryStage.setScene(adminPass);
+        adminPassCtrl.generatePass();
+        adminPass.setOnKeyPressed(e -> adminPassCtrl.keyPressed(e));
     }
 }
