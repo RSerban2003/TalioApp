@@ -13,15 +13,16 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import javax.inject.Inject;
 
 public class TaskComponent extends VBox {
     private static final String style = "-fx-background-color: #f7f7f5; -fx-border-width: 2; -fx-border-color: gray;  -fx-border-radius: 10 10 10 10;-fx-background-radius: 10 10 10 10;";
     private final long taskId;
     private MainCtrl mainCtrl;
+    @Inject
     public TaskComponent(Task task, TaskList taskList, Board board, MainCtrl mainCtrl) {
         super();
         this.mainCtrl = mainCtrl;
-
         //Creates the name box
         Label nameLabel = new Label(task.getName());
         HBox topRow = new HBox(nameLabel);
