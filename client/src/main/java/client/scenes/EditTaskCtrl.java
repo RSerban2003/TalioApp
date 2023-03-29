@@ -5,6 +5,7 @@ import commons.Task;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
+import jakarta.ws.rs.core.Form;
 import jakarta.ws.rs.core.Response;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -102,7 +103,49 @@ public class EditTaskCtrl {
 
     @FXML
     private void onSubmitButtonClicked2() {
+        String title = titleTextArea2.getText();
+        String description = descriptionTextArea2.getText();
+        if (title == null || title.isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setContentText("Task name cannot be empty. Please enter a name for the task.");
+            alert.showAndWait();
+            return;
+        }
+        Map<String, String> body = new HashMap<>();
+        if (title.trim().isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setContentText("Task name cannot be empty. Please enter a name for the task.");
+            alert.showAndWait();
+            return;
+        }
+        body.put("name", title.trim());
+        body.put("description", description.trim());
 
+        Response response = null;
+        try {
+            Client client = ClientBuilder.newClient();
+            response = client.target(server.getServerUrl()).path("api/boards/"+ boardID + "/"+ tasklistID + "/" + taskID + "/edit-card")
+                    .request(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+                    .post(Entity.entity(body, APPLICATION_JSON));
+
+            if (response.getStatus() != 200) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setContentText("Failed to add the task: Unable to send the request.");
+                alert.showAndWait();
+                return;
+            }
+            mainCtrl.showBoard();
+            resetFields();
+        } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("Failed to add task:" + e.getMessage());
+            alert.showAndWait();
+        } finally {
+            if (response != null) {
+                response.close();
+            }
+        }
     }
 
     @FXML
