@@ -15,8 +15,10 @@
  */
 package client.scenes;
 
+import client.components.TaskComponent;
 import client.components.TaskListComponent;
 import client.components.BoardComponent;
+import commons.Task;
 import commons.TaskList;
 import client.utils.ServerUtils;
 import commons.Board;
@@ -54,6 +56,7 @@ public class MainCtrl {
     private long boardID;
     private long taskListID;
     private long taskID;
+    private Task task;
 
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
             Pair<AddQuoteCtrl, Parent> add, Pair<ConnectCtrl, Parent> connect, Pair<BoardInputCtrl, Parent> boardInput,
@@ -85,7 +88,7 @@ public class MainCtrl {
         this.addTask = new Scene(addTask.getValue());
 
         this.editTaskCtrl = editTask.getKey();
-        this.editTask = new Scene(addTask.getValue());
+        this.editTask = new Scene(editTask.getValue());
 
         showConnect();
         primaryStage.show();
@@ -129,8 +132,12 @@ public class MainCtrl {
         primaryStage.setScene(taskList1);
         taskList1.setOnKeyPressed(e -> addTaskListCtrl.keyPressed(e));
     }
-    public void setTaskList(long taskListID) {
-        this.taskListID = taskListID;
+    public void setTaskList(TaskList taskList) {
+        this.taskListID = taskList.getId();
+    }
+    public void setTask(Task task) {
+        this.taskID = task.getId();
+        this.task = task;
     }
     public void showAddTask() {
         addTaskCtrl.setIDs(boardID, taskListID);
@@ -141,6 +148,7 @@ public class MainCtrl {
 
     public void showEditTask() {
         editTaskCtrl.setIDs(boardID, taskListID, taskID);
+        editTaskCtrl.updateScene(task);
         primaryStage.setTitle("Edit task");
         primaryStage.setScene(editTask);
         editTask.setOnKeyPressed(e -> editTaskCtrl.keyPressed(e));

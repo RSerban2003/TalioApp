@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
+import commons.Task;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
@@ -64,6 +65,10 @@ public class EditTaskCtrl {
         this.boardID = boardID;
         this.tasklistID = tasklistID;
         this.taskID = taskID;
+    }
+
+    public void updateScene(Task task) {
+
     }
 
     @FXML
