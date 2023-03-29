@@ -27,14 +27,14 @@ public class BoardCtrl {
     private TextField boardName;
 
     private long boardID;
-    /* @FXML
+    @FXML
     private Text textBoardName;
     @FXML
     private Button buttonEditBoardName;
     @FXML
     private TextField textFieldBoardName;
     @FXML
-    private Button buttonSaveBoardName; */
+    private Button buttonSaveBoardName;
     private Board board;
 
     private SimpleObjectProperty<Board> observableBoard;
@@ -54,6 +54,7 @@ public class BoardCtrl {
         setBoardID(board.getId());
         boardAnchor.getChildren().clear();
         boardAnchor.getChildren().add(boardComponent);
+        textBoardName.setText(board.getTitle());
     }
 
     public long getBoardID() {
@@ -79,12 +80,8 @@ public class BoardCtrl {
         server.unregisterForMessages("/topic/"+this.boardID);
     }
 
-    /* public void hideEditFields(){
-        textFieldBoardName.setVisible(false);
-        buttonSaveBoardName.setVisible(false);
-    }
-
     public void onEditBoardNameClick(){
+        textFieldBoardName.setText(textBoardName.getText());
         buttonEditBoardName.setVisible(false);
         textBoardName.setVisible(false);
         textFieldBoardName.setVisible(true);
@@ -92,12 +89,13 @@ public class BoardCtrl {
     }
 
     public void onSaveBoardNameClick(){
+        server.changeBoardName(Map.of("name",textFieldBoardName.getText()),boardID);
         textBoardName.setText(textFieldBoardName.getText());
         buttonEditBoardName.setVisible(true);
         textBoardName.setVisible(true);
         textFieldBoardName.setVisible(false);
         buttonSaveBoardName.setVisible(false);
-    } */
+    }
     public void onCopyInviteKeyClicked(){
         Long invite = observableBoard.get().getId();
         String inviteString = invite.toString();
@@ -110,21 +108,5 @@ public class BoardCtrl {
 
     public void addTaskList(){
         mainCtrl.showAddTaskList();
-    }
-
-    public void changeName() {
-        boardName.setDisable(false);
-        boardName.setEditable(true);
-    }
-
-    public void saveNewBoardName(KeyEvent key) {
-        if (key.getCode().equals(KeyCode.ENTER)) {
-            // save the new boardName
-            server.changeBoardName(Map.of("name",boardName.getText()),boardID);
-
-            // set Disables
-            boardName.setDisable(true);
-            boardName.setEditable(false);
-        }
     }
 }

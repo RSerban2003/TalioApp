@@ -15,6 +15,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <AnchorPane maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.BoardCtrl">
    <children>
@@ -82,35 +83,45 @@
                                  <children>
                                     <AnchorPane prefHeight="200.0" prefWidth="200.0">
                                        <children>
-                                          <GridPane prefHeight="68.0" prefWidth="437.0">
-                                            <columnConstraints>
-                                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="235.800048828125" minWidth="10.0" prefWidth="222.2000732421875" />
-                                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="142.199951171875" minWidth="10.0" prefWidth="71.7999267578125" />
-                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="142.199951171875" minWidth="10.0" prefWidth="100.0" />
-                                            </columnConstraints>
-                                            <rowConstraints>
-                                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                            </rowConstraints>
-                                             <children>
-                                                 <TextField fx:id="boardName" disable="true" editable="false" onKeyReleased="#saveNewBoardName" prefHeight="40.0" prefWidth="224.0" promptText="{Board Name}" text="Board name">
-                                                     <HBox.margin>
-                                                         <Insets right="20.0" />
-                                                     </HBox.margin>
-                                                     <font>
-                                                         <Font size="20.0" />
-                                                     </font>
-                                                   <GridPane.margin>
-                                                      <Insets right="5.0" />
-                                                   </GridPane.margin>
-                                                 </TextField>
-                                                 <Button mnemonicParsing="false" onAction="#changeName" prefHeight="26.0" prefWidth="50.0" text="Edit" GridPane.columnIndex="1">
-                                                     <HBox.margin>
-                                                         <Insets bottom="5.0" />
-                                                     </HBox.margin>
-                                                 </Button>
-                                                <Button fx:id="AddTaskListButton" mnemonicParsing="false" onAction="#addTaskList" text="Add tasklist" GridPane.columnIndex="2" />
-                                             </children>
-                                          </GridPane>
+                                           <GridPane prefHeight="68.0" prefWidth="437.0">
+                                               <columnConstraints>
+                                                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="235.800048828125" minWidth="10.0" prefWidth="222.2000732421875" />
+                                                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="142.199951171875" minWidth="10.0" prefWidth="71.7999267578125" />
+                                                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="142.199951171875" minWidth="10.0" prefWidth="100.0" />
+                                               </columnConstraints>
+                                               <rowConstraints>
+                                                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                               </rowConstraints>
+                                               <children>
+                                                   <Text fx:id="textBoardName" strokeType="OUTSIDE" strokeWidth="0.0" text="Name of Board" GridPane.hgrow="NEVER">
+                                                       <font>
+                                                           <Font name="Arial" size="26.0" />
+                                                       </font>
+                                                       <GridPane.margin>
+                                                           <Insets left="27.0" />
+                                                       </GridPane.margin>
+                                                   </Text>
+                                                   <TextField fx:id="textFieldBoardName" minWidth="200.0" prefHeight="49.0" prefWidth="382.0" promptText="Name of Board" visible="false" GridPane.hgrow="NEVER">
+                                                       <font>
+                                                           <Font name="Arial" size="26.0" />
+                                                       </font>
+                                                       <GridPane.margin>
+                                                           <Insets left="10.0" />
+                                                       </GridPane.margin>
+                                                   </TextField>
+                                                   <Button fx:id="buttonEditBoardName" mnemonicParsing="false" onAction="#onEditBoardNameClick" text="Edit" GridPane.columnIndex="1" GridPane.hgrow="NEVER">
+                                                       <GridPane.margin>
+                                                           <Insets left="10.0" />
+                                                       </GridPane.margin>
+                                                   </Button>
+                                                   <Button fx:id="buttonSaveBoardName" mnemonicParsing="false" onAction="#onSaveBoardNameClick" text="Save" visible="false" GridPane.columnIndex="1" GridPane.hgrow="NEVER">
+                                                       <GridPane.margin>
+                                                           <Insets left="10.0" />
+                                                       </GridPane.margin>
+                                                   </Button>
+                                                   <Button fx:id="AddTaskListButton" mnemonicParsing="false" onAction="#addTaskList" text="Add tasklist" GridPane.columnIndex="2" />
+                                               </children>
+                                           </GridPane>
                                        </children>
                                     </AnchorPane>
                                     <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
