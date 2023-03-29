@@ -24,9 +24,11 @@ public class TaskComponent extends VBox {
 
         //Creates the name box
         Label nameLabel = new Label(task.getName());
-        VBox nameBox = new VBox(nameLabel);
-        nameBox.setAlignment(Pos.TOP_LEFT);
-        nameBox.setPadding(new Insets(0, 0, 0, 20));
+        HBox topRow = new HBox(nameLabel);
+        topRow.setAlignment(Pos.TOP_LEFT);
+
+        HBox.setHgrow(nameLabel, Priority.ALWAYS);
+        nameLabel.setMaxWidth(Double.MAX_VALUE);
 
         // Creates button for editing tasks
         Button editButton = new Button("Edit");
@@ -38,9 +40,7 @@ public class TaskComponent extends VBox {
         });
 
         // Creates button for deleting tasks
-        Button deleteButton = new Button("Delete");
-        deleteButton.setMinWidth(80);
-        deleteButton.setMaxWidth(80);
+        Button deleteButton = new Button("X");
         AnnotationConfigApplicationContext context
             = new AnnotationConfigApplicationContext();
         context.scan("client");
@@ -48,20 +48,16 @@ public class TaskComponent extends VBox {
         ServerUtils server = context.getBean(ServerUtils.class);
         deleteButton.setOnAction(event -> server.deleteTask(board.getId(), taskList.getId(), task.getId()));
 
-        //Creates individual boxes for each button
+        //Adds delete button to topRow box
+        topRow.getChildren().add(deleteButton);
+        topRow.setPadding(new Insets(0, 10, 10, 10));
+
+        //Creates individual box for edit button
         HBox editButtonBox = new HBox(editButton);
-        editButtonBox.setAlignment(Pos.BOTTOM_LEFT);
+        editButtonBox.setAlignment(Pos.CENTER);
+        editButtonBox.setPadding(new Insets(5, 0, 0, 0));
 
-        HBox deleteButtonBox = new HBox(deleteButton);
-        deleteButtonBox.setAlignment(Pos.BOTTOM_RIGHT);
-
-        //Adds the 'Edit' and 'Delete' button boxes to the same box
-        HBox buttonsBox = new HBox(editButton, deleteButton);
-        buttonsBox.setSpacing(20.0);
-        buttonsBox.setPadding(new Insets(10, 0, 0, 8));
-
-        //Adds the buttons box and name box to the same box
-        VBox container = new VBox(nameBox, buttonsBox);
+        VBox container = new VBox(topRow, editButtonBox);
         container.setAlignment(Pos.CENTER);
 
         getChildren().add(container);

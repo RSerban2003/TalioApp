@@ -53,7 +53,6 @@ public class EditTaskCtrl {
 
     private long boardID;
     private long tasklistID;
-
     private long taskID;
 
     @Inject
@@ -118,20 +117,20 @@ public class EditTaskCtrl {
             alert.showAndWait();
             return;
         }
-        body.put("name", title.trim());
-        body.put("description", description.trim());
 
         Response response = null;
         try {
             Client client = ClientBuilder.newClient();
             response = client.target(server.getServerUrl()).path("api/boards/"+ boardID + "/"+ tasklistID + "/" + taskID + "/edit-card")
+                    .queryParam("name", title.trim())
+                    .queryParam("description", description.trim())
                     .request(APPLICATION_JSON)
                     .accept(APPLICATION_JSON)
-                    .post(Entity.entity(body, APPLICATION_JSON));
+                    .post(Entity.text(""));
 
             if (response.getStatus() != 200) {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setContentText("Failed to add the task: Unable to send the request.");
+                alert.setContentText("Failed to add the task: Unable to send the request.\nStatus code: " + response.getStatus());
                 alert.showAndWait();
                 return;
             }
