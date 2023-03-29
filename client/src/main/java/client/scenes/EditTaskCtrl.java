@@ -23,25 +23,25 @@ import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 public class EditTaskCtrl {
     @FXML
-    private Button editTitleButton2;
+    private Button editTitleButton;
 
     @FXML
-    private Button editDescriptionButton2;
+    private Button editDescriptionButton;
 
     @FXML
-    private Button submitButton2;
+    private Button submitButton;
 
     @FXML
-    private Button cancelButton2;
+    private Button cancelButton;
 
     @FXML
-    private TextArea titleTextArea2;
+    private TextArea titleTextArea;
 
     @FXML
-    private TextArea descriptionTextArea2;
+    private TextArea descriptionTextArea;
 
     @FXML
-    private AnchorPane anchorPane2;
+    private AnchorPane anchorPane;
 
     private ServerUtils server;
 
@@ -68,25 +68,25 @@ public class EditTaskCtrl {
     }
 
     public void updateScene(Task task) {
-        titleTextArea2.setText(task.getName());
-        descriptionTextArea2.setText(task.getDescription());
+        titleTextArea.setText(task.getName());
+        descriptionTextArea.setText(task.getDescription());
     }
 
     @FXML
-    private void onEditTitleButtonClicked2() {
-        initialTitle = titleTextArea2.getText();
-        titleTextArea2.setEditable(true);
-        titleTextArea2.requestFocus();
+    private void onEditTitleButtonClicked() {
+        initialTitle = titleTextArea.getText();
+        titleTextArea.setEditable(true);
+        titleTextArea.requestFocus();
     }
 
     @FXML
     private void initialize() {
-        titleTextArea2.textProperty().addListener((observable, oldValue, newValue) -> {
+        titleTextArea.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.length() > 30) {
-                titleTextArea2.setText(oldValue);
+                titleTextArea.setText(oldValue);
             }
         });
-        titleTextArea2.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+        titleTextArea.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 event.consume();
             }
@@ -94,16 +94,16 @@ public class EditTaskCtrl {
     }
 
     @FXML
-    private void onEditDescriptionButtonClicked2() {
-        initialDescription = descriptionTextArea2.getText();
-        descriptionTextArea2.setEditable(true);
-        descriptionTextArea2.requestFocus();
+    private void onEditDescriptionButtonClicked() {
+        initialDescription = descriptionTextArea.getText();
+        descriptionTextArea.setEditable(true);
+        descriptionTextArea.requestFocus();
     }
 
     @FXML
-    private void onSubmitButtonClicked2() {
-        String title = titleTextArea2.getText();
-        String description = descriptionTextArea2.getText();
+    private void onSubmitButtonClicked() {
+        String title = titleTextArea.getText();
+        String description = descriptionTextArea.getText();
         if (title == null || title.isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setContentText("Task name cannot be empty. Please enter a name for the task.");
@@ -128,55 +128,55 @@ public class EditTaskCtrl {
     }
 
     @FXML
-    private void onCancelButtonClicked2() {
+    private void onCancelButtonClicked() {
         this.resetFields();
         mainCtrl.showBoard();
     }
 
     private void removeFocus() {
-        anchorPane2.requestFocus();
+        anchorPane.requestFocus();
     }
 
     private void resetFields() {
-        titleTextArea2.setText("New Task");
-        titleTextArea2.setEditable(false);
-        descriptionTextArea2.setEditable(false);
-        descriptionTextArea2.clear();
+        titleTextArea.setText("New Task");
+        titleTextArea.setEditable(false);
+        descriptionTextArea.setEditable(false);
+        descriptionTextArea.clear();
     }
 
     public void keyPressed(KeyEvent e) {
         if(e.isControlDown() && e.getCode() == KeyCode.S) {
-            if (titleTextArea2.isFocused()) {
-                titleTextArea2.setEditable(false);
+            if (titleTextArea.isFocused()) {
+                titleTextArea.setEditable(false);
                 removeFocus();
-            } else if (descriptionTextArea2.isFocused()) {
-                descriptionTextArea2.setEditable(false);
+            } else if (descriptionTextArea.isFocused()) {
+                descriptionTextArea.setEditable(false);
                 removeFocus();
             }
         }
         switch (e.getCode()) {
             case ENTER:
-                if (titleTextArea2.isFocused()) {
-                    titleTextArea2.setEditable(false);
+                if (titleTextArea.isFocused()) {
+                    titleTextArea.setEditable(false);
                     removeFocus();
-                } else if (descriptionTextArea2.isFocused()) {
-                    descriptionTextArea2.setEditable(false);
+                } else if (descriptionTextArea.isFocused()) {
+                    descriptionTextArea.setEditable(false);
                     removeFocus();
                 } else {
-                    onSubmitButtonClicked2();
+                    onSubmitButtonClicked();
                 }
                 break;
             case ESCAPE:
-                if (titleTextArea2.isFocused()) {
-                    titleTextArea2.setText(initialTitle);
-                    titleTextArea2.setEditable(false);
+                if (titleTextArea.isFocused()) {
+                    titleTextArea.setText(initialTitle);
+                    titleTextArea.setEditable(false);
                     removeFocus();
-                } else if (descriptionTextArea2.isFocused()) {
-                    descriptionTextArea2.setText(initialDescription);
-                    descriptionTextArea2.setEditable(false);
+                } else if (descriptionTextArea.isFocused()) {
+                    descriptionTextArea.setText(initialDescription);
+                    descriptionTextArea.setEditable(false);
                     removeFocus();
                 } else {
-                    onCancelButtonClicked2();
+                    onCancelButtonClicked();
                 }
                 break;
             default:
