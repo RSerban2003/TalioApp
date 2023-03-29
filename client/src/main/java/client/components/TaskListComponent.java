@@ -1,6 +1,8 @@
 package client.components;
 
+import client.Main;
 import client.utils.ServerUtils;
+import client.scenes.MainCtrl;
 import commons.Board;
 import commons.Task;
 import commons.TaskList;
@@ -19,13 +21,16 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import java.util.Map;
 
 
+import java.util.Map;
+
 public class TaskListComponent extends VBox {
     private static final String style = "-fx-background-color: #c7c7c7; -fx-border-width: 2; -fx-border-color: gray; -fx-font-weight: bold; -fx-border-radius: 10 10 10 10; -fx-background-radius: 10 10 10 10;";
+    private MainCtrl mainCtrl;
     public static final DataFormat mapFormat = new DataFormat("map");
     private final TaskList taskList;
-
-    public TaskListComponent(TaskList taskList, Board board) {
+    public TaskListComponent(TaskList taskList, Board board, ServerUtils server, MainCtrl mainCtrl) {
         super();
+        this.mainCtrl = mainCtrl;
         TaskComponent[] tasks = taskList.getTask().stream().map((Task task) -> new TaskComponent(task, taskList, board)).toArray(TaskComponent[]::new);
         for (TaskComponent task: tasks) {
             task.setOnDragDetected(event -> {
@@ -42,11 +47,11 @@ public class TaskListComponent extends VBox {
                 = new AnnotationConfigApplicationContext();
         context.scan("client");
         context.refresh();
-        ServerUtils server = context.getBean(ServerUtils.class);
 
         // Create label for task list name
         Label nameLabel = new Label(taskList.getName());
         nameLabel.setAlignment(Pos.CENTER);
+
 
         // Create Edit button to edit label
         Button editButton = new Button("Edit");

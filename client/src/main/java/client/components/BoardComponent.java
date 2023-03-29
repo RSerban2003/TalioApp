@@ -1,6 +1,7 @@
 package client.components;
 
 import client.utils.ServerUtils;
+import client.scenes.MainCtrl;
 import commons.Board;
 import commons.TaskList;
 import javafx.application.Platform;
@@ -16,18 +17,25 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import java.util.Map;
 
 public class BoardComponent extends AnchorPane {
-    private final SimpleObjectProperty<Board> board;
+    private SimpleObjectProperty<Board> board;
+    private ServerUtils server;
+    private MainCtrl mainCtrl;
+
     private final int TASKLISTOFFSET = 250;
+
     private final int TASKHEIGHT = 100;
-    public BoardComponent(SimpleObjectProperty<Board> board) {
+
+    public BoardComponent(SimpleObjectProperty<Board> board, ServerUtils server, MainCtrl mainCtrl) {
         super();
         this.board = board;
+        this.server = server;
+        this.mainCtrl = mainCtrl;
         board.addListener((observable, oldValue, newValue) -> update(newValue));
     }
     public void update(Board board) {
         Platform.runLater(
             () -> {
-                TaskListComponent[] taskLists = board.getListOfTaskList().stream().map((TaskList taskList) -> new TaskListComponent(taskList, board)).toArray(TaskListComponent[]::new);
+                TaskListComponent[] taskLists = board.getListOfTaskList().stream().map((TaskList taskList) -> new TaskListComponent(taskList, board, server, mainCtrl)).toArray(TaskListComponent[]::new);
                 HBox taskListContainer = new HBox(taskLists);
                 taskListContainer.setSpacing(45.0);
                 AnchorPane.setTopAnchor(taskListContainer, 150.0);
