@@ -1,41 +1,68 @@
 package client.components;
 
+import client.scenes.MainCtrl;
 import client.utils.ServerUtils;
 import commons.Board;
 import commons.Task;
 import commons.TaskList;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import javax.inject.Inject;
 
 public class TaskComponent extends VBox {
     private static final String style = "-fx-background-color: #f7f7f5; -fx-border-width: 2; -fx-border-color: gray;  -fx-border-radius: 10 10 10 10;-fx-background-radius: 10 10 10 10;";
     private final long taskId;
-    public TaskComponent(Task task, TaskList taskList, Board board) {
+    private MainCtrl mainCtrl;
+    @Inject
+    public TaskComponent(Task task, TaskList taskList, Board board, MainCtrl mainCtrl) {
         super();
+        this.mainCtrl = mainCtrl;
+        //Creates the name box
         Label nameLabel = new Label(task.getName());
-        VBox nameBox = new VBox(nameLabel);
-        nameBox.setAlignment(Pos.TOP_CENTER);
+        HBox topRow = new HBox(nameLabel);
+        topRow.setAlignment(Pos.TOP_LEFT);
 
+        HBox.setHgrow(nameLabel, Priority.ALWAYS);
+        nameLabel.setMaxWidth(Double.MAX_VALUE);
 
-        Button button = new Button("Delete");
+        // Creates button for editing tasks
+        Button editButton = new Button("Edit");
+        editButton.setMinWidth(80);
+        editButton.setMaxWidth(80);
+        editButton.setOnAction(event -> {
+            mainCtrl.setTaskList(taskList.getId());
+            mainCtrl.setTask(task);
+            mainCtrl.showEditTask();
+        });
+
+        // Creates button for deleting tasks
+        Button deleteButton = new Button("X");
         AnnotationConfigApplicationContext context
             = new AnnotationConfigApplicationContext();
         context.scan("client");
         context.refresh();
         ServerUtils server = context.getBean(ServerUtils.class);
-        button.setOnAction(event -> server.deleteTask(board.getId(), taskList.getId(), task.getId()));
-        HBox buttonBox = new HBox(button);
-        buttonBox.setAlignment(Pos.CENTER);
+        deleteButton.setOnAction(event -> server.deleteTask(board.getId(), taskList.getId(), task.getId()));
 
-        // Add nameBox and buttonBox to top row
-        HBox topRow = new HBox(nameBox, buttonBox);
-        topRow.setSpacing(20.0);
-        topRow.setAlignment(Pos.TOP_CENTER);
-        getChildren().add(topRow);
+        //Adds delete button to topRow box
+        topRow.getChildren().add(deleteButton);
+        topRow.setPadding(new Insets(0, 10, 10, 10));
+
+        //Creates individual box for edit button
+        HBox editButtonBox = new HBox(editButton);
+        editButtonBox.setAlignment(Pos.CENTER);
+        editButtonBox.setPadding(new Insets(5, 0, 0, 0));
+
+        VBox container = new VBox(topRow, editButtonBox);
+        container.setAlignment(Pos.CENTER);
+
+        getChildren().add(container);
 
         setMaxSize(200, 80);
         setMinSize(200, 80);

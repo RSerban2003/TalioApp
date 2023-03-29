@@ -31,7 +31,7 @@ public class TaskListComponent extends VBox {
     public TaskListComponent(TaskList taskList, Board board, ServerUtils server, MainCtrl mainCtrl) {
         super();
         this.mainCtrl = mainCtrl;
-        TaskComponent[] tasks = taskList.getTask().stream().map((Task task) -> new TaskComponent(task, taskList, board)).toArray(TaskComponent[]::new);
+        TaskComponent[] tasks = taskList.getTask().stream().map((Task task) -> new TaskComponent(task, taskList, board, mainCtrl)).toArray(TaskComponent[]::new);
         for (TaskComponent task: tasks) {
             task.setOnDragDetected(event -> {
                 Dragboard db = task.startDragAndDrop(TransferMode.ANY);
