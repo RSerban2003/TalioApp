@@ -47,12 +47,18 @@ public class MainCtrl {
     private Scene addTask;
     private AddTaskCtrl addTaskCtrl;
 
+    private Scene editTask;
+
+    private EditTaskCtrl editTaskCtrl;
+
     private long boardID;
     private long taskListID;
+    private long taskID;
 
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
             Pair<AddQuoteCtrl, Parent> add, Pair<ConnectCtrl, Parent> connect, Pair<BoardInputCtrl, Parent> boardInput,
-                           Pair<BoardCtrl, Parent> board, Pair<AddTaskListCtrl, Parent> taskList1, Pair<AddTaskCtrl, Parent> addTask, ServerUtils server) {
+                           Pair<BoardCtrl, Parent> board, Pair<AddTaskListCtrl, Parent> taskList1, Pair<AddTaskCtrl, Parent> addTask,
+                           Pair<EditTaskCtrl, Parent> editTask, ServerUtils server) {
 
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
@@ -77,6 +83,9 @@ public class MainCtrl {
 
         this.addTaskCtrl = addTask.getKey();
         this.addTask = new Scene(addTask.getValue());
+
+        this.editTaskCtrl = editTask.getKey();
+        this.editTask = new Scene(addTask.getValue());
 
         showConnect();
         primaryStage.show();
@@ -128,5 +137,11 @@ public class MainCtrl {
         primaryStage.setTitle("Add a new task");
         primaryStage.setScene(addTask);
         addTask.setOnKeyPressed(e -> addTaskCtrl.keyPressed(e));
+    }
+
+    public void showEditTask() {
+        primaryStage.setTitle("Edit task");
+        primaryStage.setScene(editTask);
+        editTask.setOnKeyPressed(e -> addTaskCtrl.keyPressed(e));
     }
 }
