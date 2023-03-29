@@ -55,7 +55,7 @@ public class TaskListController {
         msgs.convertAndSend("/topic/" + boardId, board1);
         return ResponseEntity.ok(board);
     }
-    @PatchMapping(path = "/{list}/edit")
+    @PutMapping(path = "/{list}/edit")
     public ResponseEntity<?> edit(@PathVariable("board") long boardId, @PathVariable("list") long listId, @RequestBody Map<String, String> body) throws RuntimeException {
         if(!body.containsKey("name")) return ResponseEntity.badRequest().build();
         if(!boardRepository.existsById(boardId)) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Board not found");
