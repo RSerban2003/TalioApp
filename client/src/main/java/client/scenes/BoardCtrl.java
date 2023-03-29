@@ -57,6 +57,7 @@ public class BoardCtrl {
         setBoardID(board.getId());
         boardAnchor.getChildren().clear();
         boardAnchor.getChildren().add(boardComponent);
+        textBoardName.setText(board.getTitle());
     }
 
     public long getBoardID() {
@@ -67,6 +68,8 @@ public class BoardCtrl {
         if(boardID != 0){
             server.registerForMessages("/topic/"+boardID, Board.class, q -> {
                 observableBoard.set(q);
+                textBoardName.setText(q.getTitle());
+                this.board = q;
             });
         }
         this.boardID = boardID;
@@ -92,9 +95,6 @@ public class BoardCtrl {
 
     public void onSaveBoardNameClick(){
         server.changeBoardName(Map.of("name", textFieldBoardName.getText()), boardID);
-        board.setTitle(textFieldBoardName.getText());
-        updateBoard(board);
-        textBoardName.setText(textFieldBoardName.getText());
 
         buttonEditBoardName.setVisible(true);
         textBoardName.setVisible(true);

@@ -41,13 +41,14 @@ public class BoardController {
     @PutMapping(path = {"{board}/patch"})
     public ResponseEntity<?> changeName(@RequestBody Map<String,String> body, @PathVariable("board") long boardId) {
         Board board = boardRepository.findById(boardId).orElse(null);
-        if (board == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Board not found");
+        if (board == null || body.get("name") == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Board not found");
         board.setTitle(body.get("name"));
 
         Board saved = boardRepository.save(board);
+        Board board1 = boardRepository.findById(boardId).get();
 
         // send update to client using WebSocket
-        msgs.convertAndSend("/topic/" + board.getId(), saved);
+        msgs.convertAndSend("/topic/" + boardId, board1);
 
         return ResponseEntity.ok(board);
     }
