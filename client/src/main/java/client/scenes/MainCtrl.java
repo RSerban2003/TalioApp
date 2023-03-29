@@ -140,8 +140,9 @@ public class MainCtrl {
     }
 
     public void showEditTask() {
+        editTaskCtrl.setIDs(boardID, taskListID, taskID);
         primaryStage.setTitle("Edit task");
         primaryStage.setScene(editTask);
-        editTask.setOnKeyPressed(e -> addTaskCtrl.keyPressed(e));
+        editTask.setOnKeyPressed(e -> editTaskCtrl.keyPressed(e));
     }
 }
