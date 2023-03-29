@@ -65,8 +65,6 @@ public class MainCtrl {
             Pair<BoardCtrl, Parent> board, Pair<AddTaskListCtrl, Parent> taskList1, Pair<AddTaskCtrl, Parent> addTask,
             Pair<EditTaskCtrl, Parent> editTask, Pair<CreateBoardCtrl, Parent> createBoard, ServerUtils server) {
 
-
-
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
@@ -149,6 +147,7 @@ public class MainCtrl {
         this.taskID = task.getId();
         this.task = task;
     }
+
     public void setTaskList(long taskListID) {
         this.taskListID = taskListID;
     }
