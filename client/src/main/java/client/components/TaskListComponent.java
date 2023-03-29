@@ -47,6 +47,13 @@ public class TaskListComponent extends VBox {
         nameLabel.setAlignment(Pos.CENTER);
 
 
+        // Create button for adding tasks
+        Button addButton = new Button("Add Task");
+        addButton.setOnAction(event -> {
+            mainCtrl.setTaskList(taskList.getId());
+            mainCtrl.showAddTask();
+        });
+
         // Create Edit button to edit label
         Button editButton = new Button("Edit");
         TextField nameField = new TextField();
@@ -75,6 +82,7 @@ public class TaskListComponent extends VBox {
         gridPane.add(nameField, 1, 1);
         gridPane.add(editButton, 2,1);
         gridPane.add(saveButton, 2, 1);
+        gridPane.add(addButton, 1,0);
 
         // enables user to enter new label
         editButton.setOnAction(e -> {
