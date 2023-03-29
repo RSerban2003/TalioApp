@@ -10,6 +10,10 @@ public class ListOfBoards {
         this.boardList = boardList;
     }
 
+    public ListOfBoards() {
+    }
+
+
     @Override
     public String toString() {
         return "ListOfBoards{" +
