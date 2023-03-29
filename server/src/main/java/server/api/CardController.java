@@ -1,30 +1,18 @@
 package server.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-//import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
-
 import commons.Board;
 import commons.Task;
 import commons.TaskList;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
-import org.springframework.messaging.Message;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-
 import org.springframework.http.HttpStatus;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import server.database.BoardRepository;
 import server.database.TaskListRepository;
 import server.database.TaskRepository;
-
-import javax.websocket.OnMessage;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/boards/{board}/{list}")
@@ -43,7 +31,7 @@ public class CardController {
     }
 
     @GetMapping(path = {"/", ""})
-    public ResponseEntity<Object> showAll() {
+    public ResponseEntity<?> showAll() {
         return ResponseEntity.ok(taskRepository.findAll());
     }
 
@@ -121,5 +109,40 @@ public class CardController {
         msgs.convertAndSend("/topic/" + boardId, board1);
 
         return ResponseEntity.ok().build();
+    }
+    @PostMapping("/{card}/move")
+    public ResponseEntity<?> move(@PathVariable("card") long cardId, @PathVariable("list") long listId,
+                                  @PathVariable("board") long boardId, @RequestBody Map<String, Long> body) {
+        if(!body.containsKey("listTo") || !body.containsKey("index")) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("no");
+        Optional<Task> task = taskRepository.findById(cardId);
+        Optional<TaskList> taskListFrom = taskListRepository.findById(listId);
+        long listToId = body.get("listTo");
+        int index = body.get("index").intValue();
+        Optional<TaskList> taskListTo = taskListRepository.findById(listToId);
+        Optional<Board> board = boardRepository.findById(boardId);
+
+        if (task.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Task not found");
+        if (taskListFrom.isEmpty() || taskListTo.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Tasklist not found");
+        if (task.get().getTaskList().getId() != listId) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Task not part of tasklist");
+
+        if(board.isEmpty()) return ResponseEntity.badRequest().build();
+        if(taskListFrom.get().getBoard().getId() != boardId || taskListTo.get().getBoard().getId() != boardId) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("List not part of board");
+
+        taskListFrom.get().remove(task.get());
+        task.get().setTaskList(null);
+        if (index > taskListTo.get().getTask().size()) {
+            index = taskListTo.get().getTask().size();
+        }
+        taskListTo.get().add(index, task.get());
+        task.get().setTaskList(taskListTo.get());
+        taskListRepository.save(taskListFrom.get());
+        taskListRepository.save(taskListTo.get());
+
+
+        Board board1 = boardRepository.findById(boardId).get();
+        // send update to client using WebSocket
+        msgs.convertAndSend("/topic/" + boardId, board1);
+
+        return ResponseEntity.ok(taskListTo);
     }
 }

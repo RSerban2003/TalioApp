@@ -29,10 +29,20 @@ public class Task {
     @JoinColumn(name = "tasklist_id")
     private TaskList taskList;
 
+    @Column
+    private Integer index;
+
     public Task(Long id, String name, String description) {
         this.id = id;
         this.name = name;
         this.description = description;
+        this.index = -1;
+    }
+    public Task(Long id, String name, String description, int index) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.index = index;
     }
 
     public Task() {
@@ -88,7 +98,4 @@ public class Task {
     public String toString() {
         return ToStringBuilder.reflectionToString(this, MULTI_LINE_STYLE);
     }
-
-
-
 }
