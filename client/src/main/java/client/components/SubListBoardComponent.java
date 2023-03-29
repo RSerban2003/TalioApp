@@ -13,7 +13,7 @@ import javafx.scene.layout.VBox;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class SubListBoardComponent extends VBox {
-
+    private static final String style = "-fx-background-color: #f7f7f5; -fx-border-width: 2; -fx-border-color: gray;  -fx-border-radius: 10 10 10 10;-fx-background-radius: 10 10 10 10;";
     private final Board board;
 
     private MainCtrl mainCtrl;
@@ -25,31 +25,41 @@ public class SubListBoardComponent extends VBox {
         // Create label for board
         Label boardLabel = new Label(board.getTitle());
         VBox boardBox = new VBox(boardLabel);
-        boardBox.setAlignment(Pos.TOP_LEFT);
+        boardBox.setAlignment(Pos.CENTER);
 
         // Create button
-        Button button = new Button("Delete");
+        Button deleteButton = new Button("Delete");
         AnnotationConfigApplicationContext context
                 = new AnnotationConfigApplicationContext();
         context.scan("client");
         context.refresh();
         server = context.getBean(ServerUtils.class);
         ServerUtils finalServer = server;
-        button.setOnAction(event -> finalServer.deleteBoard(board.getId()));
-        HBox buttonBox = new HBox(button);
-        buttonBox.setAlignment(Pos.TOP_RIGHT);
+        deleteButton.setOnAction(event -> finalServer.deleteBoard(board.getId()));
+        HBox deleteButtonBox = new HBox(deleteButton);
+        deleteButtonBox.setAlignment(Pos.TOP_RIGHT);
 
-        HBox topRow = new HBox(boardBox, buttonBox);
+        // Create button
+        Button joinButton = new Button("Join");
+        MainCtrl finalMainCtrl = mainCtrl;
+        joinButton.setOnAction(event -> {
+            finalMainCtrl.updateBoard(board);
+            finalMainCtrl.showBoard();
+        });
+        HBox buttonBox = new HBox(joinButton);
+        buttonBox.setAlignment(Pos.TOP_CENTER);
+
+        HBox topRow = new HBox(boardBox, joinButton, deleteButtonBox);
         topRow.setSpacing(20.0);
         topRow.setAlignment(Pos.TOP_CENTER);
 
         // Add topRow
-        setMaxSize(200, 80);
-        setMinSize(200, 80);
+        setMaxSize(200, 40);
+        setMinSize(200, 40);
         getChildren().add(topRow);
-        setAlignment(Pos.TOP_CENTER);
-
-        setSpacing(20.0);
+        setAlignment(Pos.CENTER);
+        setStyle(style);
+        setSpacing(10.0);
         this.board = board;
     }
 
