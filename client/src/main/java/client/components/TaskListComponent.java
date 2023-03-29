@@ -42,12 +42,6 @@ public class TaskListComponent extends VBox {
             });
         }
 
-        // enables server functions
-        AnnotationConfigApplicationContext context
-                = new AnnotationConfigApplicationContext();
-        context.scan("client");
-        context.refresh();
-
         // Create label for task list name
         Label nameLabel = new Label(taskList.getName());
         nameLabel.setAlignment(Pos.CENTER);
