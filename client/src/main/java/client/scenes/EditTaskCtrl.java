@@ -68,7 +68,8 @@ public class EditTaskCtrl {
     }
 
     public void updateScene(Task task) {
-
+        titleTextArea2.setText(task.getName());
+        descriptionTextArea2.setText(task.getDescription());
     }
 
     @FXML
