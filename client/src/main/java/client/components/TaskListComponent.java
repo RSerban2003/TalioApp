@@ -85,7 +85,7 @@ public class TaskListComponent extends VBox {
             saveButton.setVisible(true);
         });
 
-        // saves changes to task list name
+        // saves changes of task list name to server
         saveButton.setOnAction(e ->{
             if (!(nameField.getText().trim().isEmpty() || nameField.getText() == null)){
                 String nameString = nameField.getText();
@@ -96,10 +96,9 @@ public class TaskListComponent extends VBox {
             editButton.setVisible(true);
             nameField.setVisible(false);
             saveButton.setVisible(false);
-
-
         });
 
+        // Puts gridPane with its elements in the task list
         getChildren().add(gridPane);
         getChildren().addAll(tasks);
         setStyle(style);

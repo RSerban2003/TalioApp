@@ -194,10 +194,11 @@ public class ServerUtils {
 
     public boolean renameTaskList(Long boardId, Long taskListId, String newLabel){
         Client client = ClientBuilder.newClient(new ClientConfig());
-        Entity<String> stringEntity = Entity.json(newLabel);
-        Response response = client.target(SERVER).path("api/boards/" + boardId + "/" + taskListId + "/edit").request().post(stringEntity);
+        Map<String, String> body = new HashMap<>();
+        body.put("name", newLabel);
+        Response response = client.target(SERVER).path("api/boards/" + boardId + "/" + taskListId + "/edit").request().method("PUT", Entity.json(body));
         int status = response.getStatus();
         response.close();
         return status == 200;
     }
-}
+ }
