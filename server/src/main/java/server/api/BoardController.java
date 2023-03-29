@@ -44,7 +44,10 @@ public class BoardController {
         if (board == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Board not found");
         board.setTitle(body.get("name"));
 
-        boardRepository.save(board);
+        Board saved = boardRepository.save(board);
+
+        // send update to client using WebSocket
+        msgs.convertAndSend("/topic/" + board.getId(), saved);
 
         return ResponseEntity.ok(board);
     }

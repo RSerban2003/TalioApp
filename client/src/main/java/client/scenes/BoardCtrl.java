@@ -3,6 +3,7 @@ package client.scenes;
 import client.components.BoardComponent;
 import client.utils.ServerUtils;
 import commons.Board;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -14,6 +15,7 @@ import javafx.scene.control.Button;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.text.Text;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import javax.inject.Inject;
 import java.util.Map;
@@ -50,11 +52,11 @@ public class BoardCtrl {
     }
     
     public void updateBoard(Board board) {
+        this.board = board;
         observableBoard.set(board);
         setBoardID(board.getId());
         boardAnchor.getChildren().clear();
         boardAnchor.getChildren().add(boardComponent);
-        textBoardName.setText(board.getTitle());
     }
 
     public long getBoardID() {
@@ -89,8 +91,11 @@ public class BoardCtrl {
     }
 
     public void onSaveBoardNameClick(){
-        server.changeBoardName(Map.of("name",textFieldBoardName.getText()),boardID);
+        server.changeBoardName(Map.of("name", textFieldBoardName.getText()), boardID);
+        board.setTitle(textFieldBoardName.getText());
+        updateBoard(board);
         textBoardName.setText(textFieldBoardName.getText());
+
         buttonEditBoardName.setVisible(true);
         textBoardName.setVisible(true);
         textFieldBoardName.setVisible(false);

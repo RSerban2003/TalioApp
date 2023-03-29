@@ -44,8 +44,6 @@ public class BoardComponent extends AnchorPane {
                 getChildren().clear();
                 getChildren().add(taskListContainer);
 
-                mainCtrl.updateBoard(board);
-
                 for (TaskListComponent taskListComponent : taskLists) {
                     taskListComponent.setOnDragOver(event -> {
                         event.acceptTransferModes(TransferMode.ANY);
