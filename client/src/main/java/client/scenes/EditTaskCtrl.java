@@ -117,34 +117,14 @@ public class EditTaskCtrl {
             alert.showAndWait();
             return;
         }
-
-        Response response = null;
-        try {
-            Client client = ClientBuilder.newClient();
-            response = client.target(server.getServerUrl()).path("api/boards/"+ boardID + "/"+ tasklistID + "/" + taskID + "/edit-card")
-                    .queryParam("name", title.trim())
-                    .queryParam("description", description.trim())
-                    .request(APPLICATION_JSON)
-                    .accept(APPLICATION_JSON)
-                    .post(Entity.text(""));
-
-            if (response.getStatus() != 200) {
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setContentText("Failed to add the task: Unable to send the request.\nStatus code: " + response.getStatus());
-                alert.showAndWait();
-                return;
-            }
-            mainCtrl.showBoard();
-            resetFields();
-        } catch (Exception e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Failed to add task:" + e.getMessage());
+        if (!server.editTask(boardID, tasklistID, taskID, title, description)) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setContentText("Failed to add the task: Unable to send the request.");
             alert.showAndWait();
-        } finally {
-            if (response != null) {
-                response.close();
-            }
+            return;
         }
+        mainCtrl.showBoard();
+        resetFields();
     }
 
     @FXML

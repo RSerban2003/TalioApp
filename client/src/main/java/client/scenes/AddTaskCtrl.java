@@ -116,30 +116,14 @@ public class AddTaskCtrl {
         }
         body.put("name", title.trim());
         body.put("description", description.trim());
-        Response response = null;
-        try {
-            Client client = ClientBuilder.newClient();
-            response = client.target(server.getServerUrl()).path("api/boards/"+ boardID + "/"+ tasklistID + "/card")
-                    .request(APPLICATION_JSON).accept(APPLICATION_JSON)
-                    .post(Entity.entity(body, APPLICATION_JSON));
-
-            if (response.getStatus() != 200) {
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setContentText("Failed to add the task: Unable to send the request.");
-                alert.showAndWait();
-                return;
-            }
-            mainCtrl.showBoard();
-            resetFields();
-        } catch (Exception e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Failed to add task:" + e.getMessage());
+        if (!server.addTask(boardID,tasklistID,body)) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setContentText("Failed to add the task: Unable to send the request.");
             alert.showAndWait();
-        } finally {
-            if (response != null) {
-                response.close();
-            }
+            return;
         }
+        mainCtrl.showBoard();
+        resetFields();
     }
 
     @FXML
