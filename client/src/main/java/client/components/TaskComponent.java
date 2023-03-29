@@ -36,7 +36,7 @@ public class TaskComponent extends VBox {
         editButton.setMinWidth(80);
         editButton.setMaxWidth(80);
         editButton.setOnAction(event -> {
-            mainCtrl.setTaskList(taskList);
+            mainCtrl.setTaskList(taskList.getId());
             mainCtrl.setTask(task);
             mainCtrl.showEditTask();
         });
