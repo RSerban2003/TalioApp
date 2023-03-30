@@ -27,6 +27,11 @@ public class SubListBoardComponent extends VBox {
         VBox boardBox = new VBox(boardLabel);
         boardBox.setAlignment(Pos.CENTER);
 
+        // create label for board id
+        Label idLabel = new Label(String.valueOf( board.getId()));
+        VBox idBox = new VBox(idLabel);
+        idBox.setAlignment(Pos.CENTER);
+
         // Create button
         Button deleteButton = new Button("Delete");
         AnnotationConfigApplicationContext context
@@ -49,13 +54,13 @@ public class SubListBoardComponent extends VBox {
         HBox buttonBox = new HBox(joinButton);
         buttonBox.setAlignment(Pos.TOP_CENTER);
 
-        HBox topRow = new HBox(boardBox, joinButton, deleteButtonBox);
+        HBox topRow = new HBox(boardBox, idBox, joinButton, deleteButtonBox);
         topRow.setSpacing(20.0);
         topRow.setAlignment(Pos.TOP_CENTER);
 
         // Add topRow
-        setMaxSize(200, 40);
-        setMinSize(200, 40);
+        setMaxSize(300, 40);
+        setMinSize(300, 40);
         getChildren().add(topRow);
         setAlignment(Pos.CENTER);
         setStyle(style);
