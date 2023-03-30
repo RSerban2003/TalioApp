@@ -35,6 +35,7 @@ import commons.TaskList;
 import jakarta.ws.rs.ProcessingException;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.core.Response;
+import javafx.scene.control.Alert;
 import org.glassfish.jersey.client.ClientConfig;
 
 import commons.Quote;
@@ -192,6 +193,13 @@ public class ServerUtils {
         return status == 200;
     }
 
+    public boolean deleteBoard(Long boardId) {
+        Client client = ClientBuilder.newClient(new ClientConfig());
+        Response response = client.target(SERVER).path("api/boards/" + boardId).request().delete();
+        int status = response.getStatus();
+        response.close();
+        return status == 200;
+    }
     public boolean addTask(long boardID, long taskListID, Map<String, String> body) {
         Client client = ClientBuilder.newClient();
         Response response = client.target(SERVER).path("api/boards/"+ boardID + "/"+ taskListID + "/card")

@@ -102,6 +102,10 @@ public class BoardInputCtrl {
         mainCtrl.showConnect();
     }
 
+    public void admin(){
+        mainCtrl.showAdminPass();
+    }
+
     private void clearFields() {
         boardIdTextField.clear();
     }

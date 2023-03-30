@@ -1,6 +1,7 @@
 package client.components;
 
 import client.Main;
+import java.util.Map;
 import client.utils.ServerUtils;
 import client.scenes.MainCtrl;
 import commons.Board;
@@ -17,9 +18,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-
-import java.util.Map;
-
 
 import java.util.Map;
 

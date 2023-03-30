@@ -27,6 +27,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+import java.util.List;
+
 public class MainCtrl {
 
     private Stage primaryStage;
@@ -51,8 +53,13 @@ public class MainCtrl {
     private Scene addTask;
     private AddTaskCtrl addTaskCtrl;
 
-    private Scene editTask;
+    private Scene adminPass;
+    private AdminPassCtrl adminPassCtrl;
 
+    private Scene adminDashboard;
+    private AdminDashboardCtrl adminDashboardCtrl;
+
+    private Scene editTask;
     private EditTaskCtrl editTaskCtrl;
 
     private long boardID;
@@ -63,7 +70,8 @@ public class MainCtrl {
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
             Pair<AddQuoteCtrl, Parent> add, Pair<ConnectCtrl, Parent> connect, Pair<BoardInputCtrl, Parent> boardInput,
             Pair<BoardCtrl, Parent> board, Pair<AddTaskListCtrl, Parent> taskList1, Pair<AddTaskCtrl, Parent> addTask,
-            Pair<EditTaskCtrl, Parent> editTask, Pair<CreateBoardCtrl, Parent> createBoard, ServerUtils server) {
+            Pair<EditTaskCtrl, Parent> editTask, Pair<CreateBoardCtrl, Parent> createBoard, ServerUtils server,
+            Pair<AdminPassCtrl, Parent> adminPass, Pair<AdminDashboardCtrl, Parent> admindash) {
 
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
@@ -94,6 +102,12 @@ public class MainCtrl {
 
         this.editTaskCtrl = editTask.getKey();
         this.editTask = new Scene(editTask.getValue());
+
+        this.adminPassCtrl = adminPass.getKey();
+        this.adminPass = new Scene(adminPass.getValue());
+
+        this.adminDashboardCtrl = admindash.getKey();
+        this.adminDashboard = new Scene(admindash.getValue());
 
         showConnect();
         primaryStage.show();
@@ -156,6 +170,21 @@ public class MainCtrl {
         primaryStage.setTitle("Add a new task");
         primaryStage.setScene(addTask);
         addTask.setOnKeyPressed(e -> addTaskCtrl.keyPressed(e));
+    }
+    public void showAdminPass(){
+        primaryStage.setTitle("Enter admin password");
+        primaryStage.setScene(adminPass);
+        adminPassCtrl.generatePass();
+        adminPass.setOnKeyPressed(e -> adminPassCtrl.keyPressed(e));
+    }
+
+    public void showAdminDash(){
+        primaryStage.setTitle("Admin dashboard");
+        primaryStage.setScene(adminDashboard);
+        adminDashboardCtrl.getUpdates();
+    }
+    public void updateAdminDash(List<Board> board) {
+        adminDashboardCtrl.updateAdmin(board);
     }
     public void showEditTask() {
         editTaskCtrl.setIDs(boardID, taskListID, taskID);

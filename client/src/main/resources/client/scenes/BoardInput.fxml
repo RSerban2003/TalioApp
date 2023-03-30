@@ -30,4 +30,5 @@
          <Button layoutX="282.0" layoutY="62.0" onAction="#cancel" prefHeight="30.0" prefWidth="98.0" style="-fx-background-color: #454342; -fx-text-fill: WHITE;" text="Cancel" GridPane.columnIndex="1" GridPane.rowIndex="4" />
       </children>
    </GridPane>
+   <Button onAction="#admin" style="-fx-background-color: #454342; -fx-text-fill: WHITE;" text="Admin" />
 </VBox>
