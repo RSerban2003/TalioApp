@@ -1,60 +1,47 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
+import com.google.inject.Inject;
 import commons.Board;
-import commons.TaskList;
+import jakarta.ws.rs.ProcessingException;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
-import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.Response;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
-
-
-import javax.inject.Inject;
+import org.glassfish.jersey.client.ClientConfig;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
-public class AddTaskListCtrl {
-
+public class CreateBoardCtrl {
     @FXML
-    private Text TaskListNameId;
-    @FXML
-    private Button submitButton;
-    @FXML
-    private TextField TextFieldId;
-    @FXML
-    private Button CancelButtonId;
+    private TextField boardNameTextField;
     private ServerUtils server;
     private MainCtrl mainCtrl;
-    private Long boardID;
+    private BoardCtrl boardCtrl;
 
 
     @Inject
-    public AddTaskListCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public CreateBoardCtrl(ServerUtils server, MainCtrl mainCtrl, BoardCtrl boardCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
+        this.boardCtrl = boardCtrl;
     }
-    @FXML
-    private void onCancelButtonClicked() {
-        mainCtrl.showBoard();
-    }
-    @FXML
-    private void onSubmitButtonClicked() {
-        String name = TextFieldId.getText();
+
+
+    public void createBoard(){
+        // check if the input field is either empty or null to display a warning
+        String name = boardNameTextField.getText();
         if (name == null || name.isEmpty()) {
-            // Display a warning if the name field is empty
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setContentText("Please enter a name for the task list");
+            alert.setContentText("Please enter a board ID");
             alert.showAndWait();
             return;
         }
@@ -70,23 +57,26 @@ public class AddTaskListCtrl {
         // Send a POST request to add the task list to the board
         Response response = null;
         try {
-            Client clientbuilder = ClientBuilder.newClient();
-
-            response = clientbuilder.target(server.getServerUrl()).path("api/boards/" + boardID + "/tasklist")
+            Client clientBuilder = ClientBuilder.newClient();
+            response = clientBuilder.target(server.getServerUrl()).path("/api/boards/")
                     .request(APPLICATION_JSON).accept(APPLICATION_JSON)
                     .post(Entity.entity(body, APPLICATION_JSON));
+
             if (response.getStatus() != 200) {
                 System.out.println(response.getStatus());
                 // Display an error message if the request was unsuccessful
                 Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setContentText("Was not able to make request to add the tasklist");
+                alert.setContentText("Was not able to make request to create the board");
                 alert.showAndWait();
                 return;
             }
-            // Show the board with the updated task list
-            Board board = response.readEntity(Board.class);
+            Board boardCreated = response.readEntity(Board.class);
+            System.out.println(boardCreated);
+            Long boardId = boardCreated.getId();
+            String boardIdString = boardId.toString();
+            clearFields();
             mainCtrl.showBoard();
-            mainCtrl.updateBoard(board);
+            mainCtrl.updateBoard(boardCreated);
         } catch (Exception e) {
             // Display an error message if the request failed
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -96,12 +86,14 @@ public class AddTaskListCtrl {
             if (response != null) {
                 response.close();
             }
-        }
+      }
     }
+
+
     public void keyPressed(KeyEvent e) {
         switch (e.getCode()) {
             case ENTER:
-                onSubmitButtonClicked();
+
                 break;
             case ESCAPE:
                 cancel();
@@ -110,15 +102,14 @@ public class AddTaskListCtrl {
                 break;
         }
     }
+
     public void cancel() {
         clearFields();
-        mainCtrl.showBoard();
-    }
-    private void clearFields() {
-        TextFieldId.clear();
+        mainCtrl.showConnect();
     }
 
-    public void setIDs(long boardID) {
-        this.boardID = boardID;
+    private void clearFields() {
+        boardNameTextField.clear();
     }
 }
+

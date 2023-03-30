@@ -200,4 +200,38 @@ public class ServerUtils {
         response.close();
         return status == 200;
     }
+    public boolean addTask(long boardID, long taskListID, Map<String, String> body) {
+        Client client = ClientBuilder.newClient();
+        Response response = client.target(SERVER).path("api/boards/"+ boardID + "/"+ taskListID + "/card")
+                .request(APPLICATION_JSON).accept(APPLICATION_JSON)
+                .post(Entity.entity(body, APPLICATION_JSON));
+
+        int status = response.getStatus();
+        response.close();
+        return status == 200;
+    }
+
+    public boolean editTask(long boardID, long taskListID, long taskID, String title, String description) {
+        Client client = ClientBuilder.newClient();
+        Response response = client.target(SERVER).path("api/boards/"+ boardID + "/"+ taskListID + "/" + taskID + "/edit-card")
+                .queryParam("name", title.trim())
+                .queryParam("description", description.trim())
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .post(Entity.text(""));
+
+        int status = response.getStatus();
+        response.close();
+        return status == 200;
+    }
+
+    public boolean renameTaskList(Long boardId, Long taskListId, String newLabel){
+        Client client = ClientBuilder.newClient(new ClientConfig());
+        Map<String, String> body = new HashMap<>();
+        body.put("name", newLabel);
+        Response response = client.target(SERVER).path("api/boards/" + boardId + "/" + taskListId + "/edit").request().method("PUT", Entity.json(body));
+        int status = response.getStatus();
+        response.close();
+        return status == 200;
+    }
 }

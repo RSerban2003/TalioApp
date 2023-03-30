@@ -15,8 +15,10 @@
  */
 package client.scenes;
 
+import client.components.TaskComponent;
 import client.components.TaskListComponent;
 import client.components.BoardComponent;
+import commons.Task;
 import commons.TaskList;
 import client.utils.ServerUtils;
 import commons.Board;
@@ -43,8 +45,10 @@ public class MainCtrl {
     private Scene taskList1;
     private AddTaskListCtrl addTaskListCtrl;
     private Scene board;
+    private Scene createBoard;
     private ServerUtils server;
     private BoardCtrl boardCtrl;
+    private CreateBoardCtrl createBoardCtrl;
 
     private Scene addTask;
     private AddTaskCtrl addTaskCtrl;
@@ -55,13 +59,19 @@ public class MainCtrl {
     private Scene adminDashboard;
     private AdminDashboardCtrl adminDashboardCtrl;
 
+    private Scene editTask;
+    private EditTaskCtrl editTaskCtrl;
+
     private long boardID;
     private long taskListID;
+    private long taskID;
+    private Task task;
 
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
             Pair<AddQuoteCtrl, Parent> add, Pair<ConnectCtrl, Parent> connect, Pair<BoardInputCtrl, Parent> boardInput,
-                           Pair<BoardCtrl, Parent> board, Pair<AddTaskListCtrl, Parent> taskList1, Pair<AddTaskCtrl, Parent> addTask, ServerUtils server,
-                           Pair<AdminPassCtrl, Parent> adminPass, Pair<AdminDashboardCtrl, Parent> admindash) {
+            Pair<BoardCtrl, Parent> board, Pair<AddTaskListCtrl, Parent> taskList1, Pair<AddTaskCtrl, Parent> addTask,
+            Pair<EditTaskCtrl, Parent> editTask, Pair<CreateBoardCtrl, Parent> createBoard, ServerUtils server,
+            Pair<AdminPassCtrl, Parent> adminPass, Pair<AdminDashboardCtrl, Parent> admindash) {
 
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
@@ -79,13 +89,19 @@ public class MainCtrl {
         this.boardCtrl = board.getKey();
         this.board = new Scene(board.getValue(), 1900, 1000);
 
+        this.addTaskCtrl = addTask.getKey();
+        this.addTask = new Scene(addTask.getValue());
+
         this.server = server;
 
         this.addTaskListCtrl = taskList1.getKey();
         this.taskList1 = new Scene(taskList1.getValue());
 
-        this.addTaskCtrl = addTask.getKey();
-        this.addTask = new Scene(addTask.getValue());
+        this.createBoardCtrl = createBoard.getKey();
+        this.createBoard = new Scene(createBoard.getValue());
+
+        this.editTaskCtrl = editTask.getKey();
+        this.editTask = new Scene(editTask.getValue());
 
         this.adminPassCtrl = adminPass.getKey();
         this.adminPass = new Scene(adminPass.getValue());
@@ -121,6 +137,11 @@ public class MainCtrl {
         boardCtrl.hideEditFields();
     }
 
+    public void showCreateBoard(){
+        primaryStage.setTitle("Create a Board");
+        primaryStage.setScene(createBoard);
+    }
+
     public void showBoardinput() {
         primaryStage.setTitle("Board: select a board id");
         primaryStage.setScene(boardInput);
@@ -131,10 +152,16 @@ public class MainCtrl {
         boardCtrl.updateBoard(board);
     }
     public void showAddTaskList() {
+        addTaskListCtrl.setIDs(boardID);
         primaryStage.setTitle("Create a new TaskList");
         primaryStage.setScene(taskList1);
         taskList1.setOnKeyPressed(e -> addTaskListCtrl.keyPressed(e));
     }
+    public void setTask(Task task) {
+        this.taskID = task.getId();
+        this.task = task;
+    }
+
     public void setTaskList(long taskListID) {
         this.taskListID = taskListID;
     }
@@ -158,5 +185,12 @@ public class MainCtrl {
     }
     public void updateAdminDash(List<Board> board) {
         adminDashboardCtrl.updateAdmin(board);
+    }
+    public void showEditTask() {
+        editTaskCtrl.setIDs(boardID, taskListID, taskID);
+        editTaskCtrl.updateScene(task);
+        primaryStage.setTitle("Edit task");
+        primaryStage.setScene(editTask);
+        editTask.setOnKeyPressed(e -> editTaskCtrl.keyPressed(e));
     }
 }
