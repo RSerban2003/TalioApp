@@ -51,6 +51,14 @@
                                           <Font size="14.0" />
                                        </font>
                                     </Button>
+                                    <Button mnemonicParsing="false" onAction="#onDeleteButtonClicked" prefWidth="112.0" text="Delete Board">
+                                       <VBox.margin>
+                                          <Insets left="5.0" right="5.0" top="15.0" />
+                                       </VBox.margin>
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Button>
                                  </children>
                               </VBox>
                            </children>
@@ -138,7 +146,7 @@
                            <children>
                               <VBox fx:id="boardVBox" prefHeight="508.0" prefWidth="735.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
-                                    <ScrollPane  hbarPolicy="ALWAYS" VBox.vgrow="ALWAYS" style="-fx-background-color: transparent;">
+                                    <ScrollPane hbarPolicy="ALWAYS" style="-fx-background-color: transparent;" VBox.vgrow="ALWAYS">
                                       <content>
                                         <AnchorPane fx:id="boardAnchor" />
                                       </content>
