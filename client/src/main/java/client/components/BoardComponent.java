@@ -66,7 +66,9 @@ public class BoardComponent extends AnchorPane {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setContentText("Board Has been deleted, please select another board to view.");
                     alert.showAndWait();
+                    mainCtrl.showBoardinput();
                 }
+
             }
         );
     }
