@@ -46,7 +46,7 @@ public class TaskListTest {
     public void testAddTask() {
         Task task = new Task(1L, "Task", "Description");
         taskList.add(task);
-        List<Task> tasks = taskList.getTaskList();
+        List<Task> tasks = taskList.getTask();
         Assertions.assertEquals(1, tasks.size());
         Assertions.assertEquals(task, tasks.get(0));
     }
@@ -56,7 +56,7 @@ public class TaskListTest {
         Task task = new Task(1L, "Task", "Description");
         taskList.add(task);
         taskList.remove(task);
-        List<Task> tasks = taskList.getTaskList();
+        List<Task> tasks = taskList.getTask();
         Assertions.assertEquals(0, tasks.size());
     }
     @Test
@@ -83,9 +83,10 @@ public class TaskListTest {
         TaskList taskList = new TaskList();
         List<Task> taskItems = new ArrayList<>();
         taskItems.add(new Task("Task 1", "Description 1"));
-        taskList.setTaskList(taskItems);
-        Assertions.assertEquals(taskItems, taskList.getTaskList());
+        taskList.setTask(taskItems);
+        Assertions.assertEquals(taskItems, taskList.getTask());
     }
+
 
     @Test
     public void testSetId() {
