@@ -10,20 +10,19 @@ import commons.TaskList;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.*;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.util.Map;
 
 public class TaskListComponent extends VBox {
     private static final String style = "-fx-background-color: #c7c7c7; -fx-border-width: 2; -fx-border-color: gray; -fx-font-weight: bold; -fx-border-radius: 10 10 10 10; -fx-background-radius: 10 10 10 10;";
-    private MainCtrl mainCtrl;
+    private final MainCtrl mainCtrl;
     public static final DataFormat mapFormat = new DataFormat("map");
     private final TaskList taskList;
     public TaskListComponent(TaskList taskList, Board board, ServerUtils server, MainCtrl mainCtrl) {
@@ -65,8 +64,19 @@ public class TaskListComponent extends VBox {
         saveButton.setVisible(false);
 
         // Create delete button
-        Button deleteButton = new Button("Delete");
-        deleteButton.setOnAction(event -> server.deleteTaskList(board.getId(), taskList.getId()));
+        Button deleteButton = new Button("X");
+        deleteButton.setOnAction(event -> {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setHeaderText("Delete Task List");
+            alert.setContentText("Are you sure you want to delete this task list? This action cannot be undone.");
+            alert.showAndWait();
+            if (alert.getResult().getText().equals("OK")) {
+                server.deleteTaskList(board.getId(), taskList.getId());
+            }
+            else {
+                alert.close();
+            }
+        });
 
         // puts all top elements in a GridPane
         GridPane gridPane = new GridPane();

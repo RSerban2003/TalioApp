@@ -7,6 +7,7 @@ import commons.Task;
 import commons.TaskList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -48,7 +49,18 @@ public class TaskComponent extends VBox {
         context.scan("client");
         context.refresh();
         ServerUtils server = context.getBean(ServerUtils.class);
-        deleteButton.setOnAction(event -> server.deleteTask(board.getId(), taskList.getId(), task.getId()));
+        deleteButton.setOnAction(event -> {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Delete Task");
+            alert.setHeaderText("Are you sure you want to delete this task? This action cannot be undone.");
+            alert.showAndWait();
+            if (alert.getResult().getText().equals("OK")) {
+                server.deleteTask(board.getId(), taskList.getId(), task.getId());
+            }
+            else {
+                alert.close();
+            }
+        });
 
         //Adds delete button to topRow box
         topRow.getChildren().add(deleteButton);
