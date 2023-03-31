@@ -2,6 +2,7 @@ package server.api;
 
 
 import commons.Board;
+import commons.ListOfBoards;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +10,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import server.database.BoardRepository;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -61,8 +63,11 @@ public class BoardController {
         }
         boardRepository.deleteById(id);
 
+        List<Board> boardList = boardRepository.findAll();
+        ListOfBoards ret = new ListOfBoards(boardList);
         // send update to client using WebSocket
         msgs.convertAndSend("/topic/" + id, new Board());
+        msgs.convertAndSend("/topic/admin", ret);
 
         return ResponseEntity.noContent().build();
     }

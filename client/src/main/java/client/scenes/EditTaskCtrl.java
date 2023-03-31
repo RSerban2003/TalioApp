@@ -1,31 +1,27 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
-import commons.Board;
-import commons.TaskList;
-import javafx.scene.control.TextArea;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
+import commons.Task;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
+import jakarta.ws.rs.core.Form;
 import jakarta.ws.rs.core.Response;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
-import org.glassfish.jersey.client.ClientConfig;
-
 
 import javax.inject.Inject;
-
 import java.util.HashMap;
 import java.util.Map;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
-public class AddTaskCtrl {
-
+public class EditTaskCtrl {
     @FXML
     private Button editTitleButton;
 
@@ -57,16 +53,23 @@ public class AddTaskCtrl {
 
     private long boardID;
     private long tasklistID;
+    private long taskID;
 
     @Inject
-    public AddTaskCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public EditTaskCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
     }
 
-    public void setIDs(long boardID, long tasklistID) {
+    public void setIDs(long boardID, long tasklistID, long taskID) {
         this.boardID = boardID;
         this.tasklistID = tasklistID;
+        this.taskID = taskID;
+    }
+
+    public void updateScene(Task task) {
+        titleTextArea.setText(task.getName());
+        descriptionTextArea.setText(task.getDescription());
     }
 
     @FXML
@@ -114,9 +117,7 @@ public class AddTaskCtrl {
             alert.showAndWait();
             return;
         }
-        body.put("name", title.trim());
-        body.put("description", description.trim());
-        if (!server.addTask(boardID,tasklistID,body)) {
+        if (!server.editTask(boardID, tasklistID, taskID, title, description)) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setContentText("Failed to add the task: Unable to send the request.");
             alert.showAndWait();

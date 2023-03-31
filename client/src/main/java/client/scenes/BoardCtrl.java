@@ -3,19 +3,17 @@ package client.scenes;
 import client.components.BoardComponent;
 import client.utils.ServerUtils;
 import commons.Board;
-import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
+
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Button;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.text.Text;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import javax.inject.Inject;
 import java.util.Map;
@@ -80,6 +78,21 @@ public class BoardCtrl {
     public void disconnectBoard(){
         mainCtrl.showBoardinput();
         server.unregisterForMessages("/topic/"+this.boardID);
+    }
+
+    public void onDeleteButtonClicked(){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setHeaderText("Warning! Are you sure you want to delete this board?");
+        alert.setContentText("This action cannot be undone. " +
+                "All task lists and tasks in this board will be deleted as well.");
+        alert.showAndWait();
+        if (alert.getResult().getText().equals("OK")){
+            server.deleteBoard(boardID);
+            mainCtrl.showBoardinput();
+        }
+        else {
+            alert.close();
+        }
     }
 
     public void disconnectServer(){
