@@ -8,6 +8,7 @@ import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
 
 
+import javafx.scene.control.Alert;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -61,6 +62,13 @@ public class BoardComponent extends AnchorPane {
                         event.consume();
                     });
                 }
+                if (board.getId() == null){
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setContentText("Board Has been deleted, please select another board to view.");
+                    alert.showAndWait();
+                    mainCtrl.showBoardinput();
+                }
+
             }
         );
     }
