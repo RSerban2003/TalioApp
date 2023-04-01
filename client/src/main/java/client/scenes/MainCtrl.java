@@ -24,6 +24,7 @@ import client.utils.ServerUtils;
 import commons.Board;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
@@ -110,6 +111,7 @@ public class MainCtrl {
         this.adminDashboard = new Scene(admindash.getValue());
 
         showConnect();
+        primaryStage.getIcons().add(new Image("taliologo.png"));
         primaryStage.show();
     }
 
