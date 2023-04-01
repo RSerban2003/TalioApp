@@ -68,7 +68,6 @@ public class BoardComponent extends AnchorPane {
                     alert.showAndWait();
                     mainCtrl.showBoardinput();
                 }
-
             }
         );
     }
