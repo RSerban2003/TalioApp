@@ -6,10 +6,13 @@ import commons.Board;
 import commons.NestedTask;
 import commons.Task;
 import commons.TaskList;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -29,10 +32,19 @@ public class SubNestedTaskComponent extends VBox {
         this.mainCtrl = mainCtrl;
         //Creates the name box
         Label nameLabel = new Label(nestedTask.getName());
-        HBox topRow = new HBox(nameLabel);
-        topRow.setAlignment(Pos.CENTER);
+        nameLabel.setAlignment(Pos.CENTER);
 
+        // Create Edit button to edit label
+        Button editButton = new Button("Edit");
+        TextField nameField = new TextField();
+        nameField.setPromptText("e.g. School");
+        Button saveButton = new Button("Save");
 
+        // hide text field and save button at the start
+        nameField.setVisible(false);
+        nameField.setMaxWidth(200);
+        nameField.setAlignment(Pos.CENTER);
+        saveButton.setVisible(false);
 
         // create checkbox
         CheckBox checkBox = new CheckBox();
@@ -57,8 +69,31 @@ public class SubNestedTaskComponent extends VBox {
         gridPane.setHgap(10.0);
         gridPane.setVgap(10.0);
         gridPane.setPadding(new Insets(10, 10, 10, 10));
-        gridPane.add(topRow, 1, 0);
         gridPane.add(checkBox, 0, 0);
+        GridPane.setHalignment(nameLabel, HPos.CENTER);
+        gridPane.add(nameLabel, 1, 0);
+        gridPane.add(nameField, 1, 0);
+        gridPane.add(editButton, 2,0);
+        gridPane.add(saveButton, 2, 0);
+
+        editButton.setOnAction(e -> {
+            nameLabel.setVisible(false);
+            editButton.setVisible(false);
+            nameField.setVisible(true);
+            saveButton.setVisible(true);
+        });
+
+        saveButton.setOnAction(e ->{
+            if (!(nameField.getText().trim().isEmpty() || nameField.getText() == null)){
+                String nameString = nameField.getText();
+                nameLabel.setText(nameString);
+                server.editNestedTask(boardId, taskListId, task.getId(), nestedTask.getId(), nameString, nestedTask.getComplete());
+            }
+            nameLabel.setVisible(true);
+            editButton.setVisible(true);
+            nameField.setVisible(false);
+            saveButton.setVisible(false);
+        });
 
 
         setMaxSize(300, 40);
