@@ -73,6 +73,7 @@ public class TaskOverviewCtrl {
         this.taskID = taskID;
         if(boardID != 0) {
             server.registerForMessages("/topic/" + boardID + "/" + tasklistID + "/" + taskID, Task.class, q -> {
+                System.out.println(q);
                 observableTask.set(q);
             });
         }

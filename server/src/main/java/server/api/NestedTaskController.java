@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/boards/{board}/{list}/{card}")
+@RequestMapping("/api/boards/{board}/{list}/{task}")
 public class NestedTaskController {
     private final TaskListRepository taskListRepository;
     private final TaskRepository taskRepository;
@@ -75,9 +75,11 @@ public class NestedTaskController {
 
         nestedTaskRepository.save(nested);
 
-        Board board = boardRepository.findById(boardId).get();
+        Task retTask = taskRepository.findById(taskId).get();
+        Board retBoard = boardRepository.findById(boardId).get();
         // send update to client using WebSocket
-        msgs.convertAndSend("/topic/" + boardId, board);
+        msgs.convertAndSend("/topic/" + boardId, retBoard);
+        msgs.convertAndSend("/topic/"+boardId+"/"+listId+"/"+taskId, retTask);
         return ResponseEntity.ok(nested);
     }
 
@@ -102,15 +104,17 @@ public class NestedTaskController {
 
         NestedTask saved = nestedTaskRepository.save(n);
 
-        Board board1 = boardRepository.findById(boardId).get();
+        Task retTask = taskRepository.findById(taskId).get();
+        Board retBoard = boardRepository.findById(boardId).get();
         // send update to client using WebSocket
-        msgs.convertAndSend("/topic/" + boardId, board1);
+        msgs.convertAndSend("/topic/" + boardId, retBoard);
+        msgs.convertAndSend("/topic/"+boardId+"/"+listId+"/"+taskId, retTask);
 
         return ResponseEntity.ok(saved);
     }
 
     @DeleteMapping("/{nested}")
-    public ResponseEntity<?> deleteNested(@PathVariable("nested") long nestedId, @PathVariable("card") long taskId, @PathVariable("list") long listId, @PathVariable("board") long boardId){
+    public ResponseEntity<?> deleteNested(@PathVariable("nested") long nestedId, @PathVariable("task") long taskId, @PathVariable("list") long listId, @PathVariable("board") long boardId){
         // check if board, list and task exist
         if (!boardRepository.existsById(boardId)) return ResponseEntity.notFound().build();
         if (!taskListRepository.existsById(listId)) return ResponseEntity.notFound().build();
@@ -131,15 +135,17 @@ public class NestedTaskController {
         nestedTaskRepository.deleteById(nestedId);
         taskRepository.save(t);
 
-        Board board1 = boardRepository.findById(boardId).get();
+        Task retTask = taskRepository.findById(taskId).get();
+        Board retBoard = boardRepository.findById(boardId).get();
         // send update to client using WebSocket
-        msgs.convertAndSend("/topic/" + boardId, board1);
+        msgs.convertAndSend("/topic/" + boardId, retBoard);
+        msgs.convertAndSend("/topic/"+boardId+"/"+listId+"/"+taskId, retTask);
 
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/{nested}/move")
-    public ResponseEntity<?> move(@PathVariable("nested") long nestedId, @PathVariable("card") long taskId, @PathVariable("list") long listId,
+    public ResponseEntity<?> move(@PathVariable("nested") long nestedId, @PathVariable("task") long taskId, @PathVariable("list") long listId,
                                   @PathVariable("board") long boardId, @RequestBody Map<String, Long> body){
         if(!body.containsKey("index")) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("no");
         // check if board, list and task exist
@@ -171,9 +177,11 @@ public class NestedTaskController {
 
         taskRepository.save(task);
 
-        Board board1 = boardRepository.findById(boardId).get();
+        Task retTask = taskRepository.findById(taskId).get();
+        Board retBoard = boardRepository.findById(boardId).get();
         // send update to client using WebSocket
-        msgs.convertAndSend("/topic/" + boardId, board1);
+        msgs.convertAndSend("/topic/" + boardId, retBoard);
+        msgs.convertAndSend("/topic/"+boardId+"/"+listId+"/"+taskId, retTask);
 
         return ResponseEntity.ok(task);
     }

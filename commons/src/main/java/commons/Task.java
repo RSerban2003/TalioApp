@@ -53,8 +53,8 @@ public class Task {
         this.index = index;
     }
 
-    public Task() {
-    }
+    public Task() {}
+
     public Task(String name, String description) {
         this.name = name;
         this.description = description;
