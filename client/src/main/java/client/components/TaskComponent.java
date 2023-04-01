@@ -39,7 +39,7 @@ public class TaskComponent extends VBox {
         editButton.setOnAction(event -> {
             mainCtrl.setTaskList(taskList.getId());
             mainCtrl.setTask(task);
-            mainCtrl.showEditTask();
+            mainCtrl.showTaskOverview();
         });
 
         // Creates button for deleting tasks
