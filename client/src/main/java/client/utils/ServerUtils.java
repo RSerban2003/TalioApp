@@ -20,9 +20,7 @@ import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
-import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
@@ -58,6 +56,7 @@ import org.springframework.web.socket.messaging.WebSocketStompClient;
 public class ServerUtils {
     private static String SERVER = "http://localhost:8080/";
     private static String WSSERVER = "ws://localhost:8080/";
+    private static StompSession SESSION;
 
     public static void setHost(String hostname) {
         SERVER = "http://" + hostname + ":8080/";
@@ -133,7 +132,10 @@ public class ServerUtils {
     public String getServerUrl() {
         return SERVER;
     }
-    private StompSession session = connect("ws://localhost:8080/websocket");
+    public void astablishConnection(){
+        this.SESSION = connect(WSSERVER +"websocket");
+
+    }
     private Map<String, StompSession.Subscription> subscriptions = new HashMap<>();
     private StompSession connect(String url){
         var client = new StandardWebSocketClient();
@@ -150,7 +152,7 @@ public class ServerUtils {
     }
 
     public <T> void registerForMessages(String dest, Class<T> type, Consumer<T> consumer){
-        StompSession.Subscription subscription = session.subscribe(dest, new StompFrameHandler() {
+        StompSession.Subscription subscription = SESSION.subscribe(dest, new StompFrameHandler() {
             @Override
             public Type getPayloadType(StompHeaders headers) {
                 return type;
@@ -174,7 +176,7 @@ public class ServerUtils {
     }
 
     public void send(String dest, Object o){
-        session.send(dest, o);
+        SESSION.send(dest, o);
     }
 
     public boolean deleteTaskList(Long boardId, Long taskListId){
@@ -233,5 +235,26 @@ public class ServerUtils {
         int status = response.getStatus();
         response.close();
         return status == 200;
+    }
+
+    public Board getBoard(long boardID) {
+        Response response;
+        try {
+            // If there is an input make a get request with the board id to retrieve it
+            Client client = ClientBuilder.newClient();
+            response = client.target(SERVER).path("api/boards/" + boardID + "/get/").request().get();
+            // if there is no board with such id, put up a warning and wait for another input
+            if (response.getStatus() == 404) {
+                return null;
+            } else if (response.getStatus() != 200) {
+                throw new RuntimeException("Failed to retrieve board: HTTP error code " + response.getStatus());
+            }
+            Board board = ClientBuilder.newClient(new ClientConfig()).target(SERVER)
+                    .path("api/boards/" + boardID + "/get").request(APPLICATION_JSON).accept(APPLICATION_JSON).get(new GenericType<Board>() {
+                    });
+            return board;
+        } catch (ProcessingException e) {
+            return null;
+        }
     }
 }
