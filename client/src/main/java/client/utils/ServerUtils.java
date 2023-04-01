@@ -248,4 +248,25 @@ public class ServerUtils {
         response.close();
         return status == 200;
     }
+
+    public boolean deleteNestedTask(Long boardId, Long taskListId, Long taskId, Long nestedId){
+        Client client = ClientBuilder.newClient(new ClientConfig());
+        Response response = client.target(SERVER).path("api/boards/"+ boardId + "/"+ taskListId + "/"+taskId+"/"+nestedId).request().delete();
+        int status = response.getStatus();
+        response.close();
+        return status == 200;
+    }
+
+    public boolean addNestedTask(Long boardId, Long taskListId, Long taskId){
+        Client client = ClientBuilder.newClient();
+        Map<String, String> body = new HashMap<>();
+        body.put("name", "new Nested Task");
+        Response response = client.target(SERVER).path("api/boards/"+ boardId + "/"+ taskListId + "/"+taskId+"/nestedTask")
+                .request(APPLICATION_JSON).accept(APPLICATION_JSON)
+                .post(Entity.entity(body, APPLICATION_JSON));
+
+        int status = response.getStatus();
+        response.close();
+        return status == 200;
+    }
 }

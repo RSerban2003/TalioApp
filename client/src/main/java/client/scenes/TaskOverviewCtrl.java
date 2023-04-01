@@ -117,6 +117,11 @@ public class TaskOverviewCtrl {
     }
 
     @FXML
+    private void addNestedTask(){
+        server.addNestedTask(boardID, tasklistID, taskID);
+    }
+
+    @FXML
     private void onSubmitButtonClicked() {
         String title = titleTextArea.getText();
         String description = descriptionTextArea.getText();

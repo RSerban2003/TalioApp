@@ -9,10 +9,7 @@ import commons.TaskList;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -62,11 +59,25 @@ public class SubNestedTaskComponent extends VBox {
             }
         });
 
+        // Create delete button
+        Button deleteButton = new Button("X");
+        deleteButton.setOnAction(event -> {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setHeaderText("Delete Task");
+            alert.setContentText("Are you sure you want to delete this task? This action cannot be undone.");
+            alert.showAndWait();
+            if (alert.getResult().getText().equals("OK")) {
+                server.deleteNestedTask(boardId, taskListId, task.getId(), nestedTask.getId());
+            }
+            else {
+                alert.close();
+            }
+        });
 
 
         GridPane gridPane = new GridPane();
         gridPane.setAlignment(Pos.CENTER_LEFT);
-        gridPane.setHgap(10.0);
+        gridPane.setHgap(5.0);
         gridPane.setVgap(10.0);
         gridPane.setPadding(new Insets(10, 10, 10, 10));
         gridPane.add(checkBox, 0, 0);
@@ -75,6 +86,7 @@ public class SubNestedTaskComponent extends VBox {
         gridPane.add(nameField, 1, 0);
         gridPane.add(editButton, 2,0);
         gridPane.add(saveButton, 2, 0);
+        gridPane.add(deleteButton, 3, 0);
 
         editButton.setOnAction(e -> {
             nameLabel.setVisible(false);
