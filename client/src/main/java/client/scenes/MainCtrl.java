@@ -22,6 +22,7 @@ import commons.Task;
 import commons.TaskList;
 import client.utils.ServerUtils;
 import commons.Board;
+import javafx.collections.ObservableList;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -58,6 +59,7 @@ public class MainCtrl {
 
     private Scene adminDashboard;
     private AdminDashboardCtrl adminDashboardCtrl;
+    private ObservableList<Board> data;
 
     private Scene editTask;
     private EditTaskCtrl editTaskCtrl;
@@ -93,6 +95,10 @@ public class MainCtrl {
         this.addTask = new Scene(addTask.getValue());
 
         this.server = server;
+
+        server.registerForUpdates(q -> {
+            data.add(q);
+        });
 
         this.addTaskListCtrl = taskList1.getKey();
         this.taskList1 = new Scene(taskList1.getValue());

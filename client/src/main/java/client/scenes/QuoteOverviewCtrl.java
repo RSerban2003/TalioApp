@@ -17,6 +17,8 @@ package client.scenes;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import com.google.inject.Inject;
 
@@ -57,6 +59,13 @@ public class QuoteOverviewCtrl implements Initializable {
         colFirstName.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().person.firstName));
         colLastName.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().person.lastName));
         colQuote.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().quote));
+
+        new Timer().scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                refresh();
+            }
+        } , 0, 1000);
     }
 
     public void addQuote() {

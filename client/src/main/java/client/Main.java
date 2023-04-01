@@ -55,5 +55,8 @@ public class Main extends Application {
         ServerUtils server = new ServerUtils();
         var createBoard = FXML.load(CreateBoardCtrl.class, "client", "scenes", "CreateBoard.fxml");
         mainCtrl.initialize(primaryStage, overview, add, connect, boardInput, board, taskList1, addTask, editTask, createBoard, server, adminPass, adminDash);
+        //primaryStage.setOnCloseRequest(e -> {
+            //board.getKey().stop();
+        //}
     }
 }
