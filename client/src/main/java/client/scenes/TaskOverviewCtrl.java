@@ -81,6 +81,7 @@ public class TaskOverviewCtrl {
     public void updateScene(Task task) {
         titleTextArea.setText(task.getName());
         descriptionTextArea.setText(task.getDescription());
+        observableTask.set(task);
         nestedTaskAnchorPane.getChildren().clear();
         nestedTaskAnchorPane.getChildren().add(nestedTaskComponent);
     }

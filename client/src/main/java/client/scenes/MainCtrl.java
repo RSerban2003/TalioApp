@@ -133,6 +133,14 @@ public class MainCtrl {
         boardCtrl.hideEditFields();
     }
 
+    public void showTaskOverview() {
+        taskOverviewCtrl.setIDs(boardID, taskListID, taskID);
+        taskOverviewCtrl.updateScene(task);
+        primaryStage.setTitle("Edit task");
+        primaryStage.setScene(taskOverview);
+        taskOverview.setOnKeyPressed(e -> taskOverviewCtrl.keyPressed(e));
+    }
+
     public void showCreateBoard(){
         primaryStage.setTitle("Create a Board");
         primaryStage.setScene(createBoard);
@@ -181,12 +189,5 @@ public class MainCtrl {
     }
     public void updateAdminDash(List<Board> board) {
         adminDashboardCtrl.updateAdmin(board);
-    }
-    public void showTaskOverview() {
-        taskOverviewCtrl.setIDs(boardID, taskListID, taskID);
-        taskOverviewCtrl.updateScene(task);
-        primaryStage.setTitle("Edit task");
-        primaryStage.setScene(taskOverview);
-        taskOverview.setOnKeyPressed(e -> taskOverviewCtrl.keyPressed(e));
     }
 }

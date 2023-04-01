@@ -18,3 +18,4 @@ INSERT INTO Task (id, name, description, tasklist_id, index) VALUES (100, 'thisi
 INSERT INTO Task (id, name, description, tasklist_id, index) VALUES (101, 'thisisataskaswell', '', 100,1);
 
 INSERT INTO NestedTask (id, name, isComplete, task_id, index) VALUES (100, 'nestedTest', FALSE, 100, 0);
+INSERT INTO NestedTask (id, name, isComplete, task_id, index) VALUES (101, 'nestedTest', FALSE, 101, 0);
