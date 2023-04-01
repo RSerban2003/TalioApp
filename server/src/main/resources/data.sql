@@ -1,3 +1,4 @@
+DELETE FROM nestedtask;
 DELETE FROM task;
 DELETE FROM tasklist;
 DELETE FROM board;
@@ -15,3 +16,5 @@ INSERT INTO Tasklist (id, name, board_id) VALUES (105, 'aaaa', 100);
 
 INSERT INTO Task (id, name, description, tasklist_id, index) VALUES (100, 'thisisatask', '', 100,0);
 INSERT INTO Task (id, name, description, tasklist_id, index) VALUES (101, 'thisisataskaswell', '', 100,1);
+
+INSERT INTO NestedTask (id, name, isComplete, task_id, index) VALUES (100, 'nestedTest', FALSE, 100, 0);

@@ -18,6 +18,7 @@ public class SubNestedTaskComponent extends VBox {
     @Inject
     public SubNestedTaskComponent(NestedTask nestedTask, Task task, TaskList taskList, Board board, MainCtrl mainCtrl) {
         super();
+        this.nestedId = nestedTask.getId();
         this.mainCtrl = mainCtrl;
         //Creates the name box
         Label nameLabel = new Label(nestedTask.getName());

@@ -41,6 +41,14 @@ public class NestedTask {
     public NestedTask() {
     }
 
+    public NestedTask(Long id, String name, Boolean isComplete, Task task, Integer index) {
+        this.id = id;
+        this.name = name;
+        this.isComplete = isComplete;
+        this.task = task;
+        this.index = index;
+    }
+
     public NestedTask(String name, Boolean isComplete) {
         this.name = name;
         this.isComplete = isComplete;
