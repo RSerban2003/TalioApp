@@ -100,7 +100,7 @@ public class NestedTaskController {
         if (!t.getNestedTasks().contains(n)) return ResponseEntity.badRequest().build();
 
         n.setName(body.get("name"));
-        n.setComplete(body.get("isCompleted").equals("true"));
+        n.setComplete(body.get("isCompleted").equalsIgnoreCase("true"));
 
         NestedTask saved = nestedTaskRepository.save(n);
 

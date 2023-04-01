@@ -234,4 +234,18 @@ public class ServerUtils {
         response.close();
         return status == 200;
     }
+
+    public boolean editNestedTask(Long boardId, Long taskListId, Long taskId, Long nestedId, String name, Boolean complete){
+        Client client = ClientBuilder.newClient();
+        Map<String, String> body = new HashMap<>();
+        body.put("name", name);
+        body.put("isCompleted", complete.toString());
+        Response response = client.target(SERVER).path("api/boards/"+ boardId + "/"+ taskListId + "/"+taskId+"/"+nestedId+"/edit-nested")
+                .request(APPLICATION_JSON).accept(APPLICATION_JSON)
+                .post(Entity.entity(body, APPLICATION_JSON));
+
+        int status = response.getStatus();
+        response.close();
+        return status == 200;
+    }
 }

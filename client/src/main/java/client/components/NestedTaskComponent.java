@@ -16,6 +16,16 @@ public class NestedTaskComponent extends AnchorPane {
     private SimpleObjectProperty<Task> task;
     private ServerUtils server;
     private MainCtrl mainCtrl;
+    private Long boardId;
+    private Long taskListId;
+
+    public void setBoardId(Long boardId) {
+        this.boardId = boardId;
+    }
+
+    public void setTaskListId(Long taskListId) {
+        this.taskListId = taskListId;
+    }
 
     public NestedTaskComponent(SimpleObjectProperty<Task> task, ServerUtils server, MainCtrl mainCtrl) {
         super();
@@ -29,17 +39,13 @@ public class NestedTaskComponent extends AnchorPane {
         Platform.runLater(
                 () -> {
                 SubNestedTaskComponent[] nestedTask = task.getNestedTasks().stream()
-                        .map((NestedTask nestedTask1) -> new SubNestedTaskComponent(nestedTask1, task, null, null, mainCtrl))
+                        .map((NestedTask nestedTask1) -> new SubNestedTaskComponent(nestedTask1, task, taskListId, boardId, mainCtrl))
                         .toArray(SubNestedTaskComponent[]::new);
                 VBox taskListContainer = new VBox(nestedTask);
-                taskListContainer.setSpacing(45.0);
                 AnchorPane.setTopAnchor(taskListContainer, 150.0);
                 AnchorPane.setLeftAnchor(taskListContainer, 150.0);
 
                 HBox hbox = new HBox(taskListContainer);
-                hbox.setSpacing(20.0);
-                hbox.setLayoutX(50.0);
-                hbox.setLayoutY(50.0);
 
                 getChildren().clear();
                 getChildren().add(hbox);
