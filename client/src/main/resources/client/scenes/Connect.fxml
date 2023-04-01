@@ -48,7 +48,7 @@
             <Button fx:id="connect" layoutX="379.0" layoutY="237.0" mnemonicParsing="false" onAction="#connectServer" text="Connect" />
             <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="245.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../taliologo.png" />
+                  <Image url="@/taliologo.png" />
                </image>
             </ImageView>
             <Text layoutX="238.0" layoutY="213.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Connect to a Talio server" />
