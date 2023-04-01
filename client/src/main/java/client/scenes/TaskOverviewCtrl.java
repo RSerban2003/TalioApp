@@ -71,11 +71,11 @@ public class TaskOverviewCtrl {
         this.boardID = boardID;
         this.tasklistID = tasklistID;
         this.taskID = taskID;
-        if(boardID != 0){
-            server.registerForMessages("/topic/"+boardID+"/"+tasklistID+"/"+taskID, Task.class, q -> {
+        if(boardID != 0) {
+            server.registerForMessages("/topic/" + boardID + "/" + tasklistID + "/" + taskID, Task.class, q -> {
                 observableTask.set(q);
             });
-
+        }
     }
 
     public void updateScene(Task task) {
