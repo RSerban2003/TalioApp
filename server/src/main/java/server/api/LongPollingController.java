@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 @RestController
-@RequestMapping("/api/boards")
+@RequestMapping("/api/boards/polling")
 public class LongPollingController {
 
     public Map<Object, Consumer<Board>> listeners = new HashMap<>();

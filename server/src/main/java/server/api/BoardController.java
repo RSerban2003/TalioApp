@@ -36,8 +36,6 @@ public class BoardController {
         return ResponseEntity.ok(boardRepository.findAll());
     }
 
-    //private Map<Object, Consumer<?>> listeners = new HashMap<>();
-
     @GetMapping(path = {"/updates"})
     public DeferredResult<ResponseEntity<?>> getUpdates() {
         var res = new DeferredResult<ResponseEntity<?>>(1000L);
