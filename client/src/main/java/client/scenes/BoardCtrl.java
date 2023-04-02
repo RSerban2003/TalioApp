@@ -1,11 +1,15 @@
 package client.scenes;
 
 import client.components.BoardComponent;
+import client.components.ClientBoardList;
 import client.utils.ServerUtils;
+import client.utils.WorkspaceUtils;
 import commons.Board;
 import commons.TaskList;
 import jakarta.ws.rs.client.ClientBuilder;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -19,11 +23,18 @@ import javafx.scene.text.Text;
 import org.glassfish.jersey.client.ClientConfig;
 
 import javax.inject.Inject;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class BoardCtrl {
     @FXML
     private AnchorPane boardAnchor;
     private final ServerUtils server;
+    private final WorkspaceUtils workspaceUtils;
     private MainCtrl mainCtrl;
     private long boardID;
     @FXML
@@ -34,13 +45,17 @@ public class BoardCtrl {
     private TextField textFieldBoardName;
     @FXML
     private Button buttonSaveBoardName;
+    @FXML
+    private ClientBoardList boardList;
+    private ObservableList<Board> boardListSource;
     private Board board;
 
     private SimpleObjectProperty<Board> observableBoard;
     private BoardComponent boardComponent;
 
     @Inject
-    public BoardCtrl(MainCtrl mainCtrl, ServerUtils server) {
+    public BoardCtrl(MainCtrl mainCtrl, ServerUtils server, WorkspaceUtils workspaceUtils) {
+        this.workspaceUtils = workspaceUtils;
         this.mainCtrl = mainCtrl;
         this.server = server;
         boardAnchor = new AnchorPane();
@@ -53,6 +68,7 @@ public class BoardCtrl {
         setBoardID(board.getId());
         boardAnchor.getChildren().clear();
         boardAnchor.getChildren().add(boardComponent);
+        refreshBoardList();
     }
 
     public long getBoardID() {
@@ -124,5 +140,18 @@ public class BoardCtrl {
 
     public void addTaskList(){
         mainCtrl.showAddTaskList();
+    }
+    public void refreshBoardList() {
+        File file = new File("client/src/main/resources/workspaces/" + server.getHost());
+        if(!file.exists()) return;
+        List<Long> boardIds = new ArrayList<>();
+        try {
+            Scanner scanner = new Scanner(file);
+            boardIds = workspaceUtils.getBoardIds(scanner);
+        } catch (FileNotFoundException fnfe) {
+            fnfe.printStackTrace();
+        }
+        boardListSource = FXCollections.observableList(boardIds.stream().map(server::getBoard).toList());
+        boardList.setItems(boardListSource);
     }
 }

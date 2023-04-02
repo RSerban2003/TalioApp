@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
+import client.utils.WorkspaceUtils;
 import com.google.inject.Inject;
 import commons.Board;
 import jakarta.ws.rs.ProcessingException;
@@ -15,6 +16,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import org.glassfish.jersey.client.ClientConfig;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,10 +30,12 @@ public class CreateBoardCtrl {
     private ServerUtils server;
     private MainCtrl mainCtrl;
     private BoardCtrl boardCtrl;
+    private WorkspaceUtils workspaceUtils;
 
 
     @Inject
-    public CreateBoardCtrl(ServerUtils server, MainCtrl mainCtrl, BoardCtrl boardCtrl) {
+    public CreateBoardCtrl(ServerUtils server, MainCtrl mainCtrl, BoardCtrl boardCtrl, WorkspaceUtils workspaceUtils) {
+        this.workspaceUtils = workspaceUtils;
         this.mainCtrl = mainCtrl;
         this.server = server;
         this.boardCtrl = boardCtrl;
@@ -77,6 +83,13 @@ public class CreateBoardCtrl {
             clearFields();
             mainCtrl.showBoard();
             mainCtrl.updateBoard(boardCreated);
+            try {
+                File file = new File("client/src/main/resources/workspaces/" + server.getHost());
+                if(!file.exists()) file.createNewFile();
+                workspaceUtils.addBoardId(new FileWriter(file, true), boardId);
+            } catch (IOException ioe) {
+                ioe.printStackTrace();
+            }
         } catch (Exception e) {
             // Display an error message if the request failed
             Alert alert = new Alert(Alert.AlertType.ERROR);
