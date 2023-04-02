@@ -129,12 +129,12 @@ public class MainCtrl {
         overviewCtrl.refresh();
     }
 
-    public Stage getPrimaryStage() {
-        return primaryStage;
-    }
-
     public Stage getPopUpStage() {
         return popUpStage;
+    }
+
+    public Stage getPrimaryStage() {
+        return primaryStage;
     }
 
     public void showAdd() {
@@ -161,12 +161,16 @@ public class MainCtrl {
     public void showCreateBoard(){
         primaryStage.setTitle("Create a Board");
         primaryStage.setScene(createBoard);
+        primaryStage.setX(Screen.getPrimary().getVisualBounds().getWidth() / 2 - createBoard.getWidth() / 2);
+        primaryStage.setY(Screen.getPrimary().getVisualBounds().getHeight() / 2 - createBoard.getHeight() / 2);
     }
 
     public void showBoardinput() {
         primaryStage.setTitle("Board: select a board id");
         primaryStage.setScene(boardInput);
         boardInput.setOnKeyPressed(e -> boardInputCtrl.keyPressed(e));
+        primaryStage.setX(Screen.getPrimary().getVisualBounds().getWidth() / 2 - boardInput.getWidth() / 2);
+        primaryStage.setY(Screen.getPrimary().getVisualBounds().getHeight() / 2 - boardInput.getHeight() / 2);
     }
     public void updateBoard(Board board) {
         this.boardID = board.getId();
@@ -174,8 +178,11 @@ public class MainCtrl {
     }
     public void showAddTaskList() {
         addTaskListCtrl.setIDs(boardID);
-        primaryStage.setTitle("Create a new TaskList");
-        primaryStage.setScene(taskList1);
+        popUpStage.setTitle("Create a new TaskList");
+        popUpStage.setScene(taskList1);
+        popUpStage.show();
+        popUpStage.setX(Screen.getPrimary().getVisualBounds().getWidth() / 2 - editTask.getWidth() / 2);
+        popUpStage.setY(Screen.getPrimary().getVisualBounds().getHeight() / 2 - editTask.getHeight() / 2);
         taskList1.setOnKeyPressed(e -> addTaskListCtrl.keyPressed(e));
     }
     public void setTask(Task task) {
@@ -199,6 +206,8 @@ public class MainCtrl {
         primaryStage.setTitle("Enter admin password");
         primaryStage.setScene(adminPass);
         adminPassCtrl.generatePass();
+        primaryStage.setX(Screen.getPrimary().getVisualBounds().getWidth() / 2 - adminPass.getWidth() / 2);
+        primaryStage.setY(Screen.getPrimary().getVisualBounds().getHeight() / 2 - adminPass.getHeight() / 2);
         adminPass.setOnKeyPressed(e -> adminPassCtrl.keyPressed(e));
     }
 
@@ -214,10 +223,11 @@ public class MainCtrl {
     public void showEditTask() {
         editTaskCtrl.setIDs(boardID, taskListID, taskID);
         editTaskCtrl.updateScene(task);
-        primaryStage.setTitle("Edit task");
-        primaryStage.setScene(editTask);
-        primaryStage.setX(Screen.getPrimary().getVisualBounds().getWidth() / 2 - editTask.getWidth() / 2);
-        primaryStage.setY(Screen.getPrimary().getVisualBounds().getHeight() / 2 - editTask.getHeight() / 2);
+        popUpStage.setTitle("Edit task");
+        popUpStage.setScene(editTask);
+        popUpStage.show();
+        popUpStage.setX(Screen.getPrimary().getVisualBounds().getWidth() / 2 - editTask.getWidth() / 2);
+        popUpStage.setY(Screen.getPrimary().getVisualBounds().getHeight() / 2 - editTask.getHeight() / 2);
         editTask.setOnKeyPressed(e -> editTaskCtrl.keyPressed(e));
     }
 }

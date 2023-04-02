@@ -123,14 +123,14 @@ public class EditTaskCtrl {
             alert.showAndWait();
             return;
         }
-        mainCtrl.showBoard();
+        mainCtrl.getPopUpStage().close();
         resetFields();
     }
 
     @FXML
     private void onCancelButtonClicked() {
         this.resetFields();
-        mainCtrl.showBoard();
+        mainCtrl.getPopUpStage().close();
     }
 
     private void removeFocus() {
