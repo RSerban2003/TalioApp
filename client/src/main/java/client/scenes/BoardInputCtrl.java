@@ -82,6 +82,7 @@ public class BoardInputCtrl {
             try {
                 File file = new File("client/src/main/resources/workspaces/" + server.getHost());
                 Long boardId = Long.parseLong(textBoardId);
+                System.out.println(file.toPath().toAbsolutePath());
                 if(!file.exists()) file.createNewFile();
                 if(!workspaceUtils.getBoardIds(new Scanner(file)).contains(boardId)) {
                     workspaceUtils.addBoardId(new FileWriter(file, true), Long.parseLong(textBoardId));
