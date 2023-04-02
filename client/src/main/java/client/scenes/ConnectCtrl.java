@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
+import commons.Board;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -27,7 +28,7 @@ public class ConnectCtrl {
     public void connectServer() {
         server.setHost(hostname.getText());
         if(server.ping()) {
-            mainCtrl.showBoardinput();
+            mainCtrl.showBoard();
             server.astablishConnection();
         }
         else {
