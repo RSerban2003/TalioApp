@@ -1,54 +1,39 @@
 package client.utils;
 
+import org.checkerframework.checker.units.qual.A;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Service;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-
+@Service
 public class WorkspaceUtils {
-    public List<Long> getBoardIds(String hostName) {
+    public List<Long> getBoardIds(Scanner host) {
         ArrayList<Long> result = new ArrayList<Long>();
-        File host = new File("@/workspaces/" + hostName);
-        if(!host.exists()) return result;
-        
-        try {
-            Scanner scanner = new Scanner(host);
-            while(scanner.hasNextLine()) {
-                result.add(Long.valueOf(scanner.nextLine()));
-            }
-        } catch (FileNotFoundException fnfe) {
-            fnfe.printStackTrace();
+
+        while(host.hasNextLine()) {
+            result.add(Long.valueOf(host.nextLine()));
         }
         return result;
-        
     }
-    public void addBoardId(String hostName, long boardId) {
-        try {
-            FileWriter fileWriter = new FileWriter("@/workspaces/" + hostName);
-            PrintWriter printWriter = new PrintWriter(fileWriter);
-            printWriter.println(boardId);
-            printWriter.close();
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
-    }
-    public void removeBoardId(String hostName, long boardId) {
-        File inputFile = new File("@/workspaces/" + hostName);
-        File temp = new File("@/workspaces/temp");
-        if(!inputFile.exists()) return;
-
-        try {
-            PrintWriter writer = new PrintWriter(new FileWriter(temp));
-            Scanner scanner = new Scanner(inputFile);
-            while(scanner.hasNextLine()) {
-                Long nextLine = Long.valueOf(scanner.nextLine());
-                if(nextLine != boardId) writer.println(nextLine);
-            }
+    public void addBoardId(FileWriter hostWriter, long boardId) {
+            PrintWriter writer = new PrintWriter(hostWriter);
+            writer.println(boardId);
             writer.close();
-            temp.renameTo(inputFile);
+    }
+    public void removeBoardId(Scanner scanHost, FileWriter writeHost, long boardId) {
+        PrintWriter printHost = new PrintWriter(writeHost);
+        ArrayList<Long> temp = new ArrayList<>();
+        while(scanHost.hasNextLine()) {
+            Long nextLine = Long.valueOf(scanHost.nextLine());
+            if(nextLine != boardId) temp.add(nextLine);
         }
-        catch (IOException ioe) {
-            ioe.printStackTrace();
+        for(Long Id : temp) {
+            printHost.println(Id);
         }
+        printHost.close();
     }
 }
