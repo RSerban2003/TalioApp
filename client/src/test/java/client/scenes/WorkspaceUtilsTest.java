@@ -15,30 +15,21 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 public class WorkspaceUtilsTest {
-    @Autowired
     private WorkspaceUtils workspaceUtils;
     @BeforeEach
     public void setup() {
-        System.out.println(workspaceUtils);
+        workspaceUtils = new WorkspaceUtils();
     }
     @Test
     public void testWriteNewHost() {
         try {
-            File file = new File("src/main/resources/workspaces/localhost");
+            File file = new File("src/main/resources/workspaces/testwrite");
             file.createNewFile();
             FileWriter writer = new FileWriter(file);
             workspaceUtils.addBoardId(writer, 1);
             Scanner scanner = new Scanner(file);
             assertEquals(Long.valueOf(scanner.nextLine()), 1);
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
-    }
-    @Test
-    public void testWriteToExistingHost() {
-        File file = new File("src/main/resources/workspaces/localhost");
-        try{
-            PrintWriter writer = new PrintWriter(new FileWriter(file));
+            file.delete();
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
