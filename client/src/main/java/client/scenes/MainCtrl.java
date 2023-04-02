@@ -15,11 +15,7 @@
  */
 package client.scenes;
 
-import client.components.TaskComponent;
-import client.components.TaskListComponent;
-import client.components.BoardComponent;
 import commons.Task;
-import commons.TaskList;
 import client.utils.ServerUtils;
 import commons.Board;
 import javafx.scene.Parent;
@@ -30,7 +26,6 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
-import java.awt.geom.Rectangle2D;
 import java.util.List;
 
 public class MainCtrl {
@@ -64,19 +59,19 @@ public class MainCtrl {
     private Scene adminDashboard;
     private AdminDashboardCtrl adminDashboardCtrl;
 
-    private Scene editTask;
-    private EditTaskCtrl editTaskCtrl;
+    private Scene taskOverview;
+    private TaskOverviewCtrl taskOverviewCtrl;
 
     private long boardID;
     private long taskListID;
     private long taskID;
     private Task task;
 
-    public void initialize(Stage primaryStage,Pair<QuoteOverviewCtrl, Parent> overview,
-            Pair<AddQuoteCtrl, Parent> add, Pair<ConnectCtrl, Parent> connect, Pair<BoardInputCtrl, Parent> boardInput,
-            Pair<BoardCtrl, Parent> board, Pair<AddTaskListCtrl, Parent> taskList1, Pair<AddTaskCtrl, Parent> addTask,
-            Pair<EditTaskCtrl, Parent> editTask, Pair<CreateBoardCtrl, Parent> createBoard, ServerUtils server,
-            Pair<AdminPassCtrl, Parent> adminPass, Pair<AdminDashboardCtrl, Parent> admindash) {
+    public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
+                           Pair<AddQuoteCtrl, Parent> add, Pair<ConnectCtrl, Parent> connect, Pair<BoardInputCtrl, Parent> boardInput,
+                           Pair<BoardCtrl, Parent> board, Pair<AddTaskListCtrl, Parent> taskList1, Pair<AddTaskCtrl, Parent> addTask,
+                           Pair<TaskOverviewCtrl, Parent> taskOverview, Pair<CreateBoardCtrl, Parent> createBoard, ServerUtils server,
+                           Pair<AdminPassCtrl, Parent> adminPass, Pair<AdminDashboardCtrl, Parent> admindash) {
 
         this.primaryStage = primaryStage;
 
@@ -109,8 +104,8 @@ public class MainCtrl {
         this.createBoardCtrl = createBoard.getKey();
         this.createBoard = new Scene(createBoard.getValue(), 900, 500);
 
-        this.editTaskCtrl = editTask.getKey();
-        this.editTask = new Scene(editTask.getValue(), 900, 500);
+        this.taskOverviewCtrl = taskOverview.getKey();
+        this.taskOverview = new Scene(taskOverview.getValue(), 900, 650);
 
         this.adminPassCtrl = adminPass.getKey();
         this.adminPass = new Scene(adminPass.getValue(), 900, 500);
@@ -158,6 +153,17 @@ public class MainCtrl {
         boardCtrl.hideEditFields();
     }
 
+    public void showTaskOverview() {
+        taskOverviewCtrl.setIDs(boardID, taskListID, taskID);
+        taskOverviewCtrl.updateScene(task);
+        popUpStage.setTitle("Edit task");
+        popUpStage.setScene(taskOverview);
+        popUpStage.show();
+        popUpStage.setX(Screen.getPrimary().getVisualBounds().getWidth() / 2 - taskOverview.getWidth() / 2);
+        popUpStage.setY(Screen.getPrimary().getVisualBounds().getHeight() / 2 - taskOverview.getHeight() / 2);
+        taskOverview.setOnKeyPressed(e -> taskOverviewCtrl.keyPressed(e));
+    }
+
     public void showCreateBoard(){
         primaryStage.setTitle("Create a Board");
         primaryStage.setScene(createBoard);
@@ -181,8 +187,8 @@ public class MainCtrl {
         popUpStage.setTitle("Create a new TaskList");
         popUpStage.setScene(taskList1);
         popUpStage.show();
-        popUpStage.setX(Screen.getPrimary().getVisualBounds().getWidth() / 2 - editTask.getWidth() / 2);
-        popUpStage.setY(Screen.getPrimary().getVisualBounds().getHeight() / 2 - editTask.getHeight() / 2);
+        popUpStage.setX(Screen.getPrimary().getVisualBounds().getWidth() / 2 - taskList1.getWidth() / 2);
+        popUpStage.setY(Screen.getPrimary().getVisualBounds().getHeight() / 2 - taskList1.getHeight() / 2);
         taskList1.setOnKeyPressed(e -> addTaskListCtrl.keyPressed(e));
     }
     public void setTask(Task task) {
@@ -219,15 +225,5 @@ public class MainCtrl {
     }
     public void updateAdminDash(List<Board> board) {
         adminDashboardCtrl.updateAdmin(board);
-    }
-    public void showEditTask() {
-        editTaskCtrl.setIDs(boardID, taskListID, taskID);
-        editTaskCtrl.updateScene(task);
-        popUpStage.setTitle("Edit task");
-        popUpStage.setScene(editTask);
-        popUpStage.show();
-        popUpStage.setX(Screen.getPrimary().getVisualBounds().getWidth() / 2 - editTask.getWidth() / 2);
-        popUpStage.setY(Screen.getPrimary().getVisualBounds().getHeight() / 2 - editTask.getHeight() / 2);
-        editTask.setOnKeyPressed(e -> editTaskCtrl.keyPressed(e));
     }
 }
