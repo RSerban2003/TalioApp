@@ -196,4 +196,7 @@ public class MainCtrl {
     public void refreshBoardList() {
         boardCtrl.refreshBoardList();
     }
+    public Long getBoardId() {
+        return boardID;
+    }
 }

@@ -42,6 +42,8 @@ public class ClientBoardList extends ListView<Board> {
             leave.setOnAction(a -> {
                 workspaceUtils.deleteFromFile(ServerUtils.getHost(), board.getId());
                 mainCtrl.refreshBoardList();
+                if(mainCtrl.getBoardId() == board.getId()) mainCtrl.updateBoard(new Board(0L, "Join a board"));
+
             });
             open = new Button("Open");
             open.setOnAction(event -> {
