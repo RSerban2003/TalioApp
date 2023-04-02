@@ -1,6 +1,7 @@
 package client.components;
 
 import client.scenes.BoardCtrl;
+import client.scenes.MainCtrl;
 import client.utils.ServerUtils;
 import client.utils.WorkspaceUtils;
 import commons.Board;
@@ -22,7 +23,7 @@ import java.util.List;
 @Component
 public class ClientBoardList extends ListView<Board> {
     private WorkspaceUtils workspaceUtils;
-    private BoardCtrl boardCtrl;
+    private MainCtrl mainCtrl;
     private class BoardCell extends ListCell<Board> {
         private Board board;
         private Label boardTitle;
@@ -40,11 +41,11 @@ public class ClientBoardList extends ListView<Board> {
             leave = new Button("Leave");
             leave.setOnAction(a -> {
                 workspaceUtils.deleteFromFile(ServerUtils.getHost(), board.getId());
-                boardCtrl.refreshBoardList();
+                mainCtrl.refreshBoardList();
             });
             open = new Button("Open");
             open.setOnAction(event -> {
-                boardCtrl.updateBoard(board);
+                mainCtrl.updateBoard(board);
             });
             boardTitle = new Label();
             padding = new Region();
@@ -73,7 +74,7 @@ public class ClientBoardList extends ListView<Board> {
     public void setWorkspaceUtils(WorkspaceUtils workspaceUtils) {
         this.workspaceUtils = workspaceUtils;
     }
-    public void setBoardCtrl(BoardCtrl boardCtrl) {
-        this.boardCtrl = boardCtrl;
+    public void setBoardCtrl(MainCtrl mainCtrl) {
+        this.mainCtrl = mainCtrl;
     }
 }

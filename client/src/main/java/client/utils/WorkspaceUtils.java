@@ -39,7 +39,7 @@ public class WorkspaceUtils {
         printHost.close();
     }
     public List<Long> getFromFile(String host) throws FileNotFoundException {
-        File file = new File("src/main/resources/workspaces/" + host);
+        File file = new File("client/src/main/resources/workspaces/" + host);
         if(!file.exists()) return new ArrayList<>();
         List<Long> boardIds = new ArrayList<>();
         try {
