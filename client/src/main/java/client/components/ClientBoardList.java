@@ -39,7 +39,6 @@ public class ClientBoardList extends ListView<Board> {
             root.setPadding(new Insets(5, 5, 5, 5));
             leave = new Button("Leave");
             leave.setOnAction(a -> {
-                leave.setText("Clicked");
                 File file = new File("client/src/main/resources/workspaces/" + ServerUtils.getHost());
                 try {
                     List<String> oldFile = Files.readAllLines(file.toPath());

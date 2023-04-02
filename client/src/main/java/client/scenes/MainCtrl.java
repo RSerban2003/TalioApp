@@ -193,4 +193,7 @@ public class MainCtrl {
         primaryStage.setScene(editTask);
         editTask.setOnKeyPressed(e -> editTaskCtrl.keyPressed(e));
     }
+    public void refreshBoardList() {
+        boardCtrl.refreshBoardList();
+    }
 }

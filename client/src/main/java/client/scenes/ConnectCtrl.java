@@ -24,6 +24,7 @@ public class ConnectCtrl {
         server.setHost(hostname.getText());
         if(server.ping()) {
             mainCtrl.showBoard();
+            mainCtrl.refreshBoardList();
             server.astablishConnection();
         }
         else {
