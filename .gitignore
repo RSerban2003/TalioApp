@@ -9,6 +9,7 @@ quizzzz.trace.db
 **/*.mv.db
 
 **/*.swp
+!**/src/test/**/bin/workspaces/*
 
 ### STS ###
 .apt_generated
