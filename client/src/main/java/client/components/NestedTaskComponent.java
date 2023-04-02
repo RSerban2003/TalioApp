@@ -2,15 +2,20 @@ package client.components;
 
 import client.scenes.MainCtrl;
 import client.utils.ServerUtils;
-import commons.Board;
 import commons.NestedTask;
 import commons.Task;
-import commons.TaskList;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+import java.util.Map;
+
+import static client.components.TaskListComponent.mapFormat;
 
 public class NestedTaskComponent extends AnchorPane {
     private SimpleObjectProperty<Task> task;
@@ -18,6 +23,9 @@ public class NestedTaskComponent extends AnchorPane {
     private MainCtrl mainCtrl;
     private Long boardId;
     private Long taskListId;
+    private final int NESTEDOFFSET = 300;
+    private final int NESTEDHEIGHT = 40;
+
 
     public void setBoardId(Long boardId) {
         this.boardId = boardId;
@@ -38,10 +46,29 @@ public class NestedTaskComponent extends AnchorPane {
     public void update(Task task){
         Platform.runLater(
                 () -> {
-                SubNestedTaskComponent[] nestedTask = task.getNestedTasks().stream()
+                SubNestedTaskComponent[] nestedTasks = task.getNestedTasks().stream()
                         .map((NestedTask nestedTask1) -> new SubNestedTaskComponent(nestedTask1, task, taskListId, boardId, mainCtrl))
                         .toArray(SubNestedTaskComponent[]::new);
-                VBox taskListContainer = new VBox(nestedTask);
+                    for (SubNestedTaskComponent nested : nestedTasks) {
+                        nested.setOnDragOver(event -> {
+                            event.acceptTransferModes(TransferMode.ANY);
+                            event.consume();
+                        });
+                        nested.setOnDragDropped(event -> {
+                            Dragboard db = event.getDragboard();
+                            event.setDropCompleted(db.hasString());
+                            AnnotationConfigApplicationContext context
+                                    = new AnnotationConfigApplicationContext();
+                            context.scan("client");
+                            context.refresh();
+                            ServerUtils server = context.getBean(ServerUtils.class);
+                            Map<String, Long> params = (Map<String, Long>) db.getContent(mapFormat);
+                            int index = (int) ((event.getSceneY() - NESTEDOFFSET) / NESTEDHEIGHT);
+                            server.moveTask(board.getId(), params.get("taskListId"), nested.getTaskList().getId(), params.get("taskId"), index);
+                            event.consume();
+                        });
+                    }
+                VBox taskListContainer = new VBox(nestedTasks);
                 AnchorPane.setTopAnchor(taskListContainer, 150.0);
                 AnchorPane.setLeftAnchor(taskListContainer, 150.0);
 

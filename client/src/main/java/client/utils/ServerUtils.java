@@ -32,6 +32,7 @@ import java.util.function.Consumer;
 
 import commons.Board;
 import commons.TaskList;
+import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.ProcessingException;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.core.Response;
@@ -112,6 +113,8 @@ public class ServerUtils {
             .accept(APPLICATION_JSON) //
             .post(Entity.entity(Map.of("index", index, "listTo", taskListIdTo), APPLICATION_JSON), TaskList.class);
     }
+
+//    public
 
     /**
      * Checks if a board with a given id is in the database
