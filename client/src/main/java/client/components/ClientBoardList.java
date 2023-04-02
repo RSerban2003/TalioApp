@@ -33,7 +33,10 @@ public class ClientBoardList extends ListView<Board> {
         private Button open;
         private HBox root;
         private Region padding;
+        private ListView listView;
         public BoardCell(ListView<Board> boardListView) {
+            super();
+            this.listView = boardListView;
             root = new HBox(10);
             root.setAlignment(Pos.CENTER_LEFT);
             root.setPadding(new Insets(5, 5, 5, 5));
@@ -41,7 +44,7 @@ public class ClientBoardList extends ListView<Board> {
             leave.setOnAction(a -> {
                 leave.setText("Clicked");
                 File file = new File("client/src/main/resources/workspaces/" + ServerUtils.getHost());
-                try{
+                try {
                     List<String> oldFile = Files.readAllLines(file.toPath());
                     FileWriter fileWriter = new FileWriter(file, false);
                     workspaceUtils.removeBoardId(oldFile, fileWriter, board.getId());
@@ -62,8 +65,10 @@ public class ClientBoardList extends ListView<Board> {
         }
         @Override
         protected void updateItem(Board board, boolean empty) {
+            super.updateItem(board, empty);
             if (board == null || empty) {
                 setText(null);
+                setGraphic(null);
             } else {
                 boardTitle.setText(board.getTitle());
                 this.board = board;
