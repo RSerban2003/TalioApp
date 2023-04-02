@@ -193,13 +193,6 @@ public class MainCtrl {
     public void updateAdminDash(List<Board> board) {
         adminDashboardCtrl.updateAdmin(board);
     }
-    public void showEditTask() {
-        editTaskCtrl.setIDs(boardID, taskListID, taskID);
-        editTaskCtrl.updateScene(task);
-        primaryStage.setTitle("Edit task");
-        primaryStage.setScene(editTask);
-        editTask.setOnKeyPressed(e -> editTaskCtrl.keyPressed(e));
-    }
     public void refreshBoardList() {
         boardCtrl.refreshBoardList();
     }
