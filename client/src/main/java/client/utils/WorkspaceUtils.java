@@ -24,13 +24,14 @@ public class WorkspaceUtils {
             writer.println(boardId);
             writer.close();
     }
-    public void removeBoardId(Scanner scanHost, FileWriter writeHost, long boardId) {
+    public void removeBoardId(List<String> oldFile, FileWriter writeHost, long boardId) {
         PrintWriter printHost = new PrintWriter(writeHost);
         ArrayList<Long> temp = new ArrayList<>();
-        while(scanHost.hasNextLine()) {
-            Long nextLine = Long.valueOf(scanHost.nextLine());
+        for(String line: oldFile) {
+            Long nextLine = Long.parseLong(line);
             if(nextLine != boardId) temp.add(nextLine);
         }
+        System.out.println(temp.size());
         for(Long Id : temp) {
             printHost.println(Id);
         }

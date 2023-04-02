@@ -82,7 +82,6 @@ public class CreateBoardCtrl {
             String boardIdString = boardId.toString();
             clearFields();
             mainCtrl.showBoard();
-            mainCtrl.updateBoard(boardCreated);
             try {
                 File file = new File("client/src/main/resources/workspaces/" + server.getHost());
                 if(!file.exists()) file.createNewFile();
@@ -90,6 +89,7 @@ public class CreateBoardCtrl {
             } catch (IOException ioe) {
                 ioe.printStackTrace();
             }
+            mainCtrl.updateBoard(boardCreated);
         } catch (Exception e) {
             // Display an error message if the request failed
             Alert alert = new Alert(Alert.AlertType.ERROR);

@@ -1,35 +1,31 @@
 package client.components;
 
+import client.scenes.BoardCtrl;
+import client.scenes.MainCtrl;
 import client.utils.ServerUtils;
 import client.utils.WorkspaceUtils;
 import commons.Board;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
-import javafx.util.Callback;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Scanner;
+import java.nio.file.Files;
+import java.util.List;
 @Component
 public class ClientBoardList extends ListView<Board> {
-    @Autowired
-    public ServerUtils serverUtils;
-    @Autowired
-    public WorkspaceUtils workspaceUtils;
+    private WorkspaceUtils workspaceUtils;
+    private BoardCtrl boardCtrl;
     private class BoardCell extends ListCell<Board> {
         private Board board;
         private Label boardTitle;
@@ -44,19 +40,19 @@ public class ClientBoardList extends ListView<Board> {
             leave = new Button("Leave");
             leave.setOnAction(a -> {
                 leave.setText("Clicked");
-//                            File file = new File("client/src/main/resources/workspaces/" + serverUtils.getHost());
-//                            try{
-//                                Scanner scanner = new Scanner(file);
-//                                FileWriter fileWriter = new FileWriter(file, false);
-//                                workspaceUtils.removeBoardId(scanner, fileWriter, board.getId());
-//                            } catch (IOException ioe) {
-//                                ioe.printStackTrace();
-//                            }
-
+                File file = new File("client/src/main/resources/workspaces/" + ServerUtils.getHost());
+                try{
+                    List<String> oldFile = Files.readAllLines(file.toPath());
+                    FileWriter fileWriter = new FileWriter(file, false);
+                    workspaceUtils.removeBoardId(oldFile, fileWriter, board.getId());
+                } catch (IOException ioe) {
+                    ioe.printStackTrace();
+                }
+                boardCtrl.refreshBoardList();
             });
             open = new Button("Open");
-            open.setOnMouseEntered(event -> {
-
+            open.setOnAction(event -> {
+                boardCtrl.updateBoard(board);
             });
             boardTitle = new Label();
             padding = new Region();
@@ -75,10 +71,15 @@ public class ClientBoardList extends ListView<Board> {
             }
         }
     }
-    @Inject
     public ClientBoardList() {
         super();
         this.setCellFactory(BoardCell::new);
     }
-
+    //This should be done with dependency injection, but I can't get it to work
+    public void setWorkspaceUtils(WorkspaceUtils workspaceUtils) {
+        this.workspaceUtils = workspaceUtils;
+    }
+    public void setBoardCtrl(BoardCtrl boardCtrl) {
+        this.boardCtrl = boardCtrl;
+    }
 }

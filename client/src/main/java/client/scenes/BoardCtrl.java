@@ -11,6 +11,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -25,12 +26,14 @@ import org.glassfish.jersey.client.ClientConfig;
 import javax.inject.Inject;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
-public class BoardCtrl {
+public class BoardCtrl implements Initializable {
     @FXML
     private AnchorPane boardAnchor;
     private final ServerUtils server;
@@ -61,6 +64,11 @@ public class BoardCtrl {
         boardAnchor = new AnchorPane();
         observableBoard = new SimpleObjectProperty<Board>();
         boardComponent = new BoardComponent(observableBoard, server, mainCtrl);
+    }
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        boardList.setWorkspaceUtils(workspaceUtils);
+        boardList.setBoardCtrl(this);
     }
     
     public void updateBoard(Board board) {

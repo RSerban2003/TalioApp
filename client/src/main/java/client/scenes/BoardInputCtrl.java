@@ -79,7 +79,6 @@ public class BoardInputCtrl {
                     .path("api/boards/" + textBoardId + "/get").request(APPLICATION_JSON).accept(APPLICATION_JSON).get(new GenericType<Board>() {});
             clearFields();
             mainCtrl.showBoard();
-            mainCtrl.updateBoard(board);
             try {
                 File file = new File("client/src/main/resources/workspaces/" + server.getHost());
                 Long boardId = Long.parseLong(textBoardId);
@@ -90,7 +89,7 @@ public class BoardInputCtrl {
             } catch (IOException ioe) {
                 ioe.printStackTrace();
             }
-
+            mainCtrl.updateBoard(board);
             } catch (ProcessingException e) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setContentText("Failed to retrieve board: " + e.getMessage());

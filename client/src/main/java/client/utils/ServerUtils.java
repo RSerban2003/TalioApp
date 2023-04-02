@@ -259,7 +259,7 @@ public class ServerUtils {
             return null;
         }
     }
-    public String getHost() {
+    public static String getHost() {
         return hostName;
     }
 }
