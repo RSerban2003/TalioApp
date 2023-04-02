@@ -1,7 +1,11 @@
 package client.scenes;
 
+import client.components.NestedTaskComponent;
 import client.utils.ServerUtils;
+import commons.Board;
+import commons.NestedTask;
 import commons.Task;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -14,9 +18,7 @@ import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.Map;
 
-import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
-
-public class EditTaskCtrl {
+public class TaskOverviewCtrl {
     @FXML
     private Button editTitleButton;
 
@@ -38,6 +40,9 @@ public class EditTaskCtrl {
     @FXML
     private AnchorPane anchorPane;
 
+    @FXML
+    private AnchorPane nestedTaskAnchorPane;
+
     private ServerUtils server;
 
     private MainCtrl mainCtrl;
@@ -45,26 +50,42 @@ public class EditTaskCtrl {
     private String initialTitle;
 
     private String initialDescription;
+    private SimpleObjectProperty<Task> observableTask;
+
+    private NestedTaskComponent nestedTaskComponent;
 
     private long boardID;
     private long tasklistID;
     private long taskID;
 
     @Inject
-    public EditTaskCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public TaskOverviewCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
+        nestedTaskAnchorPane = new AnchorPane();
+        observableTask = new SimpleObjectProperty<Task>();
+        nestedTaskComponent = new NestedTaskComponent(observableTask, server, mainCtrl);
     }
 
     public void setIDs(long boardID, long tasklistID, long taskID) {
         this.boardID = boardID;
         this.tasklistID = tasklistID;
         this.taskID = taskID;
+        nestedTaskComponent.setBoardId(boardID);
+        nestedTaskComponent.setTaskListId(tasklistID);
+        if(boardID != 0) {
+            server.registerForMessages("/topic/" + boardID + "/" + tasklistID + "/" + taskID, Task.class, q -> {
+                observableTask.set(q);
+            });
+        }
     }
 
     public void updateScene(Task task) {
         titleTextArea.setText(task.getName());
         descriptionTextArea.setText(task.getDescription());
+        observableTask.set(task);
+        nestedTaskAnchorPane.getChildren().clear();
+        nestedTaskAnchorPane.getChildren().add(nestedTaskComponent);
     }
 
     @FXML
@@ -96,6 +117,11 @@ public class EditTaskCtrl {
     }
 
     @FXML
+    private void addNestedTask(){
+        server.addNestedTask(boardID, tasklistID, taskID);
+    }
+
+    @FXML
     private void onSubmitButtonClicked() {
         String title = titleTextArea.getText();
         String description = descriptionTextArea.getText();
@@ -118,6 +144,7 @@ public class EditTaskCtrl {
             alert.showAndWait();
             return;
         }
+        server.unregisterForMessages("/topic/"+boardID+"/"+tasklistID+"/"+taskID);
         mainCtrl.showBoard();
         resetFields();
     }
@@ -125,6 +152,7 @@ public class EditTaskCtrl {
     @FXML
     private void onCancelButtonClicked() {
         this.resetFields();
+        server.unregisterForMessages("/topic/"+boardID+"/"+tasklistID+"/"+taskID);
         mainCtrl.showBoard();
     }
 

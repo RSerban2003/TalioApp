@@ -29,7 +29,9 @@ import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 
 import commons.Board;
+import commons.Task;
 import commons.TaskList;
+import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.ProcessingException;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.core.Response;
@@ -112,6 +114,14 @@ public class ServerUtils {
             .request(APPLICATION_JSON) //
             .accept(APPLICATION_JSON) //
             .post(Entity.entity(Map.of("index", index, "listTo", taskListIdTo), APPLICATION_JSON), TaskList.class);
+    }
+
+    public Task moveNestedTask(long boardId, long taskListId, long taskId, long nestedId, int index){
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER).path(String.format("/api/boards/%s/%s/%s/%s/move", boardId, taskListId, taskId, nestedId)) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .post(Entity.entity(Map.of("index", index), APPLICATION_JSON), Task.class);
     }
 
     /**
@@ -234,6 +244,41 @@ public class ServerUtils {
         Map<String, String> body = new HashMap<>();
         body.put("name", newLabel);
         Response response = client.target(SERVER).path("api/boards/" + boardId + "/" + taskListId + "/edit").request().method("PUT", Entity.json(body));
+        int status = response.getStatus();
+        response.close();
+        return status == 200;
+    }
+
+    public boolean editNestedTask(Long boardId, Long taskListId, Long taskId, Long nestedId, String name, Boolean complete){
+        Client client = ClientBuilder.newClient();
+        Map<String, String> body = new HashMap<>();
+        body.put("name", name);
+        body.put("isCompleted", complete.toString());
+        Response response = client.target(SERVER).path("api/boards/"+ boardId + "/"+ taskListId + "/"+taskId+"/"+nestedId+"/edit-nested")
+                .request(APPLICATION_JSON).accept(APPLICATION_JSON)
+                .post(Entity.entity(body, APPLICATION_JSON));
+
+        int status = response.getStatus();
+        response.close();
+        return status == 200;
+    }
+
+    public boolean deleteNestedTask(Long boardId, Long taskListId, Long taskId, Long nestedId){
+        Client client = ClientBuilder.newClient(new ClientConfig());
+        Response response = client.target(SERVER).path("api/boards/"+ boardId + "/"+ taskListId + "/"+taskId+"/"+nestedId).request().delete();
+        int status = response.getStatus();
+        response.close();
+        return status == 200;
+    }
+
+    public boolean addNestedTask(Long boardId, Long taskListId, Long taskId) {
+        Client client = ClientBuilder.newClient();
+        Map<String, String> body = new HashMap<>();
+        body.put("name", "new Nested Task");
+        Response response = client.target(SERVER).path("api/boards/" + boardId + "/" + taskListId + "/" + taskId + "/nestedTask")
+                .request(APPLICATION_JSON).accept(APPLICATION_JSON)
+                .post(Entity.entity(body, APPLICATION_JSON));
+
         int status = response.getStatus();
         response.close();
         return status == 200;
