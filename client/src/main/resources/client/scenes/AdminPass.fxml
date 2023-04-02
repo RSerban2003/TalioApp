@@ -5,7 +5,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" prefHeight="400.0" prefWidth="640.0" spacing="10.0" style="-fx-background-color: #615f5e;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AdminPassCtrl">
+<VBox alignment="CENTER" maxHeight="500.0" maxWidth="900.0" minHeight="500.0" minWidth="900.0" prefHeight="500.0" prefWidth="900.0" spacing="10.0" style="-fx-background-color: #615f5e;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AdminPassCtrl">
     <Label style="-fx-text-fill: WHITE;" text="Enter Admin password:" />
     <TextField fx:id="adminPass" maxWidth="200" prefHeight="26.0" style="-fx-background-color: #8c8886; -fx-text-fill: WHITE;" />
     <Button onAction="#checkPass" style="-fx-background-color: #454342; -fx-text-fill: WHITE;" text="Enter" />

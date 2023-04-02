@@ -205,6 +205,7 @@ public class MainCtrl {
     public void showAdminDash(){
         primaryStage.setTitle("Admin dashboard");
         primaryStage.setScene(adminDashboard);
+        primaryStage.setMaximized(true);
         adminDashboardCtrl.getUpdates();
     }
     public void updateAdminDash(List<Board> board) {
