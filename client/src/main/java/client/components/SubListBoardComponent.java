@@ -58,6 +58,7 @@ public class SubListBoardComponent extends VBox {
             }
             finalMainCtrl.updateBoard(newBoard);
             finalMainCtrl.showBoard();
+            finalMainCtrl.getPrimaryStage().setMaximized(true);
         });
         HBox buttonBox = new HBox(joinButton);
         buttonBox.setAlignment(Pos.TOP_CENTER);

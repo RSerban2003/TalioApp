@@ -2,8 +2,6 @@ package client.scenes;
 
 import client.components.NestedTaskComponent;
 import client.utils.ServerUtils;
-import commons.Board;
-import commons.NestedTask;
 import commons.Task;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
@@ -145,15 +143,14 @@ public class TaskOverviewCtrl {
             return;
         }
         server.unregisterForMessages("/topic/"+boardID+"/"+tasklistID+"/"+taskID);
-        mainCtrl.showBoard();
-        resetFields();
+        mainCtrl.getPopUpStage().close();
     }
 
     @FXML
     private void onCancelButtonClicked() {
         this.resetFields();
         server.unregisterForMessages("/topic/"+boardID+"/"+tasklistID+"/"+taskID);
-        mainCtrl.showBoard();
+        mainCtrl.getPopUpStage().close();
     }
 
     private void removeFocus() {

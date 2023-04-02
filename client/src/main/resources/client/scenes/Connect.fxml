@@ -42,16 +42,16 @@
 
 <VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.ConnectCtrl">
   <children>
-    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+    <AnchorPane maxHeight="500.0" maxWidth="900.0" minHeight="500.0" minWidth="900.0" prefHeight="500.0" prefWidth="900.0" VBox.vgrow="ALWAYS">
       <children>
-            <TextField fx:id="hostname" layoutX="191.0" layoutY="237.0" promptText="Hostname" />
-            <Button fx:id="connect" layoutX="379.0" layoutY="237.0" mnemonicParsing="false" onAction="#connectServer" text="Connect" />
-            <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="245.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">
+            <TextField fx:id="hostname" layoutX="345.0" layoutY="251.0" promptText="Hostname" />
+            <Button fx:id="connect" layoutX="510.0" layoutY="251.0" mnemonicParsing="false" onAction="#connectServer" text="Connect" />
+            <ImageView fitHeight="150.0" fitWidth="205.0" layoutX="375.0" layoutY="50.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@/taliologo.png" />
                </image>
             </ImageView>
-            <Text layoutX="238.0" layoutY="213.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Connect to a Talio server" />
+            <Text layoutX="384.0" layoutY="234.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Connect to a Talio server" />
       </children>
     </AnchorPane>
   </children>
