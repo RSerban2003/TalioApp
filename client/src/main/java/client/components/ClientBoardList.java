@@ -1,7 +1,6 @@
 package client.components;
 
 import client.scenes.BoardCtrl;
-import client.scenes.MainCtrl;
 import client.utils.ServerUtils;
 import client.utils.WorkspaceUtils;
 import commons.Board;
@@ -15,8 +14,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import org.springframework.stereotype.Component;
-
-import javax.inject.Inject;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;

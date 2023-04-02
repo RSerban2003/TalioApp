@@ -2,11 +2,6 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import commons.Task;
-import jakarta.ws.rs.client.Client;
-import jakarta.ws.rs.client.ClientBuilder;
-import jakarta.ws.rs.client.Entity;
-import jakarta.ws.rs.core.Form;
-import jakarta.ws.rs.core.Response;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
