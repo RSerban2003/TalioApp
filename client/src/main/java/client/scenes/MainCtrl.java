@@ -61,6 +61,7 @@ public class MainCtrl {
 
     private Scene taskOverview;
     private TaskOverviewCtrl taskOverviewCtrl;
+    private Scene editTask;
 
     private long boardID;
     private long taskListID;
@@ -225,5 +226,11 @@ public class MainCtrl {
     }
     public void updateAdminDash(List<Board> board) {
         adminDashboardCtrl.updateAdmin(board);
+    }
+    public void refreshBoardList() {
+        boardCtrl.refreshBoardList();
+    }
+    public Long getBoardId() {
+        return boardID;
     }
 }

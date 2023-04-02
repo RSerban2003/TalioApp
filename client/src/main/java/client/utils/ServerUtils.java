@@ -59,10 +59,12 @@ public class ServerUtils {
     private static String SERVER = "http://localhost:8080/";
     private static String WSSERVER = "ws://localhost:8080/";
     private static StompSession SESSION;
+    private static String hostName = "localhost";
 
     public static void setHost(String hostname) {
         SERVER = "http://" + hostname + ":8080/";
         WSSERVER = "ws://" + hostname + ":8080/";
+        hostName = hostname;
     }
     public void getQuotesTheHardWay() throws IOException {
         var url = new URL("http://localhost:8080/api/quotes");
@@ -301,5 +303,8 @@ public class ServerUtils {
         } catch (ProcessingException e) {
             return null;
         }
+    }
+    public static String getHost() {
+        return hostName;
     }
 }
