@@ -19,13 +19,13 @@ public class LongPollingController {
     public Map<Object, Consumer<Board>> listeners = new HashMap<>();
 
     @GetMapping(path= {"/updates"})
-    public DeferredResult<ResponseEntity<?>> getUpdates() {
+    public DeferredResult<ResponseEntity<Board>> getUpdates() {
         var noContent = ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        var res = new DeferredResult<ResponseEntity<?>>(1000L, noContent);
+        var res = new DeferredResult<ResponseEntity<Board>>(1000L, noContent);
 
         var key = new Object();
-        listeners.put(key, q -> {
-            res.setResult(ResponseEntity.ok(q));
+        listeners.put(key, b -> {
+            res.setResult(ResponseEntity.ok(b));
         });
         res.onCompletion(() -> listeners.remove(key));
 

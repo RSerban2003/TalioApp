@@ -59,7 +59,6 @@ public class MainCtrl {
 
     private Scene adminDashboard;
     private AdminDashboardCtrl adminDashboardCtrl;
-    private ObservableList<Board> data;
 
     private Scene editTask;
     private EditTaskCtrl editTaskCtrl;
@@ -96,8 +95,8 @@ public class MainCtrl {
 
         this.server = server;
 
-        server.registerForUpdates(q -> {
-            data.add(q);
+        server.registerForUpdates(b -> {
+            addBoardAdminDash(b);
         });
 
         this.addTaskListCtrl = taskList1.getKey();
@@ -195,6 +194,10 @@ public class MainCtrl {
     }
     public void updateAdminDash(List<Board> board) {
         adminDashboardCtrl.updateAdmin(board);
+    }
+
+    public void addBoardAdminDash(Board board) {
+        adminDashboardCtrl.addBoardToList(board);
     }
     public void showEditTask() {
         editTaskCtrl.setIDs(boardID, taskListID, taskID);

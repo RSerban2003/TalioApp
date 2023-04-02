@@ -36,6 +36,7 @@ public class BoardController {
         return ResponseEntity.ok(boardRepository.findAll());
     }
 
+    /*
     @GetMapping(path = {"/updates"})
     public DeferredResult<ResponseEntity<?>> getUpdates() {
         var res = new DeferredResult<ResponseEntity<?>>(1000L);
@@ -49,6 +50,8 @@ public class BoardController {
 
         return res;
     }
+    */
+
 
     @GetMapping("/{id}/get")
     public ResponseEntity<Board> getBoardById(@PathVariable Long id) {
