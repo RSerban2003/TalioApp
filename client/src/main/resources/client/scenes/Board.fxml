@@ -10,7 +10,7 @@
    <children>
       <HBox prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <AnchorPane minWidth="120.0" prefHeight="376.0" prefWidth="160.0">
+            <AnchorPane minWidth="120.0" prefHeight="600.0" prefWidth="197.0">
                <children>
                   <VBox prefHeight="376.0" prefWidth="130.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
@@ -56,7 +56,7 @@
                            <children>
                               <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="119.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
-                                    <Button mnemonicParsing="false" onAction="#disconnectServer" prefWidth="112.0" text="Disconnect Server">
+                                    <Button mnemonicParsing="false" onAction="#disconnectServer" prefHeight="23.0" prefWidth="143.0" text="Disconnect Server">
                                        <VBox.margin>
                                           <Insets bottom="20.0" top="5.0" />
                                        </VBox.margin>
