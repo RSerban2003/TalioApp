@@ -60,7 +60,7 @@ public class BoardCtrl implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         boardList.setWorkspaceUtils(workspaceUtils);
-        boardList.setBoardCtrl(this);
+        boardList.setMainCtrl(mainCtrl);
     }
     
     public void updateBoard(Board board) {

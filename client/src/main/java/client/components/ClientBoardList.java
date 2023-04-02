@@ -74,7 +74,7 @@ public class ClientBoardList extends ListView<Board> {
     public void setWorkspaceUtils(WorkspaceUtils workspaceUtils) {
         this.workspaceUtils = workspaceUtils;
     }
-    public void setBoardCtrl(MainCtrl mainCtrl) {
+    public void setMainCtrl(MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
     }
 }
