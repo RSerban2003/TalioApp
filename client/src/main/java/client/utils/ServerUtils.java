@@ -31,6 +31,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 
 import commons.Board;
+import commons.Task;
 import commons.TaskList;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.ProcessingException;
@@ -114,7 +115,13 @@ public class ServerUtils {
             .post(Entity.entity(Map.of("index", index, "listTo", taskListIdTo), APPLICATION_JSON), TaskList.class);
     }
 
-//    public
+    public Task moveNestedTask(long boardId, long taskListId, long taskId, long nestedId, int index){
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER).path(String.format("/api/boards/%s/%s/%s/%s/move", boardId, taskListId, taskId, nestedId)) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .post(Entity.entity(Map.of("index", index), APPLICATION_JSON), Task.class);
+    }
 
     /**
      * Checks if a board with a given id is in the database

@@ -6,6 +6,7 @@ import commons.NestedTask;
 import commons.Task;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
@@ -23,7 +24,7 @@ public class NestedTaskComponent extends AnchorPane {
     private MainCtrl mainCtrl;
     private Long boardId;
     private Long taskListId;
-    private final int NESTEDOFFSET = 300;
+    private final int NESTEDOFFSET = 340;
     private final int NESTEDHEIGHT = 40;
 
 
@@ -64,7 +65,14 @@ public class NestedTaskComponent extends AnchorPane {
                             ServerUtils server = context.getBean(ServerUtils.class);
                             Map<String, Long> params = (Map<String, Long>) db.getContent(mapFormat);
                             int index = (int) ((event.getSceneY() - NESTEDOFFSET) / NESTEDHEIGHT);
-                            server.moveTask(board.getId(), params.get("taskListId"), nested.getTaskList().getId(), params.get("taskId"), index);
+                            server.moveNestedTask(boardId, taskListId, task.getId(), params.get("nestedTaskId"), index);
+                            event.consume();
+                        });
+                        nested.setOnDragDetected(event -> {
+                            Dragboard db = nested.startDragAndDrop(TransferMode.ANY);
+                            ClipboardContent content = new ClipboardContent();
+                            content.put(mapFormat, Map.of("nestedTaskId", nested.getNestedId(), "taskId", task.getId()));
+                            db.setContent(content);
                             event.consume();
                         });
                     }

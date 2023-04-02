@@ -108,11 +108,14 @@ public class SubNestedTaskComponent extends VBox {
         });
 
 
-        setMaxSize(300, 40);
-        setMinSize(300, 40);
+        setMaxSize(499, 40);
+        setMinSize(499, 40);
         getChildren().add(gridPane);
         setAlignment(Pos.CENTER);
         setStyle(style);
         setSpacing(10.0);
+    }
+    public long getNestedId() {
+        return nestedId;
     }
 }
