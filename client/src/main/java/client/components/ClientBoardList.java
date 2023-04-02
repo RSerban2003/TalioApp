@@ -39,14 +39,7 @@ public class ClientBoardList extends ListView<Board> {
             root.setPadding(new Insets(5, 5, 5, 5));
             leave = new Button("Leave");
             leave.setOnAction(a -> {
-                File file = new File("client/src/main/resources/workspaces/" + ServerUtils.getHost());
-                try {
-                    List<String> oldFile = Files.readAllLines(file.toPath());
-                    FileWriter fileWriter = new FileWriter(file, false);
-                    workspaceUtils.removeBoardId(oldFile, fileWriter, board.getId());
-                } catch (IOException ioe) {
-                    ioe.printStackTrace();
-                }
+                workspaceUtils.deleteFromFile(ServerUtils.getHost(), board.getId());
                 boardCtrl.refreshBoardList();
             });
             open = new Button("Open");

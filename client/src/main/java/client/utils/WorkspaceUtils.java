@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -36,5 +37,27 @@ public class WorkspaceUtils {
             printHost.println(Id);
         }
         printHost.close();
+    }
+    public List<Long> getFromFile(String host) throws FileNotFoundException {
+        File file = new File("src/main/resources/workspaces/" + host);
+        if(!file.exists()) return new ArrayList<>();
+        List<Long> boardIds = new ArrayList<>();
+        try {
+            Scanner scanner = new Scanner(file);
+            boardIds = getBoardIds(scanner);
+        } catch (FileNotFoundException fnfe) {
+            fnfe.printStackTrace();
+        }
+        return boardIds;
+    }
+    public void deleteFromFile(String host, long boardId) {
+        File file = new File("client/src/main/resources/workspaces/" + host);
+        try {
+            List<String> oldFile = Files.readAllLines(file.toPath());
+            FileWriter fileWriter = new FileWriter(file, false);
+            removeBoardId(oldFile, fileWriter, boardId);
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
     }
 }

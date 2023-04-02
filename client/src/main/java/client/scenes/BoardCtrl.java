@@ -5,8 +5,6 @@ import client.components.ClientBoardList;
 import client.utils.ServerUtils;
 import client.utils.WorkspaceUtils;
 import commons.Board;
-import commons.TaskList;
-import jakarta.ws.rs.client.ClientBuilder;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,24 +12,18 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import org.glassfish.jersey.client.ClientConfig;
 
 import javax.inject.Inject;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.Scanner;
-import java.util.stream.Collectors;
 
 public class BoardCtrl implements Initializable {
     @FXML
@@ -105,7 +97,6 @@ public class BoardCtrl implements Initializable {
         alert.showAndWait();
         if (alert.getResult().getText().equals("OK")){
             server.deleteBoard(boardID);
-            mainCtrl.showBoardinput();
         }
         else {
             alert.close();
@@ -150,12 +141,14 @@ public class BoardCtrl implements Initializable {
         mainCtrl.showAddTaskList();
     }
     public void refreshBoardList() {
-        File file = new File("client/src/main/resources/workspaces/" + server.getHost());
-        if(!file.exists()) return;
         List<Long> boardIds = new ArrayList<>();
         try {
-            Scanner scanner = new Scanner(file);
-            boardIds = workspaceUtils.getBoardIds(scanner);
+            List<Long> allIds = workspaceUtils.getFromFile(ServerUtils.getHost());
+            for(Long id: allIds) {
+                if(!server.boardExists(id.toString())) {
+                    workspaceUtils.deleteFromFile(ServerUtils.getHost(), id);
+                } else boardIds.add(id);
+            }
         } catch (FileNotFoundException fnfe) {
             fnfe.printStackTrace();
         }
