@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.stubbing.Answer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -92,4 +93,111 @@ public class TaskListControllerTest {
 
         assertEquals(response.getStatusCode(), HttpStatus.BAD_REQUEST);
     }
+
+    @Test
+    public void testDelete() {
+        long boardId = 1L;
+        long listId = 2L;
+        Board board = new Board(1L, "Title 1");
+        TaskList taskList = new TaskList();
+        taskList.setBoard(board);
+
+        TaskListController controller = new TaskListController(taskListRepository, boardRepository, simpMessagingTemplate);
+
+        when(taskListRepository.findById(listId)).thenReturn(Optional.of(taskList));
+        when(boardRepository.findById(boardId)).thenReturn(Optional.of(board));
+
+        ResponseEntity<?> response = controller.delete(boardId, listId);
+
+        verify(taskListRepository).deleteById(listId);
+        verify(boardRepository).save(board);
+        verify(simpMessagingTemplate).convertAndSend(eq("/topic/" + boardId), eq(board));
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(board, response.getBody());
+    }
+
+    @Test
+    public void testAdd() {
+        Map<String, String> body = new HashMap<>();
+        body.put("name", "Test tasklist");
+        long boardId = 1L;
+        Board board = new Board();
+
+        TaskListController controller = new TaskListController(taskListRepository, boardRepository, simpMessagingTemplate);
+
+        when(boardRepository.findById(eq(boardId))).thenReturn(Optional.of(board));
+
+        ResponseEntity<Board> response = controller.add(body, boardId);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(board, response.getBody());
+
+        verify(boardRepository, times(2)).findById(eq(boardId));
+        verify(taskListRepository, times(1)).save(any(TaskList.class));
+    }
+
+    @Test
+    void editShouldReturnBadRequestWhenNameisMissing() {
+        // given
+        Map<String, String> body = new HashMap<>();
+        body.put("foo", "bar");
+
+        TaskListController controller = new TaskListController(taskListRepository, boardRepository, simpMessagingTemplate);
+
+        // when
+        ResponseEntity<?> response = controller.edit(1L, 2L, body);
+
+        // then
+        assertEquals(response.getStatusCode(), HttpStatus.BAD_REQUEST);
+        verifyNoInteractions(boardRepository);
+        verifyNoInteractions(taskListRepository);
+        verifyNoInteractions(simpMessagingTemplate);
+    }
+
+    @Test
+    void editShouldReturnNotFoundWhenBoardDoesNotExist() {
+        // given
+        Map<String, String> body = new HashMap<>();
+        body.put("name", "New list name");
+        when(boardRepository.existsById(1L)).thenReturn(false);
+
+        TaskListController controller = new TaskListController(taskListRepository, boardRepository, simpMessagingTemplate);
+
+        // when
+        ResponseEntity<?> response = controller.edit(1L, 2L, body);
+
+        // then
+        assertEquals(response.getStatusCode(), HttpStatus.NOT_FOUND);
+        assertEquals(response.getBody(), "Board not found");
+        verify(boardRepository).existsById(1L);
+        verifyNoMoreInteractions(boardRepository);
+        verifyNoInteractions(taskListRepository);
+        verifyNoInteractions(simpMessagingTemplate);
+    }
+
+    @Test
+    void editsShouldReturnNotFoundWhenListDoesNotExist() {
+        // given
+        Map<String, String> body = new HashMap<>();
+        body.put("name", "New list name");
+        when(boardRepository.existsById(1L)).thenReturn(true);
+        when(taskListRepository.existsById(2L)).thenReturn(false);
+
+        TaskListController controller = new TaskListController(taskListRepository, boardRepository, simpMessagingTemplate);
+
+        // when
+        ResponseEntity<?> response = controller.edit(1L, 2L, body);
+
+        // then
+        assertEquals(response.getStatusCode(), HttpStatus.NOT_FOUND);
+        assertEquals(response.getBody(), "List not found");
+        verify(boardRepository).existsById(1L);
+        verify(taskListRepository).existsById(2L);
+        verifyNoMoreInteractions(boardRepository);
+        verifyNoMoreInteractions(taskListRepository);
+        verifyNoInteractions(simpMessagingTemplate);
+
+    }
+
 }
