@@ -15,6 +15,7 @@
  */
 package client.scenes;
 
+import client.components.TaskListComponent;
 import commons.Task;
 import client.utils.ServerUtils;
 import commons.Board;
@@ -213,11 +214,10 @@ public class MainCtrl {
         addTask.setOnKeyPressed(e -> addTaskCtrl.keyPressed(e));
     }
 
-    public void addDefaultTask() {
-        String title = "New Task";
+    public void addDefaultTask(String title) {
         String description = "";
         Map<String, String> body = new HashMap<>();
-        body.put("name", title);
+        body.put("name", title.trim());
         body.put("description", description);
         if (!server.addTask(boardID,taskListID,body)) {
             Alert alert = new Alert(Alert.AlertType.WARNING);

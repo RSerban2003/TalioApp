@@ -51,18 +51,43 @@ public class TaskListComponent extends VBox {
 
         Button addDefaultTaskButton = new Button("+");
         addDefaultTaskButton.setStyle("-fx-font-weight: bold;");
+        TextField taskTitleField = new TextField();
+        taskTitleField.setText("New Task");
+        Button saveTaskTitleButton = new Button("Save");
+        Button addCustomTaskButton = new Button("Add Custom Task");
+
+        StackPane overlappingButtons = new StackPane();
+        overlappingButtons.getChildren().addAll(taskTitleField, addCustomTaskButton);
+
+        taskTitleField.setVisible(false);
+        taskTitleField.setMaxWidth(120);
+        addCustomTaskButton.setMaxWidth(120);
+        saveTaskTitleButton.setMaxWidth(100);
+        saveTaskTitleButton.setVisible(false);
+
         addDefaultTaskButton.setOnAction(event -> {
-            mainCtrl.setTaskList(taskList.getId());
-            mainCtrl.addDefaultTask();
+
+            taskTitleField.setVisible(true);
+            saveTaskTitleButton.setVisible(true);
+            addCustomTaskButton.setVisible(false);
+
         });
 
-        Button addCustomTaskButton = new Button("Add Custom Task");
+        saveTaskTitleButton.setOnAction(event -> {
+            taskTitleField.setVisible(false);
+            saveTaskTitleButton.setVisible(false);
+            addCustomTaskButton.setVisible(true);
+            String title = taskTitleField.getText();
+            mainCtrl.setTaskList(taskList.getId());
+            mainCtrl.addDefaultTask(title);
+        });
+
         addCustomTaskButton.setOnAction(event -> {
             mainCtrl.setTaskList(taskList.getId());
             mainCtrl.showAddTask();
         });
 
-        addTasksButton.getChildren().addAll(addDefaultTaskButton, addCustomTaskButton);
+        addTasksButton.getChildren().addAll(addDefaultTaskButton, overlappingButtons, saveTaskTitleButton);
 
         // Create Edit button to edit label
         Button editButton = new Button("Edit");
