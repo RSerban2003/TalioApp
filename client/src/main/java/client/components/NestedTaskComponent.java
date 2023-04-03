@@ -47,42 +47,45 @@ public class NestedTaskComponent extends AnchorPane {
     public void update(Task task){
         Platform.runLater(
                 () -> {
-                SubNestedTaskComponent[] nestedTasks = task.getNestedTasks().stream()
-                        .map((NestedTask nestedTask1) -> new SubNestedTaskComponent(nestedTask1, task, taskListId, boardId, mainCtrl))
-                        .toArray(SubNestedTaskComponent[]::new);
-                    for (SubNestedTaskComponent nested : nestedTasks) {
-                        nested.setOnDragOver(event -> {
-                            event.acceptTransferModes(TransferMode.ANY);
-                            event.consume();
-                        });
-                        nested.setOnDragDropped(event -> {
-                            Dragboard db = event.getDragboard();
-                            event.setDropCompleted(db.hasString());
-                            AnnotationConfigApplicationContext context
+                    getChildren().clear();
+                    HBox hbox = new HBox();
+                    if(task.getNestedTasks() != null) {
+                        SubNestedTaskComponent[] nestedTasks = task.getNestedTasks().stream()
+                            .map((NestedTask nestedTask1) -> new SubNestedTaskComponent(nestedTask1, task, taskListId, boardId, mainCtrl))
+                            .toArray(SubNestedTaskComponent[]::new);
+                        for (SubNestedTaskComponent nested : nestedTasks) {
+                            nested.setOnDragOver(event -> {
+                                event.acceptTransferModes(TransferMode.ANY);
+                                event.consume();
+                            });
+                            nested.setOnDragDropped(event -> {
+                                Dragboard db = event.getDragboard();
+                                event.setDropCompleted(db.hasString());
+                                AnnotationConfigApplicationContext context
                                     = new AnnotationConfigApplicationContext();
-                            context.scan("client");
-                            context.refresh();
-                            ServerUtils server = context.getBean(ServerUtils.class);
-                            Map<String, Long> params = (Map<String, Long>) db.getContent(mapFormat);
-                            int index = (int) ((event.getSceneY() - NESTEDOFFSET) / NESTEDHEIGHT);
-                            server.moveNestedTask(boardId, taskListId, task.getId(), params.get("nestedTaskId"), index);
-                            event.consume();
-                        });
-                        nested.setOnDragDetected(event -> {
-                            Dragboard db = nested.startDragAndDrop(TransferMode.ANY);
-                            ClipboardContent content = new ClipboardContent();
-                            content.put(mapFormat, Map.of("nestedTaskId", nested.getNestedId(), "taskId", task.getId()));
-                            db.setContent(content);
-                            event.consume();
-                        });
+                                context.scan("client");
+                                context.refresh();
+                                ServerUtils server = context.getBean(ServerUtils.class);
+                                Map<String, Long> params = (Map<String, Long>) db.getContent(mapFormat);
+                                int index = (int) ((event.getSceneY() - NESTEDOFFSET) / NESTEDHEIGHT);
+                                server.moveNestedTask(boardId, taskListId, task.getId(), params.get("nestedTaskId"), index);
+                                event.consume();
+                            });
+                            nested.setOnDragDetected(event -> {
+                                Dragboard db = nested.startDragAndDrop(TransferMode.ANY);
+                                ClipboardContent content = new ClipboardContent();
+                                content.put(mapFormat, Map.of("nestedTaskId", nested.getNestedId(), "taskId", task.getId()));
+                                db.setContent(content);
+                                event.consume();
+                            });
+                        }
+                        VBox taskListContainer = new VBox(nestedTasks);
+                        AnchorPane.setTopAnchor(taskListContainer, 150.0);
+                        AnchorPane.setLeftAnchor(taskListContainer, 150.0);
+
+                        hbox.getChildren().add(taskListContainer);
+
                     }
-                VBox taskListContainer = new VBox(nestedTasks);
-                AnchorPane.setTopAnchor(taskListContainer, 150.0);
-                AnchorPane.setLeftAnchor(taskListContainer, 150.0);
-
-                HBox hbox = new HBox(taskListContainer);
-
-                getChildren().clear();
                 getChildren().add(hbox);
         });
     }
