@@ -44,12 +44,30 @@ public class TaskListComponent extends VBox {
         nameLabel.setAlignment(Pos.CENTER);
 
 
-        // Create button for adding tasks
-        Button addButton = new Button("Add Task");
-        addButton.setOnAction(event -> {
+        // Create buttons for adding tasks
+        HBox addTasksButton = new HBox();
+        addTasksButton.setStyle("-fx-spacing: 0;" +
+                "-fx-background-color: -fx-base;" +
+                "-fx-border-width: 1;" +
+                "-fx-border-color: -fx-base;" +
+                "-fx-border-radius: 3;");
+
+        Button addDefaultTaskButton = new Button("+");
+        addDefaultTaskButton.setStyle("-fx-font-weight: bold;" +
+                "-fx-base: derive(-fx-background, 80%);");
+        addDefaultTaskButton.setOnAction(event -> {
+
+        });
+
+        Button addCustomTaskButton = new Button("Add Custom Task");
+        addCustomTaskButton.setStyle("-fx-font-weight: bold;" +
+                "-fx-base: derive(-fx-background, 80%);");
+        addCustomTaskButton.setOnAction(event -> {
             mainCtrl.setTaskList(taskList.getId());
             mainCtrl.showAddTask();
         });
+
+        addTasksButton.getChildren().addAll(addDefaultTaskButton, addCustomTaskButton);
 
         // Create Edit button to edit label
         Button editButton = new Button("Edit");
@@ -90,7 +108,7 @@ public class TaskListComponent extends VBox {
         gridPane.add(nameField, 1, 1);
         gridPane.add(editButton, 2,1);
         gridPane.add(saveButton, 2, 1);
-        gridPane.add(addButton, 1,0);
+        gridPane.add(addTasksButton, 1,0);
 
         // enables user to enter new label
         editButton.setOnAction(e -> {
