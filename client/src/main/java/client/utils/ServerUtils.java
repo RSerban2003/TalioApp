@@ -114,7 +114,6 @@ public class ServerUtils {
                         .request(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
                         .get(Response.class);
-
                 if (res.getStatus() == HTTP_OK) {
                     var board = res.readEntity(Board.class);
                     consumer.accept(board);

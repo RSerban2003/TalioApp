@@ -32,8 +32,10 @@ public class AdminDashboardCtrl {
 
     public void updateAdmin(List<Board> boardList) {
         observableList.set(boardList);
-        boardAnchor.getChildren().clear();
-        boardAnchor.getChildren().add(boardComponent);
+        boardComponent.refresh();
+        if(boardAnchor.getChildren().size() == 0) {
+            boardAnchor.getChildren().add(boardComponent);
+        }
     }
 
     public void addBoardToList(Board board){
