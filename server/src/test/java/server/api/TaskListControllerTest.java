@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import commons.Task;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -138,17 +139,17 @@ public class TaskListControllerTest {
     }
 
     @Test
-    void editShouldReturnBadRequestWhenNameisMissing() {
-        // given
+    void testEditShouldReturnBadRequestWhenNameisMissing() {
+
         Map<String, String> body = new HashMap<>();
         body.put("foo", "bar");
 
         TaskListController controller = new TaskListController(taskListRepository, boardRepository, simpMessagingTemplate);
 
-        // when
+
         ResponseEntity<?> response = controller.edit(1L, 2L, body);
 
-        // then
+
         assertEquals(response.getStatusCode(), HttpStatus.BAD_REQUEST);
         verifyNoInteractions(boardRepository);
         verifyNoInteractions(taskListRepository);
@@ -156,18 +157,18 @@ public class TaskListControllerTest {
     }
 
     @Test
-    void editShouldReturnNotFoundWhenBoardDoesNotExist() {
-        // given
+    void testEditShouldReturnNotFoundWhenBoardDoesNotExist() {
+
         Map<String, String> body = new HashMap<>();
         body.put("name", "New list name");
         when(boardRepository.existsById(1L)).thenReturn(false);
 
         TaskListController controller = new TaskListController(taskListRepository, boardRepository, simpMessagingTemplate);
 
-        // when
+
         ResponseEntity<?> response = controller.edit(1L, 2L, body);
 
-        // then
+
         assertEquals(response.getStatusCode(), HttpStatus.NOT_FOUND);
         assertEquals(response.getBody(), "Board not found");
         verify(boardRepository).existsById(1L);
@@ -177,8 +178,8 @@ public class TaskListControllerTest {
     }
 
     @Test
-    void editsShouldReturnNotFoundWhenListDoesNotExist() {
-        // given
+    void testEditsShouldReturnNotFoundWhenListDoesNotExist() {
+
         Map<String, String> body = new HashMap<>();
         body.put("name", "New list name");
         when(boardRepository.existsById(1L)).thenReturn(true);
@@ -186,10 +187,10 @@ public class TaskListControllerTest {
 
         TaskListController controller = new TaskListController(taskListRepository, boardRepository, simpMessagingTemplate);
 
-        // when
+
         ResponseEntity<?> response = controller.edit(1L, 2L, body);
 
-        // then
+
         assertEquals(response.getStatusCode(), HttpStatus.NOT_FOUND);
         assertEquals(response.getBody(), "List not found");
         verify(boardRepository).existsById(1L);
@@ -199,5 +200,14 @@ public class TaskListControllerTest {
         verifyNoInteractions(simpMessagingTemplate);
 
     }
+
+
+
+
+
+
+
+
+
 
 }
