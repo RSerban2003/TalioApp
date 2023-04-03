@@ -6,11 +6,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
-
 import javax.inject.Inject;
-import java.lang.reflect.InvocationTargetException;
-import java.net.SocketException;
-import java.net.SocketTimeoutException;
 
 public class ConnectCtrl {
     private final ServerUtils server;
@@ -27,7 +23,9 @@ public class ConnectCtrl {
     public void connectServer() {
         server.setHost(hostname.getText());
         if(server.ping()) {
-            mainCtrl.showBoardinput();
+            mainCtrl.showBoard();
+            mainCtrl.refreshBoardList();
+            server.astablishConnection();
         }
         else {
             Alert alert = new Alert(Alert.AlertType.ERROR);

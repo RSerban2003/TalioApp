@@ -6,12 +6,12 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: #615f5e;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AddTaskListCtrl">
+<AnchorPane maxHeight="500.0" maxWidth="900.0" minHeight="500.0" minWidth="900.0" prefHeight="500.0" prefWidth="900.0" style="-fx-background-color: #615f5e;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AddTaskListCtrl">
     <children>
-        <TextField fx:id="TextFieldId" layoutX="50.0" layoutY="157.0" prefHeight="63.0" prefWidth="500.0" promptText="Enter title here" />
-        <Button fx:id="CancelButtonId" layoutX="22.0" layoutY="355.0" mnemonicParsing="false" onAction="#onCancelButtonClicked" style="-fx-background-color: #615f5e;" text="Cancel" />
-        <Button fx:id="submitButton" layoutX="522.0" layoutY="355.0" mnemonicParsing="false" onAction="#onSubmitButtonClicked" style="-fx-background-color: #615f5e;" text="Submit" />
-      <Text fill="WHITE" layoutX="39.0" layoutY="77.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add a tasklist" wrappingWidth="106.53385925292969">
+        <TextField fx:id="TextFieldId" layoutX="200.0" layoutY="233.0" prefHeight="63.0" prefWidth="500.0" promptText="Enter title here" style="-fx-background-color: #8c8886;" />
+        <Button fx:id="CancelButtonId" layoutX="23.0" layoutY="451.0" mnemonicParsing="false" onAction="#onCancelButtonClicked" style="-fx-background-color: #454342; -fx-text-fill: #ffffff;" text="Cancel" />
+        <Button fx:id="submitButton" layoutX="824.0" layoutY="451.0" mnemonicParsing="false" onAction="#onSubmitButtonClicked" style="-fx-background-color: #454342; -fx-text-fill: #ffffff;" text="Submit" />
+      <Text fill="WHITE" layoutX="200.0" layoutY="208.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add a tasklist" wrappingWidth="127.53385925292969">
          <font>
             <Font size="19.0" />
          </font>

@@ -5,6 +5,7 @@ import client.utils.ServerUtils;
 import client.scenes.MainCtrl;
 import commons.Board;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.*;
@@ -48,8 +49,16 @@ public class SubListBoardComponent extends VBox {
         Button joinButton = new Button("Join");
         MainCtrl finalMainCtrl = mainCtrl;
         joinButton.setOnAction(event -> {
-            finalMainCtrl.updateBoard(board);
+            Board newBoard = finalServer.getBoard(board.getId());
+            if(newBoard == null){
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setContentText("Failed to retrieve board with id" + board.getId());
+                alert.showAndWait();
+                return;
+            }
+            finalMainCtrl.updateBoard(newBoard);
             finalMainCtrl.showBoard();
+            finalMainCtrl.getPrimaryStage().setMaximized(true);
         });
         HBox buttonBox = new HBox(joinButton);
         buttonBox.setAlignment(Pos.TOP_CENTER);

@@ -21,9 +21,7 @@ import static java.net.HttpURLConnection.HTTP_OK;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
-import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
@@ -34,7 +32,9 @@ import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
 import commons.Board;
+import commons.Task;
 import commons.TaskList;
+import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.ProcessingException;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.core.Response;
@@ -61,10 +61,13 @@ import org.springframework.web.socket.messaging.WebSocketStompClient;
 public class ServerUtils {
     private static String SERVER = "http://localhost:8080/";
     private static String WSSERVER = "ws://localhost:8080/";
+    private static StompSession SESSION;
+    private static String hostName = "localhost";
 
     public static void setHost(String hostname) {
         SERVER = "http://" + hostname + ":8080/";
         WSSERVER = "ws://" + hostname + ":8080/";
+        hostName = hostname;
     }
     public void getQuotesTheHardWay() throws IOException {
         var url = new URL("http://localhost:8080/api/quotes");
@@ -139,6 +142,14 @@ public class ServerUtils {
             .post(Entity.entity(Map.of("index", index, "listTo", taskListIdTo), APPLICATION_JSON), TaskList.class);
     }
 
+    public Task moveNestedTask(long boardId, long taskListId, long taskId, long nestedId, int index){
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER).path(String.format("/api/boards/%s/%s/%s/%s/move", boardId, taskListId, taskId, nestedId)) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .post(Entity.entity(Map.of("index", index), APPLICATION_JSON), Task.class);
+    }
+
     /**
      * Checks if a board with a given id is in the database
      * @param boardId
@@ -159,7 +170,10 @@ public class ServerUtils {
     public String getServerUrl() {
         return SERVER;
     }
-    private StompSession session = connect("ws://localhost:8080/websocket");
+    public void astablishConnection(){
+        this.SESSION = connect(WSSERVER +"websocket");
+
+    }
     private Map<String, StompSession.Subscription> subscriptions = new HashMap<>();
     private StompSession connect(String url){
         var client = new StandardWebSocketClient();
@@ -176,7 +190,7 @@ public class ServerUtils {
     }
 
     public <T> void registerForMessages(String dest, Class<T> type, Consumer<T> consumer){
-        StompSession.Subscription subscription = session.subscribe(dest, new StompFrameHandler() {
+        StompSession.Subscription subscription = SESSION.subscribe(dest, new StompFrameHandler() {
             @Override
             public Type getPayloadType(StompHeaders headers) {
                 return type;
@@ -200,7 +214,7 @@ public class ServerUtils {
     }
 
     public void send(String dest, Object o){
-        session.send(dest, o);
+        SESSION.send(dest, o);
     }
 
     public boolean deleteTaskList(Long boardId, Long taskListId){
@@ -259,5 +273,64 @@ public class ServerUtils {
         int status = response.getStatus();
         response.close();
         return status == 200;
+    }
+
+    public boolean editNestedTask(Long boardId, Long taskListId, Long taskId, Long nestedId, String name, Boolean complete){
+        Client client = ClientBuilder.newClient();
+        Map<String, String> body = new HashMap<>();
+        body.put("name", name);
+        body.put("isCompleted", complete.toString());
+        Response response = client.target(SERVER).path("api/boards/"+ boardId + "/"+ taskListId + "/"+taskId+"/"+nestedId+"/edit-nested")
+                .request(APPLICATION_JSON).accept(APPLICATION_JSON)
+                .post(Entity.entity(body, APPLICATION_JSON));
+
+        int status = response.getStatus();
+        response.close();
+        return status == 200;
+    }
+
+    public boolean deleteNestedTask(Long boardId, Long taskListId, Long taskId, Long nestedId){
+        Client client = ClientBuilder.newClient(new ClientConfig());
+        Response response = client.target(SERVER).path("api/boards/"+ boardId + "/"+ taskListId + "/"+taskId+"/"+nestedId).request().delete();
+        int status = response.getStatus();
+        response.close();
+        return status == 200;
+    }
+
+    public boolean addNestedTask(Long boardId, Long taskListId, Long taskId) {
+        Client client = ClientBuilder.newClient();
+        Map<String, String> body = new HashMap<>();
+        body.put("name", "new Nested Task");
+        Response response = client.target(SERVER).path("api/boards/" + boardId + "/" + taskListId + "/" + taskId + "/nestedTask")
+                .request(APPLICATION_JSON).accept(APPLICATION_JSON)
+                .post(Entity.entity(body, APPLICATION_JSON));
+
+        int status = response.getStatus();
+        response.close();
+        return status == 200;
+    }
+
+    public Board getBoard(long boardID) {
+        Response response;
+        try {
+            // If there is an input make a get request with the board id to retrieve it
+            Client client = ClientBuilder.newClient();
+            response = client.target(SERVER).path("api/boards/" + boardID + "/get/").request().get();
+            // if there is no board with such id, put up a warning and wait for another input
+            if (response.getStatus() == 404) {
+                return null;
+            } else if (response.getStatus() != 200) {
+                throw new RuntimeException("Failed to retrieve board: HTTP error code " + response.getStatus());
+            }
+            Board board = ClientBuilder.newClient(new ClientConfig()).target(SERVER)
+                    .path("api/boards/" + boardID + "/get").request(APPLICATION_JSON).accept(APPLICATION_JSON).get(new GenericType<Board>() {
+                    });
+            return board;
+        } catch (ProcessingException e) {
+            return null;
+        }
+    }
+    public static String getHost() {
+        return hostName;
     }
 }

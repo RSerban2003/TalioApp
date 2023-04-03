@@ -46,7 +46,7 @@ public class AddTaskListCtrl {
     }
     @FXML
     private void onCancelButtonClicked() {
-        mainCtrl.showBoard();
+        mainCtrl.getPopUpStage().close();
     }
     @FXML
     private void onSubmitButtonClicked() {
@@ -85,7 +85,7 @@ public class AddTaskListCtrl {
             }
             // Show the board with the updated task list
             Board board = response.readEntity(Board.class);
-            mainCtrl.showBoard();
+            mainCtrl.getPopUpStage().close();
             mainCtrl.updateBoard(board);
         } catch (Exception e) {
             // Display an error message if the request failed
