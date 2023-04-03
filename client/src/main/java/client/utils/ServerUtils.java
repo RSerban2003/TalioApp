@@ -86,26 +86,6 @@ public class ServerUtils {
 
     private static final ExecutorService EXEC = Executors.newSingleThreadExecutor();
 
-
-//    public void registerForUpdatesQuotes(Consumer<Quote> consumer) {
-//        EXEC.submit(() -> {
-//            while (!Thread.interrupted()) {
-//                var res = ClientBuilder.newClient(new ClientConfig())
-//                        .target(SERVER).path("api/quotes/updates2")
-//                        .request(APPLICATION_JSON)
-//                        .accept(APPLICATION_JSON)
-//                        .get(Response.class);
-//
-//                if (res.getStatus() == 204) {
-//                    continue;
-//                }
-//
-//                var q = res.readEntity(Quote.class);
-//                consumer.accept(q);
-//            }
-//        });
-//    }
-
     public void registerForUpdates(Consumer<Board> consumer) {
         EXEC.submit(() -> {
             while (!Thread.interrupted()) {

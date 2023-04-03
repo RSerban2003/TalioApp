@@ -95,13 +95,6 @@ public class MainCtrl {
 
         this.server = server;
 
-        /*
-        server.registerForUpdates(b -> {
-
-            addBoardAdminDash(b);
-        });
-         */
-
         this.addTaskListCtrl = taskList1.getKey();
         this.taskList1 = new Scene(taskList1.getValue());
 
@@ -199,9 +192,6 @@ public class MainCtrl {
         adminDashboardCtrl.updateAdmin(board);
     }
 
-    public void addBoardAdminDash(Board board) {
-        adminDashboardCtrl.addBoardToList(board);
-    }
     public void showEditTask() {
         editTaskCtrl.setIDs(boardID, taskListID, taskID);
         editTaskCtrl.updateScene(task);

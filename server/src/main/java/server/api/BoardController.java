@@ -36,23 +36,6 @@ public class BoardController {
         return ResponseEntity.ok(boardRepository.findAll());
     }
 
-    /*
-    @GetMapping(path = {"/updates"})
-    public DeferredResult<ResponseEntity<?>> getUpdates() {
-        var res = new DeferredResult<ResponseEntity<?>>(1000L);
-        var noContent = ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-
-        var key = new Object();
-        longPollingController.listeners.put(key, q -> {
-            res.setResult(ResponseEntity.ok(q));
-        });
-        res.onCompletion(() -> longPollingController.listeners.remove(key));
-
-        return res;
-    }
-    */
-
-
     @GetMapping("/{id}/get")
     public ResponseEntity<Board> getBoardById(@PathVariable Long id) {
         Board board = boardRepository.findById(id).orElse(null);
