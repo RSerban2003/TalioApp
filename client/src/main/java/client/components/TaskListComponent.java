@@ -47,21 +47,16 @@ public class TaskListComponent extends VBox {
         // Create buttons for adding tasks
         HBox addTasksButton = new HBox();
         addTasksButton.setStyle("-fx-spacing: 0;" +
-                "-fx-background-color: -fx-base;" +
-                "-fx-border-width: 1;" +
-                "-fx-border-color: -fx-base;" +
-                "-fx-border-radius: 3;");
+                "-fx-border-radius: 3;" + "-fx-background-color: transparent;");
 
         Button addDefaultTaskButton = new Button("+");
-        addDefaultTaskButton.setStyle("-fx-font-weight: bold;" +
-                "-fx-base: derive(-fx-background, 80%);");
+        addDefaultTaskButton.setStyle("-fx-font-weight: bold;");
         addDefaultTaskButton.setOnAction(event -> {
-
+            mainCtrl.setTaskList(taskList.getId());
+            mainCtrl.addDefaultTask();
         });
 
         Button addCustomTaskButton = new Button("Add Custom Task");
-        addCustomTaskButton.setStyle("-fx-font-weight: bold;" +
-                "-fx-base: derive(-fx-background, 80%);");
         addCustomTaskButton.setOnAction(event -> {
             mainCtrl.setTaskList(taskList.getId());
             mainCtrl.showAddTask();
