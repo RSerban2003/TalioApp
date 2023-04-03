@@ -16,6 +16,7 @@
 package client.utils;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
+import static java.net.HttpURLConnection.HTTP_OK;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -85,6 +86,26 @@ public class ServerUtils {
 
     private static final ExecutorService EXEC = Executors.newSingleThreadExecutor();
 
+
+//    public void registerForUpdatesQuotes(Consumer<Quote> consumer) {
+//        EXEC.submit(() -> {
+//            while (!Thread.interrupted()) {
+//                var res = ClientBuilder.newClient(new ClientConfig())
+//                        .target(SERVER).path("api/quotes/updates2")
+//                        .request(APPLICATION_JSON)
+//                        .accept(APPLICATION_JSON)
+//                        .get(Response.class);
+//
+//                if (res.getStatus() == 204) {
+//                    continue;
+//                }
+//
+//                var q = res.readEntity(Quote.class);
+//                consumer.accept(q);
+//            }
+//        });
+//    }
+
     public void registerForUpdates(Consumer<Board> consumer) {
         EXEC.submit(() -> {
             while (!Thread.interrupted()) {
@@ -94,11 +115,11 @@ public class ServerUtils {
                         .accept(APPLICATION_JSON)
                         .get(Response.class);
 
-                if (res.getStatus() == 204) {
-                    continue;
+                if (res.getStatus() == HTTP_OK) {
+                    var board = res.readEntity(Board.class);
+                    consumer.accept(board);
                 }
-                var q = res.readEntity(Board.class);
-                consumer.accept(q);
+                System.out.println("still working");
             }
         });
     }

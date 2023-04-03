@@ -42,6 +42,12 @@ public class AdminDashboardCtrl {
     }
 
     public void getUpdates(){
+
+        server.registerForUpdates(board -> {
+            System.out.println(board);
+            addBoardToList(board);
+        });
+
         server.registerForMessages("/topic/admin", ListOfBoards.class, q ->{
             List<Board> boardList = q.getBoardList();
             observableList.set(boardList);

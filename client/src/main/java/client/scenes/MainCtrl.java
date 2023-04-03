@@ -95,9 +95,12 @@ public class MainCtrl {
 
         this.server = server;
 
+        /*
         server.registerForUpdates(b -> {
+
             addBoardAdminDash(b);
         });
+         */
 
         this.addTaskListCtrl = taskList1.getKey();
         this.taskList1 = new Scene(taskList1.getValue());

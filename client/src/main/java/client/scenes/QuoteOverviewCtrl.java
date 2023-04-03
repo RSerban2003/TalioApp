@@ -60,12 +60,13 @@ public class QuoteOverviewCtrl implements Initializable {
         colLastName.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().person.lastName));
         colQuote.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().quote));
 
-        new Timer().scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                refresh();
-            }
-        } , 0, 1000);
+//        server.registerForUpdatesQuotes(q -> {
+//            data.add(q);
+//        });
+    }
+
+    public void stop() {
+        server.stop();
     }
 
     public void addQuote() {

@@ -15,9 +15,10 @@
  */
 package server.api;
 
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+import java.util.function.Consumer;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import commons.Quote;
+import org.springframework.web.context.request.async.DeferredResult;
 import server.database.QuoteRepository;
 
 @RestController
@@ -46,6 +48,21 @@ public class QuoteController {
         return repo.findAll();
     }
 
+    private Map<Object, Consumer<Quote>> listeners = new HashMap<>();
+    @GetMapping(path="updates2")
+    public DeferredResult<ResponseEntity<Quote>> getUpdates(){
+
+        var noContent = ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        var res = new DeferredResult<ResponseEntity<Quote>>(5000L, noContent);
+
+        var key = new Object();
+        listeners.put(key, quote -> res.setResult(ResponseEntity.ok(quote)));
+
+        res.onCompletion(() -> listeners.remove(key));
+
+        return res;
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Quote> getById(@PathVariable("id") long id) {
         if (id < 0 || !repo.existsById(id)) {
@@ -61,6 +78,8 @@ public class QuoteController {
                 || isNullOrEmpty(quote.quote)) {
             return ResponseEntity.badRequest().build();
         }
+
+        listeners.forEach((k, v) -> v.accept(quote));
 
         Quote saved = repo.save(quote);
         return ResponseEntity.ok(saved);
