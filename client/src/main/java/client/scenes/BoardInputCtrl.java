@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
+import client.utils.WorkspaceUtils;
 import com.google.inject.Inject;
 import commons.Board;
 import jakarta.ws.rs.ProcessingException;
@@ -14,8 +15,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import org.glassfish.jersey.client.ClientConfig;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
@@ -26,12 +31,14 @@ public class BoardInputCtrl {
     private ServerUtils server;
     private MainCtrl mainCtrl;
     private BoardCtrl boardCtrl;
+    private WorkspaceUtils workspaceUtils;
 
     @Inject
-    public BoardInputCtrl(ServerUtils server, MainCtrl mainCtrl, BoardCtrl boardCtrl) {
+    public BoardInputCtrl(ServerUtils server, MainCtrl mainCtrl, BoardCtrl boardCtrl, WorkspaceUtils workspaceUtils) {
         this.mainCtrl = mainCtrl;
         this.server = server;
         this.boardCtrl = boardCtrl;
+        this.workspaceUtils = workspaceUtils;
     }
 
     /**
@@ -72,12 +79,23 @@ public class BoardInputCtrl {
                     .path("api/boards/" + textBoardId + "/get").request(APPLICATION_JSON).accept(APPLICATION_JSON).get(new GenericType<Board>() {});
             clearFields();
             mainCtrl.showBoard();
+            try {
+                File file = new File("client/src/main/resources/workspaces/" + server.getHost());
+                Long boardId = Long.parseLong(textBoardId);
+                System.out.println(file.toPath().toAbsolutePath());
+                if(!file.exists()) file.createNewFile();
+                if(!workspaceUtils.getBoardIds(new Scanner(file)).contains(boardId)) {
+                    workspaceUtils.addBoardId(new FileWriter(file, true), Long.parseLong(textBoardId));
+                }
+            } catch (IOException ioe) {
+                ioe.printStackTrace();
+            }
             mainCtrl.updateBoard(board);
             } catch (ProcessingException e) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setContentText("Failed to retrieve board: " + e.getMessage());
                 alert.showAndWait();
-        }
+            }
     }
 
     public void keyPressed(KeyEvent e) {

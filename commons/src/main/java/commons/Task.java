@@ -7,6 +7,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
@@ -24,6 +26,10 @@ public class Task {
     @Column(name = "DESCRIPTION")
     private String description;
 
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
+    @OrderColumn(name = "index")
+    private List<NestedTask> nestedTasks;
+
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "tasklist_id")
@@ -36,20 +42,39 @@ public class Task {
         this.id = id;
         this.name = name;
         this.description = description;
+        this.nestedTasks = new ArrayList<>();
         this.index = -1;
     }
     public Task(Long id, String name, String description, int index) {
         this.id = id;
         this.name = name;
         this.description = description;
+        this.nestedTasks = new ArrayList<>();
         this.index = index;
     }
 
-    public Task() {
-    }
+    public Task() {}
+
     public Task(String name, String description) {
         this.name = name;
         this.description = description;
+    }
+
+    public void add(NestedTask nestedTask){
+        nestedTasks.add(nestedTask);
+    }
+
+    public List<NestedTask> getNestedTasks() {
+        return nestedTasks;
+    }
+
+    public void remove(NestedTask nestedTask){
+        if(!nestedTasks.contains(nestedTask)) return;
+        this.nestedTasks.remove(nestedTask);
+    }
+
+    public void add(int index, NestedTask nestedTask){
+        nestedTasks.add(index, nestedTask);
     }
 
     public String getName() {

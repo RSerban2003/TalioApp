@@ -1,9 +1,13 @@
 package client.scenes;
 
 import client.components.BoardComponent;
+import client.components.ClientBoardList;
 import client.utils.ServerUtils;
+import client.utils.WorkspaceUtils;
 import commons.Board;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 
 import javafx.scene.control.Alert;
@@ -17,11 +21,18 @@ import javafx.scene.text.Text;
 
 import javax.inject.Inject;
 import java.util.Map;
+import javafx.fxml.Initializable;
+import java.io.FileNotFoundException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ResourceBundle;
 
-public class BoardCtrl {
+public class BoardCtrl implements Initializable {
     @FXML
     private AnchorPane boardAnchor;
     private final ServerUtils server;
+    private final WorkspaceUtils workspaceUtils;
     private MainCtrl mainCtrl;
     @FXML
     private TextField boardName;
@@ -35,18 +46,27 @@ public class BoardCtrl {
     private TextField textFieldBoardName;
     @FXML
     private Button buttonSaveBoardName;
+    @FXML
+    private ClientBoardList boardList;
+    private ObservableList<Board> boardListSource;
     private Board board;
 
     private SimpleObjectProperty<Board> observableBoard;
     private BoardComponent boardComponent;
 
     @Inject
-    public BoardCtrl(MainCtrl mainCtrl, ServerUtils server) {
+    public BoardCtrl(MainCtrl mainCtrl, ServerUtils server, WorkspaceUtils workspaceUtils) {
+        this.workspaceUtils = workspaceUtils;
         this.mainCtrl = mainCtrl;
         this.server = server;
         boardAnchor = new AnchorPane();
         observableBoard = new SimpleObjectProperty<Board>();
         boardComponent = new BoardComponent(observableBoard, server, mainCtrl);
+    }
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        boardList.setWorkspaceUtils(workspaceUtils);
+        boardList.setMainCtrl(mainCtrl);
     }
     
     public void updateBoard(Board board) {
@@ -57,6 +77,7 @@ public class BoardCtrl {
         boardAnchor.getChildren().add(boardComponent);
         if (board.getTitle().length() > 10) textBoardName.setText(board.getTitle().substring(0,10)+ "..");
         else textBoardName.setText(board.getTitle());
+        refreshBoardList();
     }
 
     public long getBoardID() {
@@ -88,7 +109,6 @@ public class BoardCtrl {
         alert.showAndWait();
         if (alert.getResult().getText().equals("OK")){
             server.deleteBoard(boardID);
-            mainCtrl.showBoardinput();
         }
         else {
             alert.close();
@@ -129,5 +149,20 @@ public class BoardCtrl {
 
     public void addTaskList(){
         mainCtrl.showAddTaskList();
+    }
+    public void refreshBoardList() {
+        List<Long> boardIds = new ArrayList<>();
+        try {
+            List<Long> allIds = workspaceUtils.getFromFile(ServerUtils.getHost());
+            for(Long id: allIds) {
+                if(!server.boardExists(id.toString())) {
+                    workspaceUtils.deleteFromFile(ServerUtils.getHost(), id);
+                } else boardIds.add(id);
+            }
+        } catch (FileNotFoundException fnfe) {
+            fnfe.printStackTrace();
+        }
+        boardListSource = FXCollections.observableList(boardIds.stream().map(server::getBoard).toList());
+        boardList.setItems(boardListSource);
     }
 }
