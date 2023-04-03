@@ -101,7 +101,6 @@ public class ServerUtils {
                     var board = res.readEntity(Board.class);
                     consumer.accept(board);
                 }
-                System.out.println("still working");
             }
         });
     }
