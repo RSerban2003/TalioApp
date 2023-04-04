@@ -31,9 +31,9 @@ import java.util.function.Consumer;
 import commons.Board;
 import commons.Task;
 import commons.TaskList;
-import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.ProcessingException;
 import jakarta.ws.rs.client.Client;
+import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import javafx.scene.control.Alert;
 import org.glassfish.jersey.client.ClientConfig;
@@ -144,6 +144,21 @@ public class ServerUtils {
     public String getServerUrl() {
         return SERVER;
     }
+
+    public void changeBoardName(Map<String,String> name, long boardId) {
+        Response response = null;
+        try {
+            response = ClientBuilder.newClient()
+                    .target(SERVER).path("api/boards/" + boardId + "/patch")
+                    .request(APPLICATION_JSON).accept(APPLICATION_JSON)
+                    .put(Entity.entity(name, MediaType.APPLICATION_JSON_TYPE));
+        } catch (Exception e) {
+            System.out.println(response);
+        }
+
+    }
+    private StompSession session = connect("ws://localhost:8080/websocket");
+
     public void astablishConnection(){
         this.SESSION = connect(WSSERVER +"websocket");
 

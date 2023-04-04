@@ -4,6 +4,7 @@ package server.api;
 import commons.Board;
 import commons.ListOfBoards;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +37,25 @@ public class BoardController {
         if (board == null) {
             return ResponseEntity.notFound().build();
         }
+        return ResponseEntity.ok(board);
+    }
+
+    @PutMapping(path = {"{board}/patch"})
+    public ResponseEntity<?> changeName(@RequestBody Map<String,String> body, @PathVariable("board") long boardId) {
+        Board board = boardRepository.findById(boardId).orElse(null);
+        if (board == null || body.get("name") == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Board not found");
+        board.setTitle(body.get("name"));
+
+        Board saved = boardRepository.save(board);
+        Board board1 = boardRepository.findById(boardId).get();
+
+        List<Board> boardList = boardRepository.findAll();
+        ListOfBoards ret = new ListOfBoards(boardList);
+
+        // send update to client using WebSocket
+        msgs.convertAndSend("/topic/" + boardId, board1);
+        msgs.convertAndSend("/topic/admin", ret);
+
         return ResponseEntity.ok(board);
     }
 

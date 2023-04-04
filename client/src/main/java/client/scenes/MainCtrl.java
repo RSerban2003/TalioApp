@@ -155,7 +155,6 @@ public class MainCtrl {
         primaryStage.setTitle("Taskboard");
         primaryStage.setScene(board);
         primaryStage.setMaximized(true);
-        boardCtrl.hideEditFields();
     }
 
     public void showTaskOverview() {
