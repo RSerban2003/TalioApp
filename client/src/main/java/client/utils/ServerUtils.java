@@ -28,9 +28,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 
-import commons.Board;
-import commons.Task;
-import commons.TaskList;
+import commons.*;
 import jakarta.ws.rs.ProcessingException;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.core.MediaType;
@@ -38,7 +36,6 @@ import jakarta.ws.rs.core.Response;
 import javafx.scene.control.Alert;
 import org.glassfish.jersey.client.ClientConfig;
 
-import commons.Quote;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
@@ -161,7 +158,6 @@ public class ServerUtils {
 
     public void astablishConnection(){
         this.SESSION = connect(WSSERVER +"websocket");
-
     }
     private Map<String, StompSession.Subscription> subscriptions = new HashMap<>();
     private StompSession connect(String url){
