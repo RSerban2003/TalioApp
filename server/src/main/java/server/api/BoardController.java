@@ -49,12 +49,9 @@ public class BoardController {
         Board saved = boardRepository.save(board);
         Board board1 = boardRepository.findById(boardId).get();
 
-        List<Board> boardList = boardRepository.findAll();
-        ListOfBoards ret = new ListOfBoards(boardList);
-
         // send update to client using WebSocket
         msgs.convertAndSend("/topic/" + boardId, board1);
-        msgs.convertAndSend("/topic/admin", ret);
+        msgs.convertAndSend("/topic/boardView", board1);
 
         return ResponseEntity.ok(board);
     }
