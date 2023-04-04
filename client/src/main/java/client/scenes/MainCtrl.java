@@ -15,18 +15,22 @@
  */
 package client.scenes;
 
+import client.components.TaskListComponent;
 import commons.Task;
 import client.utils.ServerUtils;
 import commons.Board;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MainCtrl {
 
@@ -208,6 +212,18 @@ public class MainCtrl {
         popUpStage.setY(Screen.getPrimary().getVisualBounds().getHeight() / 2 - addTask.getHeight() / 2);
         popUpStage.show();
         addTask.setOnKeyPressed(e -> addTaskCtrl.keyPressed(e));
+    }
+
+    public void addDefaultTask(String title) {
+        String description = "";
+        Map<String, String> body = new HashMap<>();
+        body.put("name", title.trim());
+        body.put("description", description);
+        if (!server.addTask(boardID,taskListID,body)) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setContentText("Failed to add the task: Unable to send the request.");
+            alert.showAndWait();
+        }
     }
     public void showAdminPass(){
         primaryStage.setTitle("Enter admin password");

@@ -44,12 +44,50 @@ public class TaskListComponent extends VBox {
         nameLabel.setAlignment(Pos.CENTER);
 
 
-        // Create button for adding tasks
-        Button addButton = new Button("Add Task");
-        addButton.setOnAction(event -> {
+        // Create buttons for adding tasks
+        HBox addTasksButton = new HBox();
+        addTasksButton.setStyle("-fx-spacing: 0;" +
+                "-fx-border-radius: 3;" + "-fx-background-color: transparent;");
+
+        Button addDefaultTaskButton = new Button("+");
+        addDefaultTaskButton.setStyle("-fx-font-weight: bold;");
+        TextField taskTitleField = new TextField();
+        taskTitleField.setText("New Task");
+        Button saveTaskTitleButton = new Button("Save");
+        Button addCustomTaskButton = new Button("Add Custom Task");
+
+        StackPane overlappingButtons = new StackPane();
+        overlappingButtons.getChildren().addAll(taskTitleField, addCustomTaskButton);
+
+        taskTitleField.setVisible(false);
+        taskTitleField.setMaxWidth(120);
+        addCustomTaskButton.setMaxWidth(120);
+        saveTaskTitleButton.setMaxWidth(100);
+        saveTaskTitleButton.setVisible(false);
+
+        addDefaultTaskButton.setOnAction(event -> {
+
+            taskTitleField.setVisible(true);
+            saveTaskTitleButton.setVisible(true);
+            addCustomTaskButton.setVisible(false);
+
+        });
+
+        saveTaskTitleButton.setOnAction(event -> {
+            taskTitleField.setVisible(false);
+            saveTaskTitleButton.setVisible(false);
+            addCustomTaskButton.setVisible(true);
+            String title = taskTitleField.getText();
+            mainCtrl.setTaskList(taskList.getId());
+            mainCtrl.addDefaultTask(title);
+        });
+
+        addCustomTaskButton.setOnAction(event -> {
             mainCtrl.setTaskList(taskList.getId());
             mainCtrl.showAddTask();
         });
+
+        addTasksButton.getChildren().addAll(addDefaultTaskButton, overlappingButtons, saveTaskTitleButton);
 
         // Create Edit button to edit label
         Button editButton = new Button("Edit");
@@ -90,7 +128,7 @@ public class TaskListComponent extends VBox {
         gridPane.add(nameField, 1, 1);
         gridPane.add(editButton, 2,1);
         gridPane.add(saveButton, 2, 1);
-        gridPane.add(addButton, 1,0);
+        gridPane.add(addTasksButton, 1,0);
 
         // enables user to enter new label
         editButton.setOnAction(e -> {
