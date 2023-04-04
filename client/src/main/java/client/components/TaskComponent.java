@@ -3,6 +3,7 @@ package client.components;
 import client.scenes.MainCtrl;
 import client.utils.ServerUtils;
 import commons.Board;
+import commons.NestedTask;
 import commons.Task;
 import commons.TaskList;
 import javafx.geometry.Insets;
@@ -10,8 +11,10 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import javax.inject.Inject;
@@ -34,8 +37,8 @@ public class TaskComponent extends VBox {
 
         // Creates button for editing tasks
         Button editButton = new Button("Edit");
-        editButton.setMinWidth(80);
-        editButton.setMaxWidth(80);
+        editButton.setMinWidth(50);
+        editButton.setMaxWidth(50);
         editButton.setOnAction(event -> {
             mainCtrl.setTaskList(taskList.getId());
             mainCtrl.setTask(task);
@@ -61,15 +64,26 @@ public class TaskComponent extends VBox {
                 alert.close();
             }
         });
-
+        ProgressBar progressBar = new ProgressBar();
+        progressBar.setPrefWidth(80);
+        if(task.getNestedTasks() == null || task.getNestedTasks().size() == 0) {
+            progressBar.setVisible(false);
+        }
+        else {
+            double subTasks = task.getNestedTasks().size();
+            double completedSubtasks = task.getNestedTasks().stream().filter(NestedTask::getComplete).count();
+            progressBar.setProgress(completedSubtasks / subTasks);
+        }
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
         //Adds delete button to topRow box
         topRow.getChildren().add(deleteButton);
         topRow.setPadding(new Insets(0, 10, 10, 10));
 
         //Creates individual box for edit button
-        HBox editButtonBox = new HBox(editButton);
+        HBox editButtonBox = new HBox(progressBar, spacer, editButton);
         editButtonBox.setAlignment(Pos.CENTER);
-        editButtonBox.setPadding(new Insets(5, 0, 0, 0));
+        editButtonBox.setPadding(new Insets(5, 10, 0, 10));
 
         VBox container = new VBox(topRow, editButtonBox);
         container.setAlignment(Pos.CENTER);
