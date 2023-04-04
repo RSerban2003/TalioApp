@@ -118,7 +118,7 @@ public class BoardCtrl implements Initializable {
     public void disconnectServer(){
         mainCtrl.showConnect();
         server.unregisterForMessages("/topic/"+this.boardID);
-        server.unregisterForMessages("topic/admin");
+        server.unregisterForMessages("topic/boardView");
     }
 
     public void onEditBoardNameClick(){
