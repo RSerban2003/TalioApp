@@ -5,6 +5,7 @@ import client.components.ClientBoardList;
 import client.utils.ServerUtils;
 import client.utils.WorkspaceUtils;
 import commons.Board;
+import commons.ListOfBoards;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -77,7 +78,6 @@ public class BoardCtrl implements Initializable {
         boardAnchor.getChildren().add(boardComponent);
         if (board.getTitle().length() > 10) textBoardName.setText(board.getTitle().substring(0,10)+ "..");
         else textBoardName.setText(board.getTitle());
-        refreshBoardList();
     }
 
     public long getBoardID() {
@@ -88,7 +88,6 @@ public class BoardCtrl implements Initializable {
         if(boardID != 0){
             server.registerForMessages("/topic/"+boardID, Board.class, q -> {
                 observableBoard.set(q);
-                refreshBoardList();
                 this.board = q;
                 if (board.getTitle().length() > 10) textBoardName.setText(board.getTitle().substring(0,10) + "..");
                 else textBoardName.setText(board.getTitle());
@@ -119,6 +118,7 @@ public class BoardCtrl implements Initializable {
     public void disconnectServer(){
         mainCtrl.showConnect();
         server.unregisterForMessages("/topic/"+this.boardID);
+        server.unregisterForMessages("topic/boardView");
     }
 
     public void onEditBoardNameClick(){
@@ -131,13 +131,11 @@ public class BoardCtrl implements Initializable {
 
     public void onSaveBoardNameClick(){
         server.changeBoardName(Map.of("name", textFieldBoardName.getText()), boardID);
-        if (board.getTitle().length() > 10) textBoardName.setText(board.getTitle().substring(0,10)+ "..");
-         else textBoardName.setText(board.getTitle());
+        updateBoard(board);
         buttonEditBoardName.setVisible(true);
         textBoardName.setVisible(true);
         textFieldBoardName.setVisible(false);
         buttonSaveBoardName.setVisible(false);
-        refreshBoardList();
     }
     public void onCopyInviteKeyClicked(){
         Long invite = observableBoard.get().getId();

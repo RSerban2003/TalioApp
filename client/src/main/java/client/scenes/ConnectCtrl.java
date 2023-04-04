@@ -1,6 +1,9 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
+import commons.Board;
+import commons.ListOfBoards;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -26,6 +29,8 @@ public class ConnectCtrl {
             mainCtrl.showBoard();
             mainCtrl.refreshBoardList();
             server.astablishConnection();
+            server.registerForMessages("/topic/boardView", Board.class, q ->
+                    Platform.runLater( () -> mainCtrl.refreshBoardList()));
         }
         else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
