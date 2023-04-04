@@ -155,6 +155,7 @@ public class ServerUtils {
         } catch (Exception e) {
             System.out.println(response);
         }
+
     }
     private StompSession session = connect("ws://localhost:8080/websocket");
 

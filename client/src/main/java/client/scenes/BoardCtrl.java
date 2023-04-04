@@ -88,6 +88,7 @@ public class BoardCtrl implements Initializable {
         if(boardID != 0){
             server.registerForMessages("/topic/"+boardID, Board.class, q -> {
                 observableBoard.set(q);
+                refreshBoardList();
                 this.board = q;
                 if (board.getTitle().length() > 10) textBoardName.setText(board.getTitle().substring(0,10) + "..");
                 else textBoardName.setText(board.getTitle());
@@ -136,6 +137,7 @@ public class BoardCtrl implements Initializable {
         textBoardName.setVisible(true);
         textFieldBoardName.setVisible(false);
         buttonSaveBoardName.setVisible(false);
+        refreshBoardList();
     }
     public void onCopyInviteKeyClicked(){
         Long invite = observableBoard.get().getId();
