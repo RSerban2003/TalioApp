@@ -154,7 +154,6 @@ public class ServerUtils {
         }
 
     }
-    private StompSession session = connect("ws://localhost:8080/websocket");
 
     public void astablishConnection(){
         this.SESSION = connect(WSSERVER +"websocket");
