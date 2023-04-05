@@ -69,6 +69,7 @@ public class Task {
         this.name = name;
         this.description = description;
         this.listOfTags = new ArrayList<>();
+        this.nestedTasks = new ArrayList<>();
     }
 
     public void add(NestedTask nestedTask){
