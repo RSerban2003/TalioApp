@@ -11,6 +11,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -29,6 +31,7 @@ public class ClientBoardList extends ListView<Board> {
         private Label boardTitle;
         private Button leave;
         private Button open;
+        private Button copyId;
         private HBox root;
         private Region padding;
         private ListView listView;
@@ -41,8 +44,8 @@ public class ClientBoardList extends ListView<Board> {
             leave = new Button("Leave");
             leave.setOnAction(a -> {
                 workspaceUtils.deleteFromFile(ServerUtils.getHost(), board.getId());
+                if(mainCtrl.getBoardId() == board.getId()) mainCtrl.showBoardinput();
                 mainCtrl.refreshBoardList();
-                if(mainCtrl.getBoardId() == board.getId()) mainCtrl.updateBoard(new Board(0L, "Join a board"));
 
             });
             open = new Button("Open");
@@ -50,11 +53,21 @@ public class ClientBoardList extends ListView<Board> {
                 mainCtrl.updateBoard(board);
                 mainCtrl.showBoard();
             });
+            copyId = new Button("copy ID");
+            copyId.setOnAction(event -> {
+                Long invite = board.getId();
+                String inviteString = invite.toString();
+
+                Clipboard clipboard = Clipboard.getSystemClipboard();
+                ClipboardContent clipboardContent = new ClipboardContent();
+                clipboardContent.putString(inviteString);
+                clipboard.setContent(clipboardContent);
+            });
             boardTitle = new Label();
             padding = new Region();
             HBox.setHgrow(padding, Priority.ALWAYS);
             setText(null);
-            root.getChildren().addAll(boardTitle, padding, open, leave);
+            root.getChildren().addAll(boardTitle, padding, open, leave, copyId);
         }
         @Override
         protected void updateItem(Board board, boolean empty) {

@@ -108,6 +108,7 @@ public class BoardInputCtrl implements Initializable {
                 ioe.printStackTrace();
             }
             mainCtrl.updateBoard(board);
+            mainCtrl.refreshBoardList();
             } catch (ProcessingException e) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setContentText("Failed to retrieve board: " + e.getMessage());
