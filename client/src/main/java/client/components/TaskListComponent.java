@@ -125,9 +125,23 @@ public class TaskListComponent extends VBox {
 
         // Create Edit button to edit label
         Button editButton = new Button("Edit");
-        TextField nameField = new TextField();
-        nameField.setPromptText("e.g. School");
+        editButton.setMinWidth(50);
+        editButton.setMaxWidth(50);
+        TextField nameField = new TextField(nameLabel.getText());
         Button saveButton = new Button("Save");
+        saveButton.setMinWidth(50);
+        saveButton.setMaxWidth(50);
+
+        nameField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.length() > 30) {
+                nameField.setText(oldValue);
+            }
+        });
+        nameField.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                event.consume();
+            }
+        });
 
         // hide text field and save button at the start
         nameField.setVisible(false);
@@ -159,6 +173,7 @@ public class TaskListComponent extends VBox {
         GridPane.setHalignment(nameLabel, HPos.CENTER);
         gridPane.add(deleteButton, 0, 0);
         gridPane.add(nameLabel, 1, 1);
+        GridPane.setHalignment(nameField, HPos.CENTER);
         gridPane.add(nameField, 1, 1);
         gridPane.add(editButton, 2,1);
         gridPane.add(saveButton, 2, 1);
