@@ -5,7 +5,6 @@ import client.components.ClientBoardList;
 import client.utils.ServerUtils;
 import client.utils.WorkspaceUtils;
 import commons.Board;
-import commons.ListOfBoards;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -77,7 +76,6 @@ public class BoardCtrl implements Initializable {
         boardAnchor.getChildren().clear();
         boardAnchor.getChildren().add(boardComponent);
         boardList.setMainCtrl(mainCtrl);
-
         if (board.getTitle().length() > 10) textBoardName.setText(board.getTitle().substring(0,10)+ "..");
         else textBoardName.setText(board.getTitle());
     }

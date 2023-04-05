@@ -1,41 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import client.components.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<?import javafx.scene.layout.AnchorPane?>
-<?import client.components.ClientBoardList?>
 <VBox alignment="CENTER" maxHeight="500.0" maxWidth="900.0" minHeight="500.0" minWidth="900.0" prefHeight="500.0" prefWidth="900.0" spacing="10.0" style="-fx-background-color: #615f5e;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.BoardInputCtrl">
-    <AnchorPane prefHeight="206.0" prefWidth="159.0">
-        <children>
-            <ClientBoardList fx:id="boardList" prefHeight="200.0" prefWidth="159.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-        </children>
-    </AnchorPane>
-    <Label style="-fx-text-fill: WHITE;" text="Enter Board ID:" />
-    <TextField fx:id="boardIdTextField" maxWidth="200" prefHeight="26.0" style="-fx-background-color: #8c8886; -fx-text-fill: WHITE;" />
-   <GridPane prefHeight="131.0" prefWidth="640.0">
+   <GridPane prefHeight="502.0" prefWidth="900.0">
      <columnConstraints>
-         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-       <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
      </columnConstraints>
      <rowConstraints>
        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
      </rowConstraints>
       <children>
-          <Button onAction="#retrieveBoard" style="-fx-background-color: #454342; -fx-text-fill: WHITE;" text="Retrieve Board" GridPane.columnIndex="1" />
-         <Button onAction="#createBoardButton" prefHeight="30.0" prefWidth="98.0" style="-fx-background-color: #454342; -fx-text-fill: WHITE;" text="Create a board" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-         <Button layoutX="282.0" layoutY="62.0" onAction="#cancel" prefHeight="30.0" prefWidth="98.0" style="-fx-background-color: #454342; -fx-text-fill: WHITE;" text="Cancel" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+         <VBox prefHeight="200.0" prefWidth="100.0">
+            <children>
+               <GridPane prefHeight="267.0" prefWidth="450.0">
+                 <columnConstraints>
+                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                   <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                 </columnConstraints>
+                 <rowConstraints>
+                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                 </rowConstraints>
+                  <children>
+                      <Label style="-fx-text-fill: WHITE;" text="Enter Board ID:" GridPane.columnIndex="1" />
+                      <Button onAction="#retrieveBoard" style="-fx-background-color: #454342; -fx-text-fill: WHITE;" text="Retrieve Board" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                     <Button onAction="#createBoardButton" prefHeight="30.0" prefWidth="98.0" style="-fx-background-color: #454342; -fx-text-fill: WHITE;" text="Create a board" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                     <Button layoutX="282.0" layoutY="62.0" onAction="#cancel" prefHeight="30.0" prefWidth="98.0" style="-fx-background-color: #454342; -fx-text-fill: WHITE;" text="Cancel" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                     <Button onAction="#admin" style="-fx-background-color: #454342; -fx-text-fill: WHITE;" text="Admin" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+                      <TextField fx:id="boardIdTextField" maxWidth="200" prefHeight="26.0" style="-fx-background-color: #8c8886; -fx-text-fill: WHITE;" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  </children>
+                  <VBox.margin>
+                     <Insets top="120.0" />
+                  </VBox.margin>
+               </GridPane>
+            </children>
+         </VBox>
+          <AnchorPane prefHeight="206.0" prefWidth="159.0" GridPane.columnIndex="1">
+              <children>
+                  <ClientBoardList fx:id="boardList" prefHeight="200.0" prefWidth="159.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+              </children>
+          </AnchorPane>
       </children>
    </GridPane>
-   <Button onAction="#admin" style="-fx-background-color: #454342; -fx-text-fill: WHITE;" text="Admin" />
 </VBox>
