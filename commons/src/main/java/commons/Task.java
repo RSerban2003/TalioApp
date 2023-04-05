@@ -35,6 +35,11 @@ public class Task {
     @JoinColumn(name = "tasklist_id")
     private TaskList taskList;
 
+    @JsonIgnore
+    @ManyToMany(mappedBy = "task", cascade = CascadeType.ALL)
+    @OrderColumn(name = "index")
+    private List<Tag> listOfTags;
+
     @Column
     private Integer index;
 
@@ -44,6 +49,7 @@ public class Task {
         this.description = description;
         this.nestedTasks = new ArrayList<>();
         this.index = -1;
+        this.listOfTags = new ArrayList<>();
     }
     public Task(Long id, String name, String description, int index) {
         this.id = id;
@@ -51,13 +57,18 @@ public class Task {
         this.description = description;
         this.nestedTasks = new ArrayList<>();
         this.index = index;
+        this.listOfTags = new ArrayList<>();
     }
 
-    public Task() {}
+    public Task() {
+        this.nestedTasks = new ArrayList<>();
+        this.listOfTags = new ArrayList<>();
+    }
 
     public Task(String name, String description) {
         this.name = name;
         this.description = description;
+        this.listOfTags = new ArrayList<>();
     }
 
     public void add(NestedTask nestedTask){
@@ -107,6 +118,18 @@ public class Task {
 
     public void setTaskList(TaskList taskList) {
         this.taskList = taskList;
+    }
+
+    public void addTag(Tag tag) {
+        this.listOfTags.add(tag);
+    }
+    public void removeTag(Tag tag) {
+        if(!listOfTags.contains(tag)) return;
+        listOfTags.remove(tag);
+    }
+
+    public List<Tag> getListOfTags () {
+        return listOfTags;
     }
 
     @Override

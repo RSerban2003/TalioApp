@@ -23,6 +23,9 @@ public class Board {
     private String title;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+    @OrderColumn(name = "index")
+    private List<Tag> listOfTags;
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
     private List<TaskList> listOfTaskList;
 
 
@@ -30,10 +33,12 @@ public class Board {
         this.id = id;
         this.title = title;
         this.listOfTaskList = new ArrayList<>();
+        this.listOfTags = new ArrayList<>();
     }
 
     public Board() {
         this.listOfTaskList = new ArrayList<>();
+        this.listOfTags = new ArrayList<>();
     }
 
     public void setListOfTaskList(List<TaskList> listOfTaskList) {
@@ -69,6 +74,19 @@ public class Board {
 
     public Long getId() {
         return id;
+    }
+
+    public void addTag (Tag tag) {
+        this.listOfTags.add(tag);
+    }
+
+    public void removeTag (Tag tag){
+        if(!listOfTags.contains(tag)) return;
+        this.listOfTags.remove(tag);
+    }
+
+    public List<Tag> getListOfTags () {
+        return listOfTags;
     }
 
     @Override
