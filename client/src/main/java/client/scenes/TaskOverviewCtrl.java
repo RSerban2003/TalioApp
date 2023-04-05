@@ -142,6 +142,7 @@ public class TaskOverviewCtrl {
             alert.showAndWait();
             return;
         }
+
         server.unregisterForMessages("/topic/"+boardID+"/"+tasklistID+"/"+taskID);
         mainCtrl.getPopUpStage().close();
     }
