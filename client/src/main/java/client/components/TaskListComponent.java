@@ -55,14 +55,22 @@ public class TaskListComponent extends VBox {
         taskTitleField.setText("New Task");
         Button saveTaskTitleButton = new Button("Save");
         Button addCustomTaskButton = new Button("Add Custom Task");
+        Button cancelDefaultTaskButton = new Button("Cancel");
 
         StackPane overlappingButtons = new StackPane();
         overlappingButtons.getChildren().addAll(taskTitleField, addCustomTaskButton);
 
+        cancelDefaultTaskButton.setVisible(false);
         taskTitleField.setVisible(false);
         taskTitleField.setMaxWidth(120);
+        taskTitleField.setMinWidth(120);
         addCustomTaskButton.setMaxWidth(120);
-        saveTaskTitleButton.setMaxWidth(100);
+        addCustomTaskButton.setMinWidth(120);
+        saveTaskTitleButton.setMaxWidth(50);
+        saveTaskTitleButton.setMinWidth(50);
+        cancelDefaultTaskButton.setMinWidth(70);
+        cancelDefaultTaskButton.setMaxWidth(70);
+
         saveTaskTitleButton.setVisible(false);
 
         addDefaultTaskButton.setOnAction(event -> {
@@ -70,24 +78,41 @@ public class TaskListComponent extends VBox {
             taskTitleField.setVisible(true);
             saveTaskTitleButton.setVisible(true);
             addCustomTaskButton.setVisible(false);
+            cancelDefaultTaskButton.setVisible(true);
 
         });
 
         saveTaskTitleButton.setOnAction(event -> {
-            taskTitleField.setVisible(false);
-            saveTaskTitleButton.setVisible(false);
-            addCustomTaskButton.setVisible(true);
             String title = taskTitleField.getText();
-            mainCtrl.setTaskList(taskList.getId());
-            mainCtrl.addDefaultTask(title);
+            if(title.trim().isEmpty() || title.trim() == null) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setContentText("Task name cannot be empty. Please enter a name for the task.");
+                alert.showAndWait();
+                return;
+            }
+            else {
+                taskTitleField.setVisible(false);
+                saveTaskTitleButton.setVisible(false);
+                addCustomTaskButton.setVisible(true);
+
+                mainCtrl.setTaskList(taskList.getId());
+                mainCtrl.addDefaultTask(title);
+            }
         });
 
+        cancelDefaultTaskButton.setOnAction(event -> {
+            taskTitleField.setText("New Task");
+            cancelDefaultTaskButton.setVisible(false);
+            saveTaskTitleButton.setVisible(false);
+            taskTitleField.setVisible(false);
+            addCustomTaskButton.setVisible(true);
+        });
         addCustomTaskButton.setOnAction(event -> {
             mainCtrl.setTaskList(taskList.getId());
             mainCtrl.showAddTask();
         });
 
-        addTasksButton.getChildren().addAll(addDefaultTaskButton, overlappingButtons, saveTaskTitleButton);
+        addTasksButton.getChildren().addAll(addDefaultTaskButton, overlappingButtons, saveTaskTitleButton, cancelDefaultTaskButton);
 
         // Create Edit button to edit label
         Button editButton = new Button("Edit");
