@@ -1,12 +1,12 @@
 package client.components;
 
-import javafx.fxml.FXML;
 import client.scenes.MainCtrl;
 import client.utils.ServerUtils;
 import commons.Board;
 import commons.NestedTask;
 import commons.Task;
 import commons.TaskList;
+import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
@@ -19,9 +19,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import javax.inject.Inject;
 import javax.swing.*;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Objects;
@@ -78,15 +81,10 @@ public class TaskComponent extends VBox {
         });
 
         // implementation for description indicator
-        URL url = getClass().getResource("description-4.png");
-        Image icon = new Image(getClass().getResourceAsStream("description-4.png"));
-        InputStream strm = url.openStream();
-
-        Label iconLabel = new Label("", new ImageView(icon));
-        hasDescription(iconLabel);
-
-        Label iconLabel = new Label("test");
-        hasDescription(iconLabel);
+        Label descriptionLabel = new Label("- See Description");
+        descriptionLabel.setStyle("-fx-font-size: 10px;");
+        descriptionLabel.setTextFill(Color.GRAY);
+        hasDescription(descriptionLabel);
 
         ProgressBar progressBar = new ProgressBar();
         progressBar.setPrefWidth(80);
@@ -101,18 +99,22 @@ public class TaskComponent extends VBox {
 
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
-        //Adds delete button to topRow box
-        topRow.getChildren().add(iconLabel);
 
+        //Adds delete button to topRow box
         topRow.getChildren().add(deleteButton);
-        topRow.setPadding(new Insets(0, 10, 10, 10));
+        topRow.setPadding(new Insets(0, 10, 0, 10));
+
+        // creates individual box for description indicator
+        HBox descriptionIndicatorBox = new HBox(descriptionLabel);
+        descriptionIndicatorBox.setPadding(new Insets(0, 10, 2, 10));
+        descriptionIndicatorBox.setAlignment(Pos.CENTER_LEFT);
 
         //Creates individual box for edit button
         HBox editButtonBox = new HBox(progressBar, spacer, editButton);
         editButtonBox.setAlignment(Pos.CENTER);
-        editButtonBox.setPadding(new Insets(5, 10, 0, 10));
+        editButtonBox.setPadding(new Insets(0, 10, 0, 10));
 
-        VBox container = new VBox(topRow, editButtonBox);
+        VBox container = new VBox(topRow, descriptionIndicatorBox, editButtonBox);
         container.setAlignment(Pos.CENTER);
 
         getChildren().add(container);
