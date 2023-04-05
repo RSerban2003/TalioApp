@@ -1,6 +1,5 @@
 package client.components;
 
-import client.Main;
 import java.util.Map;
 import client.utils.ServerUtils;
 import client.scenes.MainCtrl;
@@ -16,9 +15,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-
-import java.util.Map;
 
 public class TaskListComponent extends VBox {
     private static final String style = "-fx-background-color: #c7c7c7; -fx-border-width: 2; -fx-border-color: gray; -fx-font-weight: bold; -fx-border-radius: 10 10 10 10; -fx-background-radius: 10 10 10 10;";
@@ -51,7 +47,20 @@ public class TaskListComponent extends VBox {
 
         Button addDefaultTaskButton = new Button("+");
         addDefaultTaskButton.setStyle("-fx-font-weight: bold;");
+
         TextField taskTitleField = new TextField();
+
+        taskTitleField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.length() > 30) {
+                taskTitleField.setText(oldValue);
+            }
+        });
+        taskTitleField.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                event.consume();
+            }
+        });
+
         taskTitleField.setText("New Task");
         Button saveTaskTitleButton = new Button("Save");
         Button addCustomTaskButton = new Button("Add Custom Task");
