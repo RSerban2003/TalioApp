@@ -243,6 +243,7 @@ public class MainCtrl {
         adminDashboardCtrl.updateAdmin(board);
     }
     public void refreshBoardList() {
+        boardInputCtrl.refreshBoardList();
         boardCtrl.refreshBoardList();
     }
     public Long getBoardId() {

@@ -48,6 +48,7 @@ public class ClientBoardList extends ListView<Board> {
             open = new Button("Open");
             open.setOnAction(event -> {
                 mainCtrl.updateBoard(board);
+                mainCtrl.showBoard();
             });
             boardTitle = new Label();
             padding = new Region();
