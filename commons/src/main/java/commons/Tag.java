@@ -32,7 +32,12 @@ public class Tag {
     @JoinColumn(name = "board_id")
     private Board board;
 
-    public Tag() {
+    public Tag () {
+        this.listOfTasks = new ArrayList<>();
+    }
+
+    public Tag(String name) {
+        this.name = name;
         this.listOfTasks = new ArrayList<>();
     }
 
@@ -62,6 +67,10 @@ public class Tag {
         return listOfTasks;
     }
 
+    public void setListOfTasks(List<Task> listOfTasks) {
+        this.listOfTasks = listOfTasks;
+    }
+
     public void addTask(Task task) {
         if(listOfTasks.contains(task)) return;
         listOfTasks.add(task);
@@ -69,6 +78,14 @@ public class Tag {
     public void removeTask(Task task) {
         if(!listOfTasks.contains(task)) return;
         listOfTasks.remove(task);
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
+    }
+
+    public Board getBoard() {
+        return this.board;
     }
 
     @Override
