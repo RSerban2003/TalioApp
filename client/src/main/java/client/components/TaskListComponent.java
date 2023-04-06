@@ -200,7 +200,6 @@ public class TaskListComponent extends VBox {
             nameField.setVisible(false);
             saveButton.setVisible(false);
         });
-
         // Puts gridPane with its elements in the task list
         getChildren().add(gridPane);
         getChildren().addAll(tasks);
