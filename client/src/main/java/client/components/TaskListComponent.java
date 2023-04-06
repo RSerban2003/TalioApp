@@ -157,7 +157,7 @@ public class TaskListComponent extends VBox {
         getChildren().addAll(tasks);
         setStyle(style);
         setAlignment(Pos.TOP_CENTER);
-        setPrefSize(300, 700);
+        setPrefSize(300, 800);
         setSpacing(20.0);
         this.taskList = taskList;
     }

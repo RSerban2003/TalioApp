@@ -156,7 +156,7 @@
                                  <children>
                                     <ScrollPane prefHeight="513.0" prefWidth="715.0" stylesheets="@../../css/ScrollPane.css" VBox.vgrow="ALWAYS">
                                       <content>
-                                        <AnchorPane fx:id="boardAnchor" maxHeight="-Infinity" maxWidth="-Infinity" style="-fx-background-color: #8c8886; -fx-background-image: ;">
+                                        <AnchorPane fx:id="boardAnchor" maxHeight="-Infinity" maxWidth="-Infinity" style="-fx-background-color: #8c8886;">
                                              <children>
                                                 <Pane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="532.0" prefWidth="715.0" style="-fx-background-color: #8c8886;" />
                                              </children></AnchorPane>
