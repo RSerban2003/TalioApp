@@ -1,6 +1,9 @@
 package client.scenes;
 
+import client.components.TagComponent;
 import client.utils.ServerUtils;
+import commons.Board;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -42,6 +45,13 @@ public class TagManagementCtrl {
     @FXML
     private Button backButton;
 
+    @FXML
+    private AnchorPane tagAnchorPane;
+
+    private SimpleObjectProperty<Board> observableBoard;
+
+    private TagComponent tagComponent;
+
     private ServerUtils server;
 
     private MainCtrl mainCtrl;
@@ -58,6 +68,10 @@ public class TagManagementCtrl {
     public TagManagementCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
+        tagAnchorPane = new AnchorPane();
+        observableBoard = new SimpleObjectProperty<Board>();
+
+        observableBoard.addListener((obs, oldBoard, newBoard) -> updateScene(newBoard));
     }
 
     public void setIDs(long boardID, long tasklistID, long taskID) {
@@ -163,6 +177,19 @@ public class TagManagementCtrl {
     private void onBackButtonClicked() {
         this.resetFields();
         mainCtrl.getPopUpStage().close();
+    }
+
+    public void updateScene(Board board) {
+
+        observableBoard.set(board);
+        tagAnchorPane.getChildren().clear();
+
+        for (Tag tag : board.getListOfTags()) {
+            TagComponent tagComponent = new TagComponent(observableBoard, mainCtrl, server);
+            tagComponent.setTag(tag);
+            tagAnchorPane.getChildren().add(tagComponent);
+        }
+
     }
 
     private void resetFields() {

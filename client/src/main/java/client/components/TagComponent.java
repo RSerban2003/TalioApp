@@ -3,13 +3,13 @@ package client.components;
 import client.scenes.MainCtrl;
 import client.utils.ServerUtils;
 import commons.Board;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.yaml.snakeyaml.nodes.Tag;
 
 import javax.inject.Inject;
 
@@ -22,15 +22,21 @@ public class TagComponent extends VBox {
     private Tag tag;
     private MainCtrl mainCtrl;
 
+    private SimpleObjectProperty<Board> observableBoard;
+
+    private ServerUtils serverUtils;
+
     private String initialName;
 
     @Inject
-    public TagComponent(Board board, Tag tag, MainCtrl mainCtrl, ServerUtils serverUtils) {
+    public TagComponent(SimpleObjectProperty<Board> observableBoard, MainCtrl mainCtrl, ServerUtils serverUtils) {
         super();
+        this.observableBoard = observableBoard;
         this.mainCtrl = mainCtrl;
-        this.tag = tag;
+        this.serverUtils = serverUtils;
 
-
+    }
+    private void initializeTagComponent() {
         //Tag name box
         Label tagNameLabel = new Label();
         tagNameLabel.setText(tag.getName());
@@ -45,17 +51,12 @@ public class TagComponent extends VBox {
         //Tag delete button
         Button deleteButton = new Button("X");
         deleteButton.setOnAction(event -> {
-            AnnotationConfigApplicationContext context
-                    = new AnnotationConfigApplicationContext();
-            context.scan("client");
-            context.refresh();
-            ServerUtils server = context.getBean(ServerUtils.class);
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Delete Tag");
             alert.setHeaderText("This tag will be deleted and removed from all associated tasks. Are you sure you want to proceed? ");
             alert.showAndWait();
             if (alert.getResult().getText().equals("OK")) {
-                server.deleteTag(board.getId(), tag.getId());
+                serverUtils.deleteTag(board.getId(), tag.getId());
             }
             else {
                 alert.close();
@@ -115,12 +116,7 @@ public class TagComponent extends VBox {
             }
             else {
 
-                AnnotationConfigApplicationContext context
-                        = new AnnotationConfigApplicationContext();
-                context.scan("client");
-                context.refresh();
-                ServerUtils server = context.getBean(ServerUtils.class);
-                server.editTag(board.getId(), tag.getId(), name);
+                serverUtils.editTag(board.getId(), tag.getId(), name);
 
                 tagNameLabel.setText(name);
                 saveNameButton.setVisible(false);
@@ -148,5 +144,10 @@ public class TagComponent extends VBox {
 
         VBox tagButtons = new VBox();
         tagButtons.getChildren().addAll(topRow, bottomRow);
+    }
+
+    public void setTag(Tag tag) {
+        this.tag = tag;
+        initializeTagComponent();
     }
 }

@@ -119,6 +119,7 @@ public class BoardCtrl implements Initializable {
     public void onTagManagementButtonClicked() {
         mainCtrl.setBoard(board);
         mainCtrl.showTagManagement();
+
     }
 
     public void disconnectServer(){

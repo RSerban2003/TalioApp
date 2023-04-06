@@ -67,6 +67,7 @@ public class MainCtrl {
     private long taskListID;
     private long taskID;
     private Task task;
+    private Board boardObject;
 
     public void initialize(Stage primaryStage,
                            Pair<ConnectCtrl, Parent> connect, Pair<BoardInputCtrl, Parent> boardInput,
@@ -166,6 +167,7 @@ public class MainCtrl {
 
     public void setBoard(Board board) {
         this.boardID = board.getId();
+        this.boardObject = board;
     }
     public void updateBoard(Board board) {
         boardCtrl.updateBoard(board);
@@ -226,6 +228,7 @@ public class MainCtrl {
 
     public void showTagManagement() {
         tagManagementCtrl.setIDs(boardID, taskListID, taskID);
+        tagManagementCtrl.updateScene(boardObject);
         popUpStage.setTitle("Tag Management");
         popUpStage.setScene(tagManagement);
         popUpStage.show();

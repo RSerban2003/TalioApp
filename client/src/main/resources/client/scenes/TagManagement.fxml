@@ -63,7 +63,7 @@
                <children>
                   <ScrollPane style="-fx-border-color: transparent; -fx-background-color: #8c8886; -fx-control-inner-background: #8c8886;" VBox.vgrow="ALWAYS">
                      <content>
-                        <AnchorPane fx:id="nestedTaskAnchorPane" prefHeight="288.0" prefWidth="250.0" />
+                        <AnchorPane fx:id="tagAnchorPane" prefHeight="288.0" prefWidth="250.0" />
                      </content>
                   </ScrollPane>
                </children>
