@@ -2,6 +2,7 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
@@ -10,6 +11,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 
 import javax.inject.Inject;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TagManagementCtrl {
     @FXML
@@ -66,7 +69,7 @@ public class TagManagementCtrl {
     @FXML
     private void initialize() {
         tagNameTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.length() > 20) {
+            if (newValue.length() > 30) {
                 tagNameTextField.setText(oldValue);
             }
         });
@@ -107,10 +110,20 @@ public class TagManagementCtrl {
 
     @FXML
     private void onSaveNameButtonClicked() {
-        saveNameButton.setVisible(false);
-        cancelNameButton.setVisible(false);
-        editNameButton.setVisible(true);
-        tagNameTextField.setEditable(false);
+
+        String name = tagNameTextField.getText();
+        if(name.trim().isEmpty() || name.trim() == null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setContentText("Task name cannot be empty. Please enter a name for the task.");
+            alert.showAndWait();
+            return;
+        }
+        else {
+            saveNameButton.setVisible(false);
+            cancelNameButton.setVisible(false);
+            editNameButton.setVisible(true);
+            tagNameTextField.setEditable(false);
+        }
     }
 
     @FXML
@@ -128,6 +141,7 @@ public class TagManagementCtrl {
 
     @FXML
     private void onCreateTagButtonClicked() {
+        String name = tagNameTextField.getText();
         tagNameText.setVisible(false);
         tagNameTextField.setVisible(false);
         editNameButton.setVisible(false);
@@ -138,8 +152,11 @@ public class TagManagementCtrl {
         tagNameTextField.setText("New Tag");
         tagNameTextField.setEditable(false);
 
-        //add tag component to the list and tag entity to the database
-
+        if (!server.createTag(boardID, name)) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setContentText("Failed to add the tag: Unable to send the request.");
+            alert.showAndWait();
+        }
     }
 
     @FXML
