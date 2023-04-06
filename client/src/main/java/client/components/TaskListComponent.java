@@ -21,7 +21,8 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import java.util.Map;
 
 public class TaskListComponent extends VBox {
-    private static final String style = "-fx-background-color: #c7c7c7; -fx-border-width: 2; -fx-border-color: gray; -fx-font-weight: bold; -fx-border-radius: 10 10 10 10; -fx-background-radius: 10 10 10 10;";
+    private static final String style = "-fx-background-color: #c7c7c7; -fx-border-width: 2; -fx-border-color: gray; -fx-font-weight: bold; -fx-border-radius: 10 10 10 10; -fx-background-radius: 10 10 10 10; -fx-padding: 0 0 50 0;";
+
     private final MainCtrl mainCtrl;
     public static final DataFormat mapFormat = new DataFormat("map");
     private final TaskList taskList;
