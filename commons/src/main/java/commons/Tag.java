@@ -28,7 +28,7 @@ public class Tag {
     private List<Task> listOfTasks;
 
     @JsonIgnore
-    @ManyToMany
+    @ManyToOne
     @JoinColumn(name = "board_id")
     private Board board;
 

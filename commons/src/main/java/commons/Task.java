@@ -34,8 +34,7 @@ public class Task {
     private TaskList taskList;
 
     @JsonIgnore
-    @ManyToMany(mappedBy = "task", cascade = CascadeType.ALL)
-    @OrderColumn(name = "index")
+    @ManyToMany(mappedBy = "listOfTasks", cascade = CascadeType.ALL)
     private List<Tag> listOfTags;
 
     @Column
