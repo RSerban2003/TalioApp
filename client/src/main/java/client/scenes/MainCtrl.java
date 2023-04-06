@@ -36,12 +36,6 @@ public class MainCtrl {
 
     private Stage primaryStage;
     private Stage popUpStage;
-
-    private QuoteOverviewCtrl overviewCtrl;
-    private Scene overview;
-
-    private AddQuoteCtrl addCtrl;
-    private Scene add;
     private ConnectCtrl connectCtrl;
     private Scene connect;
     private BoardInputCtrl boardInputCtrl;
@@ -72,8 +66,7 @@ public class MainCtrl {
     private long taskID;
     private Task task;
 
-    public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
-                           Pair<AddQuoteCtrl, Parent> add, Pair<ConnectCtrl, Parent> connect, Pair<BoardInputCtrl, Parent> boardInput,
+    public void initialize(Stage primaryStage, Pair<ConnectCtrl, Parent> connect, Pair<BoardInputCtrl, Parent> boardInput,
                            Pair<BoardCtrl, Parent> board, Pair<AddTaskListCtrl, Parent> taskList1, Pair<AddTaskCtrl, Parent> addTask,
                            Pair<TaskOverviewCtrl, Parent> taskOverview, Pair<CreateBoardCtrl, Parent> createBoard, ServerUtils server,
                            Pair<AdminPassCtrl, Parent> adminPass, Pair<AdminDashboardCtrl, Parent> admindash) {
@@ -82,12 +75,6 @@ public class MainCtrl {
 
         this.popUpStage = new Stage();
         popUpStage.initModality(Modality.APPLICATION_MODAL);
-
-        this.overviewCtrl = overview.getKey();
-        this.overview = new Scene(overview.getValue());
-
-        this.addCtrl = add.getKey();
-        this.add = new Scene(add.getValue());
 
         this.connectCtrl = connect.getKey();
         this.connect = new Scene(connect.getValue(), 900, 500);
@@ -123,24 +110,12 @@ public class MainCtrl {
         primaryStage.show();
     }
 
-    public void showOverview() {
-        primaryStage.setTitle("Quotes: Overview");
-        primaryStage.setScene(overview);
-        overviewCtrl.refresh();
-    }
-
     public Stage getPopUpStage() {
         return popUpStage;
     }
 
     public Stage getPrimaryStage() {
         return primaryStage;
-    }
-
-    public void showAdd() {
-        primaryStage.setTitle("Quotes: Adding Quote");
-        primaryStage.setScene(add);
-        add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
     }
 
     public void showConnect() {
