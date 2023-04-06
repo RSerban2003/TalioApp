@@ -145,7 +145,7 @@ public class TagController {
     }
 
     @PostMapping(path = "/{list}/{task}/{tag}")
-    public ResponseEntity<?> addTag(@RequestBody Map<String, String> body, @PathVariable("board") long boardId,  @PathVariable("list") long listId,
+    public ResponseEntity<?> addTag(@PathVariable("board") long boardId,  @PathVariable("list") long listId,
                                     @PathVariable("task") long taskId, @PathVariable("tag") long tagId) throws RuntimeException {
 
         // check if the board, task list, task and tag exist
@@ -171,6 +171,7 @@ public class TagController {
 
         tagRepository.save(tag);
         taskRepository.save(task);
+        boardRepository.save(board);
 
         Task retTask = taskRepository.findById(taskId).get();
 
