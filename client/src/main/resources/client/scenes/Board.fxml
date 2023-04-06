@@ -143,7 +143,7 @@
                                  <children>
                                     <ScrollPane prefHeight="513.0" prefWidth="715.0" style="-fx-background-color: #8c8886;" stylesheets="@../../css/ScrollPane.css" VBox.vgrow="ALWAYS">
                                       <content>
-                                        <AnchorPane fx:id="boardAnchor" minHeight="860.0" minWidth="1500.0" style="-fx-background-color: #8c8886;" />
+                                        <AnchorPane fx:id="boardAnchor" minHeight="880.0" minWidth="1330.0" style="-fx-background-color: #8c8886;" />
                                       </content>
                                     </ScrollPane>
                                  </children>
