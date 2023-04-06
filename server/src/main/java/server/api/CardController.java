@@ -2,6 +2,7 @@ package server.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import commons.Board;
+import commons.Tag;
 import commons.Task;
 import commons.TaskList;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -95,6 +96,11 @@ public class CardController {
         if (!taskListRepository.existsById(listId)) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Tasklist not found");
         TaskList taskList = taskListRepository.findById(listId).get();
         if (task.getTaskList().getId() != listId) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Task not part of tasklist");
+
+        for(Tag tag : task.getListOfTags()) {
+            tag.removeTask(task);
+            task.removeTag(tag);
+        }
 
         // update the taskList and save
         taskList.remove(task);
