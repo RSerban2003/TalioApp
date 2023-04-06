@@ -36,8 +36,8 @@ public class TaskListController {
 
     @GetMapping(path = "/{list}/get")
     public ResponseEntity<?> getById(@PathVariable("list") long listId) {
-        var TL = taskListRepository.findById(listId);
-        if (TL.isPresent()) return ResponseEntity.ok(taskListRepository.findById(listId).get());
+        var tL = taskListRepository.findById(listId);
+        if (tL.isPresent()) return ResponseEntity.ok(taskListRepository.findById(listId).get());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("List not found");
     }
 
