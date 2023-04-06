@@ -48,10 +48,11 @@ public class Main extends Application {
         var adminPass = FXML.load(AdminPassCtrl.class, "client", "scenes", "AdminPass.fxml");
         var adminDash = FXML.load(AdminDashboardCtrl.class, "client", "scenes", "AdminDashboard.fxml");
         var TaskOverview = FXML.load(TaskOverviewCtrl.class, "client", "scenes", "TaskOverview.fxml");
+        var tagManagement = FXML.load(TagManagementCtrl.class, "client", "scenes", "TagManagement.fxml");
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
 
         ServerUtils server = new ServerUtils();
         var createBoard = FXML.load(CreateBoardCtrl.class, "client", "scenes", "CreateBoard.fxml");
-        mainCtrl.initialize(primaryStage, connect, boardInput, board, taskList1, addTask, TaskOverview, createBoard, server, adminPass, adminDash);
+        mainCtrl.initialize(primaryStage, connect, boardInput, board, taskList1, addTask, TaskOverview, createBoard, server, adminPass, adminDash, tagManagement);
     }
 }
