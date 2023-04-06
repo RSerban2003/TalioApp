@@ -51,6 +51,7 @@ public class AddTaskListCtrl {
     @FXML
     private void onSubmitButtonClicked() {
         String name = TextFieldId.getText();
+        String taskListAlert = "task list";
         if (name == null || name.isEmpty()) {
             // Display a warning if the name field is empty
             Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -59,13 +60,7 @@ public class AddTaskListCtrl {
             return;
         }
         Map<String, String> body = new HashMap<>();
-        if (name.trim().isEmpty()) {
-            // Display a warning if the name field in the map is empty
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setContentText("The task list name in the request body cannot be empty");
-            alert.showAndWait();
-            return;
-        }
+        if (MainCtrl.emptyFieldWarning(name, taskListAlert)) return;
         body.put("name", name.trim());
         // Send a POST request to add the task list to the board
         Response response = null;

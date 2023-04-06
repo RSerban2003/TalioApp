@@ -41,10 +41,14 @@ public class CreateBoardCtrl {
         this.boardCtrl = boardCtrl;
     }
 
-
+    /***
+     * Method which is called when pressing button to create a new board, it will send a POST request to the server
+     * to create a new board
+     */
     public void createBoard(){
         // check if the input field is either empty or null to display a warning
         String name = boardNameTextField.getText();
+        String boardAlert = "board";
         if (name == null || name.isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setContentText("Please enter a board ID");
@@ -52,13 +56,7 @@ public class CreateBoardCtrl {
             return;
         }
         Map<String, String> body = new HashMap<>();
-        if (name.trim().isEmpty()) {
-            // Display a warning if the name field in the map is empty
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setContentText("The task list name in the request body cannot be empty");
-            alert.showAndWait();
-            return;
-        }
+        if (MainCtrl.emptyFieldWarning(name, boardAlert)) return;
         body.put("name", name.trim());
         // Send a POST request to add the task list to the board
         Response response = null;
@@ -103,11 +101,9 @@ public class CreateBoardCtrl {
       }
     }
 
-
     public void keyPressed(KeyEvent e) {
         switch (e.getCode()) {
             case ENTER:
-
                 break;
             case ESCAPE:
                 cancel();
@@ -122,8 +118,32 @@ public class CreateBoardCtrl {
         mainCtrl.showConnect();
     }
 
-    private void clearFields() {
+    public void clearFields() {
         boardNameTextField.clear();
+    }
+
+    public TextField getBoardNameTextField() {
+        return boardNameTextField;
+    }
+
+    public ServerUtils getServer() {
+        return server;
+    }
+
+    public MainCtrl getMainCtrl() {
+        return mainCtrl;
+    }
+
+    public BoardCtrl getBoardCtrl() {
+        return boardCtrl;
+    }
+
+    public WorkspaceUtils getWorkspaceUtils() {
+        return workspaceUtils;
+    }
+
+    public void setBoardNameTextField(TextField boardNameTextField) {
+        this.boardNameTextField = boardNameTextField;
     }
 }
 

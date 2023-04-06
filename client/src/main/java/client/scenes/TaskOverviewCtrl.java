@@ -203,4 +203,24 @@ public class TaskOverviewCtrl {
                 break;
         }
     }
+
+    public long getBoardID() {
+        return boardID;
+    }
+
+    public long getTaskListID() {
+        return tasklistID;
+    }
+
+    public long getTaskID() {
+        return taskID;
+    }
+
+    public NestedTaskComponent getNestedTaskComponent() {
+        return nestedTaskComponent;
+    }
+
+    public void setObservableTask(SimpleObjectProperty<Task> observableTask) {
+        this.observableTask = observableTask;
+    }
 }

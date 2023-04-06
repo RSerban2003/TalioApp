@@ -15,17 +15,55 @@
  */
 package client.scenes;
 
+import commons.Board;
+import javafx.stage.Stage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class MainCtrlTest {
 
     private MainCtrl sut;
+    //@Mock
+   // private Board mockBoard;
+    @Mock
+    private BoardCtrl mockBoardCtrl;
+    @Mock
+    private Stage mockPrimaryStage;
 
     @BeforeEach
     public void setup() {
         sut = new MainCtrl();
     }
+
+    @Test
+    void testUpdateBoard() {
+
+        Board mockBoard = new Board();
+
+
+        mockBoard.setId(1L);
+        mockBoard.setTitle("Board");
+
+        Board board = new Board();
+        mockBoardCtrl.updateBoard(mockBoard);
+        assertEquals(mockBoard, board);
+
+        verify(mockBoardCtrl).updateBoard(mockBoard);
+    }
+
+    @Test
+    void testShowOverview(){
+        sut.showOverview();
+
+        verify(mockPrimaryStage).setTitle("Quotes: Overview");
+        verify(mockPrimaryStage).setScene(sut.getOverview());
+    }
+
 
     @Test
     public void writeSomeTests() {

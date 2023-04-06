@@ -40,6 +40,10 @@ public class MainCtrl {
     private QuoteOverviewCtrl overviewCtrl;
     private Scene overview;
 
+    public Scene getOverview() {
+        return overview;
+    }
+
     private AddQuoteCtrl addCtrl;
     private Scene add;
     private ConnectCtrl connectCtrl;
@@ -239,6 +243,18 @@ public class MainCtrl {
         primaryStage.setMaximized(true);
         adminDashboardCtrl.getUpdates();
     }
+
+    public static boolean emptyFieldWarning(String name, String insert){
+        if (name.trim().isEmpty()) {
+            // Display a warning if the name field in the map is empty
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setContentText("The " + insert + " name in the request body cannot be empty");
+            alert.showAndWait();
+            return true;
+        }
+        return false;
+    }
+
     public void updateAdminDash(List<Board> board) {
         adminDashboardCtrl.updateAdmin(board);
     }

@@ -28,7 +28,7 @@ public class ConnectCtrl {
         if(server.ping()) {
             mainCtrl.showBoard();
             mainCtrl.refreshBoardList();
-            server.astablishConnection();
+            server.establishConnection();
             server.registerForMessages("/topic/boardView", Board.class, q ->
                     Platform.runLater( () -> mainCtrl.refreshBoardList()));
         }
@@ -52,5 +52,13 @@ public class ConnectCtrl {
 
     private void clearFields() {
         hostname.clear();
+    }
+
+    public TextField getHostname() {
+        return hostname;
+    }
+
+    public Button getConnect() {
+        return connect;
     }
 }

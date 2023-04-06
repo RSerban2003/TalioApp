@@ -156,7 +156,7 @@ public class ServerUtils {
     }
     private StompSession session = connect("ws://localhost:8080/websocket");
 
-    public void astablishConnection(){
+    public void establishConnection(){
         this.SESSION = connect(WSSERVER +"websocket");
     }
     private Map<String, StompSession.Subscription> subscriptions = new HashMap<>();
