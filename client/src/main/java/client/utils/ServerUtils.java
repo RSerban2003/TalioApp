@@ -294,10 +294,13 @@ public class ServerUtils {
         return status == 200;
     }
 
-    public boolean createTag(Long boardId) {
+    public boolean createTag(Long boardId, String name) {
         Client client = ClientBuilder.newClient();
         Map<String, String> body = new HashMap<>();
-        body.put("name", "New Tag");
+        if(name.trim().isEmpty() || name == null) {
+            name = "New Tag";
+        }
+        body.put("name", name);
 
         Response response = client.target(SERVER).path("api/boards/" + boardId + "/add-tag")
                 .request(APPLICATION_JSON).accept(APPLICATION_JSON)
