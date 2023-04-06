@@ -89,7 +89,7 @@ public class BoardController {
         return ResponseEntity.ok(saved);
     }
 
-    private static boolean isNullOrEmpty(String s) {
+    static boolean isNullOrEmpty(String s) {
         return s == null || s.isEmpty();
     }
 }

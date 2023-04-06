@@ -109,4 +109,20 @@ public class TaskListTest {
         String expected = "commons.TaskList@";
         assertTrue(taskList.toString().startsWith(expected));
     }
+
+    @Test
+    public void testAddWithIndex() {
+        taskList = new TaskList(1L, "Test Task List");
+        Task task1 = new Task("Name1", "Test Task 1");
+        Task task2 = new Task("Name2", "Test Task 2");
+        Task task3 = new Task("Name3", "Test Task 3");
+
+        taskList.add(task1);
+        taskList.add(task2);
+        taskList.add(0, task3);
+
+        Assertions.assertEquals(task3, taskList.getTask().get(0));
+        Assertions.assertEquals(task1, taskList.getTask().get(1));
+        Assertions.assertEquals(task2, taskList.getTask().get(2));
+    }
 }
