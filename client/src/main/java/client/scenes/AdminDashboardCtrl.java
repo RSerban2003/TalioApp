@@ -63,6 +63,8 @@ public class AdminDashboardCtrl {
 
     public void disconnectServer(){
         mainCtrl.showConnect();
+        server.stop();
+        System.out.println("polling stopped");
         server.unregisterForMessages("/topic/admin");
     }
 }
