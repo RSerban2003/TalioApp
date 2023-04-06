@@ -92,6 +92,7 @@ public class TagManagementCtrl {
         editNameButton.setVisible(false);
         saveNameButton.setVisible(true);
         cancelNameButton.setVisible(true);
+        tagNameTextField.requestFocus();
         initialName = tagNameTextField.getText();
     }
 

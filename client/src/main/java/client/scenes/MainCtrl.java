@@ -163,8 +163,11 @@ public class MainCtrl {
         primaryStage.setX(Screen.getPrimary().getVisualBounds().getWidth() / 2 - boardInput.getWidth() / 2);
         primaryStage.setY(Screen.getPrimary().getVisualBounds().getHeight() / 2 - boardInput.getHeight() / 2);
     }
-    public void updateBoard(Board board) {
+
+    public void setBoard(Board board) {
         this.boardID = board.getId();
+    }
+    public void updateBoard(Board board) {
         boardCtrl.updateBoard(board);
     }
     public void showAddTaskList() {

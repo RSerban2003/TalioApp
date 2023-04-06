@@ -52,7 +52,7 @@
             <Font size="18.0" />
          </font>
       </Text>
-      <Text fx:id="tagNameText" fill="WHITE" layoutX="510.0" layoutY="151.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tag Name:" visible="false">
+      <Text fx:id="tagNameText" fill="WHITE" layoutX="500.0" layoutY="151.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tag Name:" visible="false">
          <font>
             <Font size="18.0" />
          </font>
