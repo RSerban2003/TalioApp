@@ -45,6 +45,26 @@ public class BoardController {
         return ResponseEntity.ok(board);
     }
 
+    @PutMapping(path = {"{board}/patch"})
+    public ResponseEntity<?> changeName(@RequestBody Map<String,String> body, @PathVariable("board") long boardId) {
+        Board board = boardRepository.findById(boardId).orElse(null);
+        if (board == null || body.get("name") == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Board not found");
+        board.setTitle(body.get("name"));
+
+        Board saved = boardRepository.save(board);
+        Board board1 = boardRepository.findById(boardId).get();
+
+        List<Board> boardList = boardRepository.findAll();
+        ListOfBoards ret = new ListOfBoards(boardList);
+
+        // send update to client using WebSocket
+        msgs.convertAndSend("/topic/" + boardId, board1);
+        msgs.convertAndSend("/topic/boardView", board1);
+        msgs.convertAndSend("topic/admin",ret);
+
+        return ResponseEntity.ok(board);
+    }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBoardById(@PathVariable Long id){
@@ -79,7 +99,7 @@ public class BoardController {
         return ResponseEntity.ok(saved);
     }
 
-    private static boolean isNullOrEmpty(String s) {
+    static boolean isNullOrEmpty(String s) {
         return s == null || s.isEmpty();
     }
 }

@@ -82,6 +82,7 @@ public class CreateBoardCtrl {
             String boardIdString = boardId.toString();
             clearFields();
             mainCtrl.showBoard();
+            mainCtrl.getPrimaryStage().setMaximized(true);
             try {
                 File file = new File("client/src/main/resources/workspaces/" + server.getHost());
                 if(!file.exists()) file.createNewFile();

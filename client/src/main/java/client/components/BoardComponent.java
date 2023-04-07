@@ -1,5 +1,6 @@
 package client.components;
 
+import client.scenes.BoardCtrl;
 import client.utils.ServerUtils;
 import client.scenes.MainCtrl;
 import commons.Board;
@@ -43,6 +44,7 @@ public class BoardComponent extends AnchorPane {
                 AnchorPane.setLeftAnchor(taskListContainer, 150.0);
                 getChildren().clear();
                 getChildren().add(taskListContainer);
+
                 for (TaskListComponent taskListComponent : taskLists) {
                     taskListComponent.setOnDragOver(event -> {
                         event.acceptTransferModes(TransferMode.ANY);

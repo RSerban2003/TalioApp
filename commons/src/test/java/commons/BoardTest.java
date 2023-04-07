@@ -3,6 +3,9 @@ package commons;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class BoardTest {
@@ -56,5 +59,18 @@ class BoardTest {
         board.setId(expectedId);
         Long actualId = board.getId();
         assertEquals(expectedId, actualId);
+    }
+    @Test
+    public void testSetListOfTaskList() {
+        Board board = new Board();
+        List<TaskList> taskListList = new ArrayList<>();
+        taskListList.add(new TaskList(1L, "Task List 1"));
+        taskListList.add(new TaskList(2L, "Task List 2"));
+
+        board.setListOfTaskList(taskListList);
+
+        assertEquals(2, board.getListOfTaskList().size());
+        assertEquals("Task List 1", board.getListOfTaskList().get(0).getName());
+        assertEquals("Task List 2", board.getListOfTaskList().get(1).getName());
     }
 }

@@ -31,17 +31,14 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
-import commons.Board;
-import commons.Task;
-import commons.TaskList;
-import jakarta.ws.rs.PUT;
+import commons.*;
 import jakarta.ws.rs.ProcessingException;
 import jakarta.ws.rs.client.Client;
+import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import javafx.scene.control.Alert;
 import org.glassfish.jersey.client.ClientConfig;
 
-import commons.Quote;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
@@ -69,6 +66,7 @@ public class ServerUtils {
         WSSERVER = "ws://" + hostname + ":8080/";
         hostName = hostname;
     }
+<<<<<<< HEAD
     public void getQuotesTheHardWay() throws IOException {
         var url = new URL("http://localhost:8080/api/quotes");
         var is = url.openConnection().getInputStream();
@@ -122,6 +120,8 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(quote, APPLICATION_JSON), Quote.class);
     }
+=======
+>>>>>>> main
 
     public boolean ping() {
         ClientConfig config = new ClientConfig();
@@ -175,9 +175,22 @@ public class ServerUtils {
     public String getServerUrl() {
         return SERVER;
     }
+
+    public void changeBoardName(Map<String,String> name, long boardId) {
+        Response response = null;
+        try {
+            response = ClientBuilder.newClient()
+                    .target(SERVER).path("api/boards/" + boardId + "/patch")
+                    .request(APPLICATION_JSON).accept(APPLICATION_JSON)
+                    .put(Entity.entity(name, MediaType.APPLICATION_JSON_TYPE));
+        } catch (Exception e) {
+            System.out.println(response);
+        }
+
+    }
+
     public void astablishConnection(){
         this.SESSION = connect(WSSERVER +"websocket");
-
     }
     private Map<String, StompSession.Subscription> subscriptions = new HashMap<>();
     private StompSession connect(String url){

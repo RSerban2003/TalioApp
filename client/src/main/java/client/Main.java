@@ -40,8 +40,6 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
 
-        var overview = FXML.load(QuoteOverviewCtrl.class, "client", "scenes", "QuoteOverview.fxml");
-        var add = FXML.load(AddQuoteCtrl.class, "client", "scenes", "AddQuote.fxml");
         var connect = FXML.load(ConnectCtrl.class, "client", "scenes", "Connect.fxml");
         var boardInput = FXML.load(BoardInputCtrl.class, "client", "scenes", "BoardInput.fxml");
         var board = FXML.load(BoardCtrl.class, "client", "scenes", "Board.fxml");
@@ -58,6 +56,6 @@ public class Main extends Application {
         primaryStage.setOnCloseRequest(event -> {
             mainCtrl.stop();
         });
-        mainCtrl.initialize(primaryStage, overview, add, connect, boardInput, board, taskList1, addTask, TaskOverview, createBoard, server, adminPass, adminDash);
+        mainCtrl.initialize(primaryStage, connect, boardInput, board, taskList1, addTask, TaskOverview, createBoard, server, adminPass, adminDash);
     }
 }

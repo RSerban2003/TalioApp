@@ -5,20 +5,24 @@ import client.components.ClientBoardList;
 import client.utils.ServerUtils;
 import client.utils.WorkspaceUtils;
 import commons.Board;
+import commons.ListOfBoards;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
+
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 
 import javax.inject.Inject;
+import java.util.Map;
+import javafx.fxml.Initializable;
 import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -31,6 +35,9 @@ public class BoardCtrl implements Initializable {
     private final ServerUtils server;
     private final WorkspaceUtils workspaceUtils;
     private MainCtrl mainCtrl;
+    @FXML
+    private TextField boardName;
+
     private long boardID;
     @FXML
     private Text textBoardName;
@@ -64,10 +71,13 @@ public class BoardCtrl implements Initializable {
     }
     
     public void updateBoard(Board board) {
+        this.board = board;
         observableBoard.set(board);
         setBoardID(board.getId());
         boardAnchor.getChildren().clear();
         boardAnchor.getChildren().add(boardComponent);
+        if (board.getTitle().length() > 10) textBoardName.setText(board.getTitle().substring(0,10)+ "..");
+        else textBoardName.setText(board.getTitle());
         refreshBoardList();
     }
 
@@ -79,6 +89,9 @@ public class BoardCtrl implements Initializable {
         if(boardID != 0){
             server.registerForMessages("/topic/"+boardID, Board.class, q -> {
                 observableBoard.set(q);
+                this.board = q;
+                if (board.getTitle().length() > 10) textBoardName.setText(board.getTitle().substring(0,10) + "..");
+                else textBoardName.setText(board.getTitle());
             });
         }
         this.boardID = boardID;
@@ -106,14 +119,11 @@ public class BoardCtrl implements Initializable {
     public void disconnectServer(){
         mainCtrl.showConnect();
         server.unregisterForMessages("/topic/"+this.boardID);
-    }
-
-    public void hideEditFields(){
-        textFieldBoardName.setVisible(false);
-        buttonSaveBoardName.setVisible(false);
+        server.unregisterForMessages("topic/boardView");
     }
 
     public void onEditBoardNameClick(){
+        textFieldBoardName.setText(board.getTitle());
         buttonEditBoardName.setVisible(false);
         textBoardName.setVisible(false);
         textFieldBoardName.setVisible(true);
@@ -121,7 +131,8 @@ public class BoardCtrl implements Initializable {
     }
 
     public void onSaveBoardNameClick(){
-        textBoardName.setText(textFieldBoardName.getText());
+        server.changeBoardName(Map.of("name", textFieldBoardName.getText()), boardID);
+        updateBoard(board);
         buttonEditBoardName.setVisible(true);
         textBoardName.setVisible(true);
         textFieldBoardName.setVisible(false);
