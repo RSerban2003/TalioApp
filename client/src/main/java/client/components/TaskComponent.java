@@ -23,10 +23,16 @@ public class TaskComponent extends VBox {
     private static final String style = "-fx-background-color: #f7f7f5; -fx-border-width: 2; -fx-border-color: gray;  -fx-border-radius: 10 10 10 10;-fx-background-radius: 10 10 10 10;";
     private final long taskId;
     private MainCtrl mainCtrl;
+    private Task task;
+    private TaskList taskList;
+
     @Inject
     public TaskComponent(Task task, TaskList taskList, Board board, MainCtrl mainCtrl) {
         super();
         this.mainCtrl = mainCtrl;
+        this.task = task;
+        this.taskList = taskList;
+
         //Creates the name box
         Label nameLabel = new Label(task.getName());
         HBox topRow = new HBox(nameLabel);
@@ -40,9 +46,7 @@ public class TaskComponent extends VBox {
         editButton.setMinWidth(50);
         editButton.setMaxWidth(50);
         editButton.setOnAction(event -> {
-            mainCtrl.setTaskList(taskList.getId());
-            mainCtrl.setTask(task);
-            mainCtrl.showTaskOverview();
+            openTaskOverview(task, taskList);
         });
 
         // Creates button for deleting tasks
@@ -98,5 +102,19 @@ public class TaskComponent extends VBox {
     }
     public long getTaskId() {
         return taskId;
+    }
+
+    public void openTaskOverview(Task task, TaskList taskList) {
+        mainCtrl.setTaskList(taskList.getId());
+        mainCtrl.setTask(task);
+        mainCtrl.showTaskOverview();
+    }
+
+    public Task getTask() {
+        return task;
+    }
+
+    public TaskList getTaskList() {
+        return taskList;
     }
 }
