@@ -87,6 +87,6 @@ public class NestedTaskComponent extends AnchorPane {
 
                     }
                 getChildren().add(hbox);
-        });
+            });
     }
 }

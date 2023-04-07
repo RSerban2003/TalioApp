@@ -38,8 +38,8 @@ public class CardController {
     @GetMapping(path = "/{card}/get")
     public ResponseEntity<?> getById(@PathVariable("card") long cardId) {
         //TODO : do the check if parents are good
-        var TL = taskRepository.findById(cardId);
-        if (TL.isPresent()) return ResponseEntity.ok(taskRepository.findById(cardId).get());
+        var tL = taskRepository.findById(cardId);
+        if (tL.isPresent()) return ResponseEntity.ok(taskRepository.findById(cardId).get());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Task not found");
     }
 

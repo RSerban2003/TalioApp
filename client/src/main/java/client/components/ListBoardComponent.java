@@ -5,16 +5,11 @@ import client.scenes.MainCtrl;
 import commons.Board;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
-import java.util.Map;
 
-import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 
-import java.util.Map;
 
 import java.util.List;
 

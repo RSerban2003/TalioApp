@@ -15,7 +15,6 @@
  */
 package client.scenes;
 
-import client.components.TaskListComponent;
 import commons.Task;
 import client.utils.ServerUtils;
 import commons.Board;
@@ -67,8 +66,7 @@ public class MainCtrl {
     private long taskID;
     private Task task;
 
-    public void initialize(Stage primaryStage,
-                           Pair<ConnectCtrl, Parent> connect, Pair<BoardInputCtrl, Parent> boardInput,
+    public void initialize(Stage primaryStage, Pair<ConnectCtrl, Parent> connect, Pair<BoardInputCtrl, Parent> boardInput,
                            Pair<BoardCtrl, Parent> board, Pair<AddTaskListCtrl, Parent> taskList1, Pair<AddTaskCtrl, Parent> addTask,
                            Pair<TaskOverviewCtrl, Parent> taskOverview, Pair<CreateBoardCtrl, Parent> createBoard, ServerUtils server,
                            Pair<AdminPassCtrl, Parent> adminPass, Pair<AdminDashboardCtrl, Parent> admindash) {
