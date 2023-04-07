@@ -15,7 +15,6 @@
  */
 package client.scenes;
 
-import client.components.TaskListComponent;
 import commons.Task;
 import client.utils.ServerUtils;
 import commons.Board;
