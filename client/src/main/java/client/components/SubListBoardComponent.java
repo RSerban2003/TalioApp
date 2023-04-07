@@ -35,6 +35,7 @@ public class SubListBoardComponent extends VBox {
 
         // Create button
         Button deleteButton = new Button("Delete");
+        deleteButton.setStyle("-fx-background-color: #8d8d8d; -fx-text-fill: #000000");
         AnnotationConfigApplicationContext context
                 = new AnnotationConfigApplicationContext();
         context.scan("client");
@@ -47,6 +48,7 @@ public class SubListBoardComponent extends VBox {
 
         // Create button
         Button joinButton = new Button("Join");
+        joinButton.setStyle("-fx-background-color: #8d8d8d; -fx-text-fill: #000000");
         MainCtrl finalMainCtrl = mainCtrl;
         joinButton.setOnAction(event -> {
             Board newBoard = finalServer.getBoard(board.getId());

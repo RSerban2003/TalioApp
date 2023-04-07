@@ -46,7 +46,7 @@ public class TaskListComponent extends VBox {
                 "-fx-border-radius: 3;" + "-fx-background-color: transparent;");
 
         Button addDefaultTaskButton = new Button("+");
-        addDefaultTaskButton.setStyle("-fx-font-weight: bold;");
+        addDefaultTaskButton.setStyle("-fx-background-color: #8d8d8d; -fx-text-fill: #000000; -fx-font-weight: bold");
 
         TextField taskTitleField = new TextField();
 
@@ -63,8 +63,11 @@ public class TaskListComponent extends VBox {
 
         taskTitleField.setText("New Task");
         Button saveTaskTitleButton = new Button("Save");
+        saveTaskTitleButton.setStyle("-fx-background-color: #8d8d8d; -fx-text-fill: #000000");
         Button addCustomTaskButton = new Button("Add Custom Task");
+        addCustomTaskButton.setStyle("-fx-background-color: #8d8d8d; -fx-text-fill: #000000");
         Button cancelDefaultTaskButton = new Button("Cancel");
+        cancelDefaultTaskButton.setStyle("-fx-background-color: #8d8d8d; -fx-text-fill: #000000");
 
         StackPane overlappingButtons = new StackPane();
         overlappingButtons.getChildren().addAll(taskTitleField, addCustomTaskButton);
@@ -125,10 +128,12 @@ public class TaskListComponent extends VBox {
 
         // Create Edit button to edit label
         Button editButton = new Button("Edit");
+        editButton.setStyle("-fx-background-color: #8d8d8d; -fx-text-fill: #000000");
         editButton.setMinWidth(50);
         editButton.setMaxWidth(50);
         TextField nameField = new TextField(nameLabel.getText());
         Button saveButton = new Button("Save");
+        saveButton.setStyle("-fx-background-color: #8d8d8d; -fx-text-fill: #000000");
         saveButton.setMinWidth(50);
         saveButton.setMaxWidth(50);
 
@@ -151,6 +156,7 @@ public class TaskListComponent extends VBox {
 
         // Create delete button
         Button deleteButton = new Button("X");
+        deleteButton.setStyle("-fx-background-color: #8d8d8d; -fx-text-fill: #000000");
         deleteButton.setOnAction(event -> {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setHeaderText("Delete Task List");
