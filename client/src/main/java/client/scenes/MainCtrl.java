@@ -18,6 +18,7 @@ package client.scenes;
 import commons.Task;
 import client.utils.ServerUtils;
 import commons.Board;
+import javafx.collections.ObservableList;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -115,6 +116,10 @@ public class MainCtrl {
 
     public Stage getPrimaryStage() {
         return primaryStage;
+    }
+
+    public void stop(){
+        server.stop();
     }
     public void showConnect() {
         primaryStage.setTitle("Connect: select a hostname");

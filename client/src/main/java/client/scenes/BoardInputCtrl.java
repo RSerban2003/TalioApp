@@ -117,6 +117,7 @@ public class BoardInputCtrl {
     public void cancel() {
         clearFields();
         mainCtrl.showConnect();
+        server.stop();
     }
 
     public void admin(){

@@ -45,4 +45,7 @@ public class ListBoardComponent extends AnchorPane {
             getChildren().add(hbox);
         });
     }
+    public void refresh() {
+        update(listBoard.get());
+    }
 }
