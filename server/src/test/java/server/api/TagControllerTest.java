@@ -70,6 +70,10 @@ public class TagControllerTest {
         Map<String, String> body = new HashMap<>();
         body.put("name", "Tag2");
 
+        when(boardRepository.findById(1L)).thenReturn(Optional.of(board));
+        when(tagRepository.save(any(Tag.class))).thenAnswer(i -> i.getArguments()[0]);
+
+
         ResponseEntity<?> response = tagController.createTag(body, 1L);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -87,6 +91,9 @@ public class TagControllerTest {
         Map<String, String> body = new HashMap<>();
         body.put("name", "editedTag");
 
+        when(tagRepository.findById(2L)).thenReturn(Optional.of(tag));
+        when(tagRepository.save(any(Tag.class))).thenAnswer(i -> i.getArguments()[0]);
+
         ResponseEntity<?> response = tagController.editTag(body, 1L, 2L);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -99,6 +106,8 @@ public class TagControllerTest {
         Tag tag = new Tag(2L,"tag1");
         board.addTag(tag);
         tag.setBoard(board);
+
+        when(tagRepository.findById(2L)).thenReturn(Optional.of(tag));
 
         ResponseEntity<?> response = tagController.deleteTag(1L, 2L);
 
@@ -118,6 +127,9 @@ public class TagControllerTest {
         board.addTag(tag);
         tag.setBoard(board);
 
+        when(tagRepository.findById(4L)).thenReturn(Optional.of(tag));
+        when(taskRepository.findById(3L)).thenReturn(Optional.of(task));
+
         ResponseEntity<?> response = tagController.addTag(1L, 2L, 3L, 4L);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -135,6 +147,9 @@ public class TagControllerTest {
         board.addTag(tag);
         tag.setBoard(board);
         task.addTag(tag);
+
+        when(tagRepository.findById(4L)).thenReturn(Optional.of(tag));
+        when(taskRepository.findById(3L)).thenReturn(Optional.of(task));
 
         ResponseEntity<?> response = tagController.removeTag(1L, 2L, 3L, 4L);
 
