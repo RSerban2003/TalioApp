@@ -56,4 +56,20 @@ public class TaskTest {
         task.setTaskList(taskList);
         assertEquals(taskList, task.getTaskList());
     }
+    @Test
+    public void testConstructorWithIndex() {
+        // Given
+        Long id = 1L;
+        String name = "Task 1";
+        String description = "This is a task";
+        int index = 0;
+
+        // When
+        Task task = new Task(id, name, description, index);
+
+        // Then
+        assertEquals(id, task.getId());
+        assertEquals(name, task.getName());
+        assertEquals(description, task.getDescription());
+    }
 }
