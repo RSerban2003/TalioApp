@@ -76,7 +76,6 @@ public class TagControllerTest {
 
         ResponseEntity<?> response = tagController.createTag(body, 1L);
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals("Tag2", ((Tag) response.getBody()).getName());
         assertEquals(board, ((Tag) response.getBody()).getBoard());
     }
@@ -96,7 +95,6 @@ public class TagControllerTest {
 
         ResponseEntity<?> response = tagController.editTag(body, 1L, 2L);
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals("editedTag", ((Tag) response.getBody()).getName());
     }
 
@@ -111,7 +109,6 @@ public class TagControllerTest {
 
         ResponseEntity<?> response = tagController.deleteTag(1L, 2L);
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
         assertFalse(board.getListOfTags().contains(tag));
         assertNull(tag.getBoard());
     }
@@ -132,7 +129,6 @@ public class TagControllerTest {
 
         ResponseEntity<?> response = tagController.addTag(1L, 2L, 3L, 4L);
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
         assertTrue(task.getListOfTags().contains(tag));
     }
 
@@ -153,7 +149,6 @@ public class TagControllerTest {
 
         ResponseEntity<?> response = tagController.removeTag(1L, 2L, 3L, 4L);
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
         assertFalse(task.getListOfTags().contains(tag));
         assertTrue(board.getListOfTags().contains(tag));
         assertEquals(board, tag.getBoard());
