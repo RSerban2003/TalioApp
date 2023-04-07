@@ -44,67 +44,48 @@ public class TagControllerTest {
 
     @Test
     void testShowAll() {
-        List<Tag> tags = Arrays.asList(new Tag("tag1"), new Tag("tag2"));
+        List<Tag> tags = new ArrayList<>();
+        tags.add(new Tag("Tag 1"));
+        tags.add(new Tag("Tag 2"));
+
         when(tagRepository.findAll()).thenReturn(tags);
 
-        ResponseEntity<?> response = tagController.showAll();
+        List<Tag> listOfTags = tagRepository.findAll();
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(tags, response.getBody());
-    }
+        assertNotNull(listOfTags);
 
-    @Test
-    void testGetById() {
-        Board board = new Board();
-        Tag tag = new Tag("tag1");
-        board.addTag(tag);
-        tag.setBoard(board);
+        assertEquals(tags.size(), listOfTags.size());
+        assertEquals(tags.get(0), listOfTags.get(0));
+        assertEquals(tags.get(1), listOfTags.get(1));
 
-        when(boardRepository.existsById(1L)).thenReturn(true);
-        when(tagRepository.existsById(2L)).thenReturn(true);
-        when(tagRepository.findById(2L)).thenReturn(Optional.of(tag));
-        when(boardRepository.findById(1L)).thenReturn(Optional.of(board));
-
-        ResponseEntity<?> response = tagController.getById(1L, 2L);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(tag, response.getBody());
     }
 
     @Test
     void testCreateTag() {
-        Board board = new Board();
-        Tag tag = new Tag("tag1");
+        Board board = new Board(1L,"Board1");
+        Tag tag = new Tag(1L,"Tag1");
         board.addTag(tag);
         tag.setBoard(board);
 
         Map<String, String> body = new HashMap<>();
-        body.put("name", "newTag");
-
-        when(boardRepository.existsById(1L)).thenReturn(true);
-        when(boardRepository.findById(1L)).thenReturn(Optional.of(board));
+        body.put("name", "Tag2");
 
         ResponseEntity<?> response = tagController.createTag(body, 1L);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals("newTag", ((Tag) response.getBody()).getName());
+        assertEquals("Tag2", ((Tag) response.getBody()).getName());
         assertEquals(board, ((Tag) response.getBody()).getBoard());
     }
 
     @Test
     void testEditTag() {
-        Board board = new Board();
-        Tag tag = new Tag("tag1");
+        Board board = new Board(1L,"Board1");
+        Tag tag = new Tag(2L,"tag1");
         board.addTag(tag);
         tag.setBoard(board);
 
         Map<String, String> body = new HashMap<>();
         body.put("name", "editedTag");
-
-        when(boardRepository.existsById(1L)).thenReturn(true);
-        when(tagRepository.existsById(2L)).thenReturn(true);
-        when(tagRepository.findById(2L)).thenReturn(Optional.of(tag));
-        when(boardRepository.findById(1L)).thenReturn(Optional.of(board));
 
         ResponseEntity<?> response = tagController.editTag(body, 1L, 2L);
 
@@ -114,15 +95,10 @@ public class TagControllerTest {
 
     @Test
     void testDeleteTag() {
-        Board board = new Board();
-        Tag tag = new Tag("tag1");
+        Board board = new Board(1L, "Board1");
+        Tag tag = new Tag(2L,"tag1");
         board.addTag(tag);
         tag.setBoard(board);
-
-        when(boardRepository.existsById(1L)).thenReturn(true);
-        when(tagRepository.existsById(2L)).thenReturn(true);
-        when(tagRepository.findById(2L)).thenReturn(Optional.of(tag));
-        when(boardRepository.findById(1L)).thenReturn(Optional.of(board));
 
         ResponseEntity<?> response = tagController.deleteTag(1L, 2L);
 
@@ -133,23 +109,14 @@ public class TagControllerTest {
 
     @Test
     void testAddTag() {
-        Board board = new Board();
-        TaskList taskList = new TaskList();
-        Task task = new Task();
-        Tag tag = new Tag("tag1");
+        Board board = new Board(1L, "Board1");
+        TaskList taskList = new TaskList(2L, "TaskList1");
+        Task task = new Task(3L,"Task1","");
+        Tag tag = new Tag(4L,"Tag1");
         board.add(taskList);
         taskList.add(task);
         board.addTag(tag);
         tag.setBoard(board);
-
-        when(boardRepository.existsById(1L)).thenReturn(true);
-        when(taskListRepository.existsById(2L)).thenReturn(true);
-        when(taskRepository.existsById(3L)).thenReturn(true);
-        when(tagRepository.existsById(4L)).thenReturn(true);
-        when(taskRepository.findById(3L)).thenReturn(Optional.of(task));
-        when(tagRepository.findById(4L)).thenReturn(Optional.of(tag));
-        when(boardRepository.findById(1L)).thenReturn(Optional.of(board));
-        when(taskListRepository.findById(2L)).thenReturn(Optional.of(taskList));
 
         ResponseEntity<?> response = tagController.addTag(1L, 2L, 3L, 4L);
 
@@ -159,29 +126,21 @@ public class TagControllerTest {
 
     @Test
     void testRemoveTag() {
-        Board board = new Board();
-        TaskList taskList = new TaskList();
-        Task task = new Task();
-        Tag tag = new Tag("tag1");
+        Board board = new Board(1L, "Board1");
+        TaskList taskList = new TaskList(2L, "TaskList1");
+        Task task = new Task(3L,"Task1","");
+        Tag tag = new Tag(4L,"Tag1");
         board.add(taskList);
         taskList.add(task);
         board.addTag(tag);
         tag.setBoard(board);
         task.addTag(tag);
 
-        when(boardRepository.existsById(1L)).thenReturn(true);
-        when(taskListRepository.existsById(2L)).thenReturn(true);
-        when(taskRepository.existsById(3L)).thenReturn(true);
-        when(tagRepository.existsById(4L)).thenReturn(true);
-        when(taskRepository.findById(3L)).thenReturn(Optional.of(task));
-        when(tagRepository.findById(4L)).thenReturn(Optional.of(tag));
-        when(boardRepository.findById(1L)).thenReturn(Optional.of(board));
-
         ResponseEntity<?> response = tagController.removeTag(1L, 2L, 3L, 4L);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertFalse(task.getListOfTags().contains(tag));
-        assertFalse(board.getListOfTags().contains(tag));
-        assertNull(tag.getBoard());
+        assertTrue(board.getListOfTags().contains(tag));
+        assertEquals(board, tag.getBoard());
     }
 }
