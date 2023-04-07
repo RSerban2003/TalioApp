@@ -33,7 +33,6 @@ public class Task {
     @JoinColumn(name = "tasklist_id")
     private TaskList taskList;
 
-    @JsonIgnore
     @ManyToMany(mappedBy = "listOfTasks", cascade = CascadeType.ALL)
     private List<Tag> listOfTags;
 
