@@ -208,11 +208,14 @@ public class TagController {
 
         taskRepository.save(task);
         tagRepository.save(tag);
+        boardRepository.save(board);
 
         Task retTask = taskRepository.findById(taskId).get();
+        Board retBoard = boardRepository.findById(boardId).get();
 
         // send update to clients
         msgs.convertAndSend("/topic/"+ boardId + "/" + listId + "/" + taskId, retTask);
+        msgs.convertAndSend("/topic/"+ boardId, retBoard);
 
         return ResponseEntity.ok(task);
     }
