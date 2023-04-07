@@ -71,7 +71,7 @@ public class TagControllerTest {
         body.put("name", "Tag2");
 
         when(boardRepository.findById(1L)).thenReturn(Optional.of(board));
-        when(tagRepository.save(any(Tag.class))).thenAnswer(i -> i.getArguments()[0]);
+        when(tagRepository.findById(2L)).thenReturn(Optional.of(tag));
 
 
         ResponseEntity<?> response = tagController.createTag(body, 1L);
@@ -91,7 +91,7 @@ public class TagControllerTest {
         body.put("name", "editedTag");
 
         when(tagRepository.findById(2L)).thenReturn(Optional.of(tag));
-        when(tagRepository.save(any(Tag.class))).thenAnswer(i -> i.getArguments()[0]);
+        when(boardRepository.findById(1L)).thenReturn(Optional.of(board));
 
         ResponseEntity<?> response = tagController.editTag(body, 1L, 2L);
 
@@ -106,6 +106,7 @@ public class TagControllerTest {
         tag.setBoard(board);
 
         when(tagRepository.findById(2L)).thenReturn(Optional.of(tag));
+        when(boardRepository.findById(1L)).thenReturn(Optional.of(board));
 
         ResponseEntity<?> response = tagController.deleteTag(1L, 2L);
 

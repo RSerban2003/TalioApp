@@ -24,7 +24,11 @@ public class Tag {
 
     @JsonIgnore
     @ManyToMany
-    @JoinColumn(name = "task_id")
+    @JoinTable(
+            name = "task_tag",
+            joinColumns = @JoinColumn(name = "tag_id"),
+            inverseJoinColumns = @JoinColumn(name = "task_id")
+    )
     private List<Task> listOfTasks;
 
     @JsonIgnore

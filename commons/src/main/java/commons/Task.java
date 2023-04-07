@@ -34,6 +34,11 @@ public class Task {
     private TaskList taskList;
 
     @ManyToMany(mappedBy = "listOfTasks", cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "task_tag",
+            joinColumns = @JoinColumn(name = "task_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
     private List<Tag> listOfTags;
 
     @Column
