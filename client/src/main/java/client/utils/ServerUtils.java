@@ -66,25 +66,6 @@ public class ServerUtils {
         WSSERVER = "ws://" + hostname + ":8080/";
         hostName = hostname;
     }
-<<<<<<< HEAD
-    public void getQuotesTheHardWay() throws IOException {
-        var url = new URL("http://localhost:8080/api/quotes");
-        var is = url.openConnection().getInputStream();
-        var br = new BufferedReader(new InputStreamReader(is));
-        String line;
-        while ((line = br.readLine()) != null) {
-            System.out.println(line);
-        }
-    }
-
-    public List<Quote> getQuotes() {
-        return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/quotes") //
-                .request(APPLICATION_JSON) //
-                .accept(APPLICATION_JSON) //
-                .get(new GenericType<List<Quote>>() {});
-    }
-
     private static ExecutorService EXEC;
 
     public void registerForUpdates(Consumer<Board> consumer) {
@@ -112,16 +93,6 @@ public class ServerUtils {
     public void stop() {
         EXEC.shutdownNow();
     }
-
-    public Quote addQuote(Quote quote) {
-        return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/quotes") //
-                .request(APPLICATION_JSON) //
-                .accept(APPLICATION_JSON) //
-                .post(Entity.entity(quote, APPLICATION_JSON), Quote.class);
-    }
-=======
->>>>>>> main
 
     public boolean ping() {
         ClientConfig config = new ClientConfig();
