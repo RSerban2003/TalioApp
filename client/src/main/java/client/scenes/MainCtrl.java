@@ -117,7 +117,6 @@ public class MainCtrl {
     public Stage getPrimaryStage() {
         return primaryStage;
     }
-
     public void showConnect() {
         primaryStage.setTitle("Connect: select a hostname");
         primaryStage.setScene(connect);
