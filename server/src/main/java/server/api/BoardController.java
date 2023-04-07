@@ -102,4 +102,8 @@ public class BoardController {
     static boolean isNullOrEmpty(String s) {
         return s == null || s.isEmpty();
     }
+
+    public void setLongPollingController(LongPollingController longPollingController) {
+        this.longPollingController = longPollingController;
+    }
 }

@@ -72,9 +72,6 @@ public class ServerUtils {
         if (EXEC == null || EXEC.isShutdown()) {
             EXEC = Executors.newSingleThreadExecutor();
         }
-        if (!EXEC.isShutdown()){
-            EXEC = Executors.newSingleThreadExecutor();
-        }
         EXEC.submit(() -> {
             while (!Thread.interrupted()) {
                 var res = ClientBuilder.newClient(new ClientConfig())
