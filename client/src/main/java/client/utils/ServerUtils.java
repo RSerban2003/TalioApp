@@ -87,9 +87,12 @@ public class ServerUtils {
                 .get(new GenericType<List<Quote>>() {});
     }
 
-    private static ExecutorService EXEC = Executors.newSingleThreadExecutor();;
+    private static ExecutorService EXEC;
 
     public void registerForUpdates(Consumer<Board> consumer) {
+        if (EXEC == null || EXEC.isShutdown()) {
+            EXEC = Executors.newSingleThreadExecutor();
+        }
         if (!EXEC.isShutdown()){
             EXEC = Executors.newSingleThreadExecutor();
         }
@@ -104,7 +107,6 @@ public class ServerUtils {
                     var board = res.readEntity(Board.class);
                     consumer.accept(board);
                 }
-                System.out.println("polling");
             }
         });
     }
