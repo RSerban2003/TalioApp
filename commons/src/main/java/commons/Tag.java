@@ -1,6 +1,7 @@
 package commons;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -22,8 +23,8 @@ public class Tag {
     @Column(name = "NAME")
     private String name;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "tag", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    @OneToMany(mappedBy = "tag", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TaskTag> taskTags;
 
     @JsonIgnore
@@ -62,12 +63,12 @@ public class Tag {
         this.name = name;
     }
 
-    public List<TaskTag> getListOfTasks() {
+    public List<TaskTag> getTaskTags() {
         return taskTags;
     }
 
-    public void setListOfTasks(List<TaskTag> listOfTasks) {
-        this.taskTags = listOfTasks;
+    public void setTaskTags(List<TaskTag> taskTags) {
+        this.taskTags = taskTags;
     }
 
     public void addTask(TaskTag taskTag) {

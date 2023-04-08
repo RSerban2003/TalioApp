@@ -32,12 +32,13 @@ public class BoardController {
     }
 
     @GetMapping("/{id}/get")
-    public ResponseEntity<Board> getBoardById(@PathVariable Long id) {
+    public ResponseEntity<?> getBoardById(@PathVariable Long id) {
         Board board = boardRepository.findById(id).orElse(null);
         if (board == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(board);
+        Board retBoard = boardRepository.findById(id).get();
+        return ResponseEntity.ok(retBoard);
     }
 
     @PutMapping(path = {"{board}/patch"})

@@ -1,6 +1,7 @@
 package commons;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -32,9 +33,8 @@ public class Task {
     @ManyToOne
     @JoinColumn(name = "tasklist_id")
     private TaskList taskList;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TaskTag> taskTags;
 
     @Column
@@ -120,14 +120,33 @@ public class Task {
 
     public void addTag(TaskTag taskTag) {
         this.taskTags.add(taskTag);
+        taskTag.setTask(this);
     }
+
     public void removeTag(TaskTag taskTag) {
         if(!taskTags.contains(taskTag)) return;
         taskTags.remove(taskTag);
+        taskTag.setTask(null);
     }
 
-    public List<TaskTag> getListOfTags () {
+    public void setNestedTasks(List<NestedTask> nestedTasks) {
+        this.nestedTasks = nestedTasks;
+    }
+
+    public List<TaskTag> getTaskTags() {
         return taskTags;
+    }
+
+    public void setTaskTags(List<TaskTag> taskTags) {
+        this.taskTags = taskTags;
+    }
+
+    public Integer getIndex() {
+        return index;
+    }
+
+    public void setIndex(Integer index) {
+        this.index = index;
     }
 
     @Override

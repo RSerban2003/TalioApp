@@ -1,19 +1,23 @@
 package commons;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "task_tag")
 public class TaskTag {
-
+    @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "task_id")
     private Task task;
-
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "tag_id")
     private Tag tag;

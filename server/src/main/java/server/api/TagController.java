@@ -74,7 +74,7 @@ public class TagController {
         // send update to clients
         msgs.convertAndSend("/topic/" + boardId, retBoard);
 
-        return ResponseEntity.ok(tag);
+        return ResponseEntity.ok(retBoard);
     }
 
     @PostMapping("/{tag}/edit-tag")
@@ -101,7 +101,7 @@ public class TagController {
         // send update to clients
         Board retBoard = boardRepository.findById(boardId).get();
         msgs.convertAndSend("/topic/" + boardId, retBoard);
-        for (TaskTag taskTag : tag.getListOfTasks()) {
+        for (TaskTag taskTag : tag.getTaskTags()) {
             taskTag.setTagName(body.get("name"));
             taskRepository.save(taskTag.getTask());
             msgs.convertAndSend("/topic/" + boardId + "/" + taskTag.getTask().getTaskList().getId() + "/" + taskTag.getTask().getId(), taskTag.getTask());
@@ -128,7 +128,7 @@ public class TagController {
         t.setBoard(null);
 
         // remove the tag from all the tasks, save the tasks and send update to clients
-        for(TaskTag taskTag : t.getListOfTasks()) {
+        for(TaskTag taskTag : t.getTaskTags()) {
             Tag tag = taskTag.getTag();
             Task task = taskTag.getTask();
             tag.removeTask(taskTag);
@@ -210,7 +210,7 @@ public class TagController {
         if(!board.getListOfTags().contains(tag)) return  ResponseEntity.badRequest().build();
 
         // remove the tag from the task and save the changes
-        for(TaskTag taskTag : task.getListOfTags()) {
+        for(TaskTag taskTag : task.getTaskTags()) {
             if(taskTag.getTag().equals(tag)) {
                 task.removeTag(taskTag);
                 tag.removeTask(taskTag);

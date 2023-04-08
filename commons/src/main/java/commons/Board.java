@@ -22,7 +22,6 @@ public class Board {
     private String title;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
-    @OrderColumn(name = "index")
     private List<Tag> listOfTags;
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
     private List<TaskList> listOfTaskList;

@@ -98,7 +98,7 @@ public class CardController {
         if (task.getTaskList().getId() != listId) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Task not part of tasklist");
 
         // Iterate over the TaskTags and remove the relationship
-        for (TaskTag taskTag : task.getListOfTags()) {
+        for (TaskTag taskTag : task.getTaskTags()) {
             Tag tag = taskTag.getTag();
             tag.removeTask(taskTag);
             task.removeTag(taskTag);
