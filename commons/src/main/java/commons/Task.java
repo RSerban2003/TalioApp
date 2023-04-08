@@ -33,13 +33,9 @@ public class Task {
     @JoinColumn(name = "tasklist_id")
     private TaskList taskList;
 
-    @ManyToMany(mappedBy = "listOfTasks", cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "task_tag",
-            joinColumns = @JoinColumn(name = "task_id"),
-            inverseJoinColumns = @JoinColumn(name = "tag_id")
-    )
-    private List<Tag> listOfTags;
+    @JsonIgnore
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
+    private List<TaskTag> taskTags;
 
     @Column
     private Integer index;
@@ -50,7 +46,7 @@ public class Task {
         this.description = description;
         this.nestedTasks = new ArrayList<>();
         this.index = -1;
-        this.listOfTags = new ArrayList<>();
+        this.taskTags = new ArrayList<>();
     }
     public Task(Long id, String name, String description, int index) {
         this.id = id;
@@ -58,18 +54,18 @@ public class Task {
         this.description = description;
         this.nestedTasks = new ArrayList<>();
         this.index = index;
-        this.listOfTags = new ArrayList<>();
+        this.taskTags = new ArrayList<>();
     }
 
     public Task() {
         this.nestedTasks = new ArrayList<>();
-        this.listOfTags = new ArrayList<>();
+        this.taskTags = new ArrayList<>();
     }
 
     public Task(String name, String description) {
         this.name = name;
         this.description = description;
-        this.listOfTags = new ArrayList<>();
+        this.taskTags = new ArrayList<>();
         this.nestedTasks = new ArrayList<>();
     }
 
@@ -122,16 +118,16 @@ public class Task {
         this.taskList = taskList;
     }
 
-    public void addTag(Tag tag) {
-        this.listOfTags.add(tag);
+    public void addTag(TaskTag taskTag) {
+        this.taskTags.add(taskTag);
     }
-    public void removeTag(Tag tag) {
-        if(!listOfTags.contains(tag)) return;
-        listOfTags.remove(tag);
+    public void removeTag(TaskTag taskTag) {
+        if(!taskTags.contains(taskTag)) return;
+        taskTags.remove(taskTag);
     }
 
-    public List<Tag> getListOfTags () {
-        return listOfTags;
+    public List<TaskTag> getListOfTags () {
+        return taskTags;
     }
 
     @Override

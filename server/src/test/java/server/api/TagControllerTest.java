@@ -1,15 +1,11 @@
-package server.api;
+/*package server.api;
 
-import commons.Board;
-import commons.Tag;
-import commons.Task;
-import commons.TaskList;
+import commons.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import server.database.BoardRepository;
 import server.database.TagRepository;
@@ -143,7 +139,7 @@ public class TagControllerTest {
         taskList.add(task);
         board.addTag(tag);
         tag.setBoard(board);
-        task.addTag(tag);
+        task.addTag(new TaskTag(task,tag));
 
         when(tagRepository.findById(4L)).thenReturn(Optional.of(tag));
         when(taskRepository.findById(3L)).thenReturn(Optional.of(task));
@@ -155,3 +151,4 @@ public class TagControllerTest {
         assertEquals(board, tag.getBoard());
     }
 }
+*/

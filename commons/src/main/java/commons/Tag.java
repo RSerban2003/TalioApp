@@ -23,13 +23,8 @@ public class Tag {
     private String name;
 
     @JsonIgnore
-    @ManyToMany
-    @JoinTable(
-            name = "task_tag",
-            joinColumns = @JoinColumn(name = "tag_id"),
-            inverseJoinColumns = @JoinColumn(name = "task_id")
-    )
-    private List<Task> listOfTasks;
+    @OneToMany(mappedBy = "tag", cascade = CascadeType.ALL)
+    private List<TaskTag> taskTags;
 
     @JsonIgnore
     @ManyToOne
@@ -37,18 +32,18 @@ public class Tag {
     private Board board;
 
     public Tag () {
-        this.listOfTasks = new ArrayList<>();
+        this.taskTags = new ArrayList<>();
     }
 
     public Tag(String name) {
         this.name = name;
-        this.listOfTasks = new ArrayList<>();
+        this.taskTags = new ArrayList<>();
     }
 
     public Tag (Long id, String name) {
         this.id = id;
         this.name = name;
-        this.listOfTasks = new ArrayList<>();
+        this.taskTags = new ArrayList<>();
     }
 
     public Long getId() {
@@ -67,21 +62,21 @@ public class Tag {
         this.name = name;
     }
 
-    public List<Task> getListOfTasks() {
-        return listOfTasks;
+    public List<TaskTag> getListOfTasks() {
+        return taskTags;
     }
 
-    public void setListOfTasks(List<Task> listOfTasks) {
-        this.listOfTasks = listOfTasks;
+    public void setListOfTasks(List<TaskTag> listOfTasks) {
+        this.taskTags = listOfTasks;
     }
 
-    public void addTask(Task task) {
-        if(listOfTasks.contains(task)) return;
-        listOfTasks.add(task);
+    public void addTask(TaskTag taskTag) {
+        if(taskTags.contains(taskTag)) return;
+        taskTags.add(taskTag);
     }
-    public void removeTask(Task task) {
-        if(!listOfTasks.contains(task)) return;
-        listOfTasks.remove(task);
+    public void removeTask(TaskTag taskTag) {
+        if(!taskTags.contains(taskTag)) return;
+        taskTags.remove(taskTag);
     }
 
     public void setBoard(Board board) {

@@ -6,7 +6,10 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import server.database.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/boards/{board}")
@@ -98,11 +101,10 @@ public class TagController {
         // send update to clients
         Board retBoard = boardRepository.findById(boardId).get();
         msgs.convertAndSend("/topic/" + boardId, retBoard);
-
-        for (Task retTask : tag.getListOfTasks()) {
-            retTask.getListOfTags().get(retTask.getListOfTags().indexOf(tag)).setName(body.get("name"));
-            taskRepository.save(retTask);
-            msgs.convertAndSend("/topic/" + boardId + "/" + retTask.getTaskList().getId() + "/" + retTask.getId(), retTask);
+        for (TaskTag taskTag : tag.getListOfTasks()) {
+            taskTag.setTagName(body.get("name"));
+            taskRepository.save(taskTag.getTask());
+            msgs.convertAndSend("/topic/" + boardId + "/" + taskTag.getTask().getTaskList().getId() + "/" + taskTag.getTask().getId(), taskTag.getTask());
         }
 
         return ResponseEntity.ok(tag);
@@ -126,10 +128,14 @@ public class TagController {
         t.setBoard(null);
 
         // remove the tag from all the tasks, save the tasks and send update to clients
-        for(Task retTask : t.getListOfTasks()) {
-            retTask.getListOfTags().remove(t);
-            taskRepository.save(retTask);
-            msgs.convertAndSend("/topic/" + boardId + "/" + retTask.getTaskList().getId() + "/" + retTask.getId(), retTask);
+        for(TaskTag taskTag : t.getListOfTasks()) {
+            Tag tag = taskTag.getTag();
+            Task task = taskTag.getTask();
+            tag.removeTask(taskTag);
+            task.removeTag(taskTag);
+            taskRepository.save(task);
+            tagRepository.save(tag);
+            msgs.convertAndSend("/topic/" + boardId + "/" + task.getTaskList().getId() + "/" + task.getId(), task);
         }
 
         // delete the tag from the repository and save the board
@@ -166,8 +172,9 @@ public class TagController {
         if(!board.getListOfTags().contains(tag)) return  ResponseEntity.badRequest().build();
 
         // assign the tag to the task and save the changes
-        task.addTag(tag);
-        tag.addTask(task);
+        TaskTag taskTag = new TaskTag(task, tag);
+        task.addTag(taskTag);
+        tag.addTask(taskTag);
 
         tagRepository.save(tag);
         taskRepository.save(task);
@@ -203,8 +210,13 @@ public class TagController {
         if(!board.getListOfTags().contains(tag)) return  ResponseEntity.badRequest().build();
 
         // remove the tag from the task and save the changes
-        task.removeTag(tag);
-        tag.removeTask(task);
+        for(TaskTag taskTag : task.getListOfTags()) {
+            if(taskTag.getTag().equals(tag)) {
+                task.removeTag(taskTag);
+                tag.removeTask(taskTag);
+                break;
+            }
+        }
 
         taskRepository.save(task);
         tagRepository.save(tag);

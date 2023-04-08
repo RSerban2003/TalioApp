@@ -1,15 +1,13 @@
 package server.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import commons.Board;
-import commons.Tag;
-import commons.Task;
-import commons.TaskList;
+import commons.*;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.database.BoardRepository;
+import server.database.TagRepository;
 import server.database.TaskListRepository;
 import server.database.TaskRepository;
 import java.util.Map;
@@ -22,6 +20,8 @@ public class CardController {
     private final TaskListRepository taskListRepository;
     private final TaskRepository taskRepository;
     private final BoardRepository boardRepository;
+
+    private TagRepository tagRepository;
     private SimpMessagingTemplate msgs;
 
     public CardController(BoardRepository boardRepository, TaskListRepository taskListRepository, TaskRepository taskRepository, SimpMessagingTemplate msgs) {
@@ -97,9 +97,13 @@ public class CardController {
         TaskList taskList = taskListRepository.findById(listId).get();
         if (task.getTaskList().getId() != listId) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Task not part of tasklist");
 
-        for(Tag tag : task.getListOfTags()) {
-            tag.removeTask(task);
-            task.removeTag(tag);
+        // Iterate over the TaskTags and remove the relationship
+        for (TaskTag taskTag : task.getListOfTags()) {
+            Tag tag = taskTag.getTag();
+            tag.removeTask(taskTag);
+            task.removeTag(taskTag);
+            tagRepository.save(tag);
+            taskRepository.save(task);
         }
 
         // update the taskList and save
