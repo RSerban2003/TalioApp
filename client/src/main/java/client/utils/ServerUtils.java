@@ -16,6 +16,7 @@
 package client.utils;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
+import static java.net.HttpURLConnection.HTTP_OK;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -26,6 +27,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
 import commons.*;
@@ -61,6 +64,30 @@ public class ServerUtils {
         SERVER = "http://" + hostname + ":8080/";
         WSSERVER = "ws://" + hostname + ":8080/";
         hostName = hostname;
+    }
+    private static ExecutorService EXEC;
+
+    public void registerForUpdates(Consumer<Board> consumer) {
+        if (EXEC == null || EXEC.isShutdown()) {
+            EXEC = Executors.newSingleThreadExecutor();
+        }
+        EXEC.submit(() -> {
+            while (!Thread.interrupted()) {
+                var res = ClientBuilder.newClient(new ClientConfig())
+                        .target(SERVER).path("api/boards/polling/updates")
+                        .request(APPLICATION_JSON)
+                        .accept(APPLICATION_JSON)
+                        .get(Response.class);
+                if (res.getStatus() == HTTP_OK) {
+                    var board = res.readEntity(Board.class);
+                    consumer.accept(board);
+                }
+            }
+        });
+    }
+
+    public void stop() {
+        EXEC.shutdownNow();
     }
 
     public boolean ping() {

@@ -18,8 +18,6 @@ import org.glassfish.jersey.client.ClientConfig;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
@@ -92,11 +90,11 @@ public class BoardInputCtrl {
                 ioe.printStackTrace();
             }
             mainCtrl.updateBoard(board);
-            } catch (ProcessingException e) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setContentText("Failed to retrieve board: " + e.getMessage());
-                alert.showAndWait();
-            }
+        } catch (ProcessingException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("Failed to retrieve board: " + e.getMessage());
+            alert.showAndWait();
+        }
     }
 
     public void keyPressed(KeyEvent e) {
@@ -119,6 +117,7 @@ public class BoardInputCtrl {
     public void cancel() {
         clearFields();
         mainCtrl.showConnect();
+        server.stop();
     }
 
     public void admin(){

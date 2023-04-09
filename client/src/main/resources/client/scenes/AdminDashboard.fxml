@@ -89,7 +89,7 @@
                                     <children>
                                         <VBox fx:id="boardVBox" prefHeight="508.0" prefWidth="735.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                             <children>
-                                                <ScrollPane hbarPolicy="ALWAYS">
+                                                <ScrollPane hbarPolicy="ALWAYS" VBox.vgrow="ALWAYS">
                                                     <content>
                                                         <AnchorPane fx:id="boardAnchor" />
                                                     </content>

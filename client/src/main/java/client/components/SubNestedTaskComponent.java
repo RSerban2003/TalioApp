@@ -2,16 +2,13 @@ package client.components;
 
 import client.scenes.MainCtrl;
 import client.utils.ServerUtils;
-import commons.Board;
 import commons.NestedTask;
 import commons.Task;
-import commons.TaskList;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 

@@ -1,6 +1,5 @@
 package client.components;
 
-import client.scenes.BoardCtrl;
 import client.utils.ServerUtils;
 import client.scenes.MainCtrl;
 import commons.Board;
