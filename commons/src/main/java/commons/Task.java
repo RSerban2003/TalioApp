@@ -56,11 +56,16 @@ public class Task {
         this.index = index;
     }
 
-    public Task() {}
+    public Task() {
+        this.nestedTasks = new ArrayList<>();
+        this.tagList = new ArrayList<>();
+    }
 
     public Task(String name, String description) {
         this.name = name;
         this.description = description;
+        this.nestedTasks = new ArrayList<>();
+        this.tagList = new ArrayList<>();
     }
 
     public void add(NestedTask nestedTask){

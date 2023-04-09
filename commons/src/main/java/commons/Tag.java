@@ -39,7 +39,9 @@ public class Tag {
         this.taskList = new ArrayList<>();
     }
 
-    public Tag() {}
+    public Tag() {
+        this.taskList = new ArrayList<>();
+    }
 
     public Tag(String name) {
         this.name = name;

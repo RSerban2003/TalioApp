@@ -56,13 +56,13 @@ public class TagController {
         board.add(tag);
         tag.setBoard(board);
 
-        Tag tag1 = tagRepository.save(tag);
+        tagRepository.save(tag);
 
         Board board1 = boardRepository.findById(boardId).get();
         // send update to client using WebSocket
         msgs.convertAndSend("/topic/" + boardId, board1);
 
-        return ResponseEntity.ok(tag1);
+        return ResponseEntity.ok(tag);
     }
 
     @PostMapping("{tag}/edit-tag")
@@ -77,13 +77,13 @@ public class TagController {
         if (tag.getBoard().getId() != boardId) return ResponseEntity.badRequest().build();
 
         tag.setName(body.get("name"));
-        Tag tag1 = tagRepository.save(tag);
+        tagRepository.save(tag);
 
         Board board1 = boardRepository.findById(boardId).get();
         // send update to client using WebSocket
         msgs.convertAndSend("/topic/" + boardId, board1);
 
-        return ResponseEntity.ok(tag1);
+        return ResponseEntity.ok(tag);
     }
 
     @DeleteMapping("/{tag}/delete-tag")
@@ -122,57 +122,60 @@ public class TagController {
 
     @PostMapping(path = "{list}/{card}/{tag}")
     public ResponseEntity<?> add(@PathVariable("tag") long tagId, @PathVariable("card") long taskId, @PathVariable("list") long listId,@PathVariable("board") long boardId) throws RuntimeException {
-        // check if board, list and task exist
+        // check if board, list, task and tag exist
         if (!boardRepository.existsById(boardId)) return ResponseEntity.notFound().build();
         if (!taskListRepository.existsById(listId)) return ResponseEntity.notFound().build();
         if (!taskRepository.existsById(taskId)) return ResponseEntity.notFound().build();
+        if (!tagRepository.existsById(tagId)) return ResponseEntity.notFound().build();
 
         // check if they are in relation
         Task task = taskRepository.findById(taskId).get();
-        if (task.getTaskList().getId() != listId) return ResponseEntity.badRequest().build();
-        if (task.getTaskList().getBoard().getId() != boardId) return ResponseEntity.badRequest().build();
         Tag tag = tagRepository.findById(tagId).get();
+
         if(task.getTagList().contains(tag)) return ResponseEntity.badRequest().build();
         if (tag.getBoard().getId() != boardId) return ResponseEntity.badRequest().build();
         Board board = boardRepository.findById(boardId).get();
 
         task.add(tag);
         tag.add(task);
-        Task task1 = taskRepository.save(task);
-        Tag tag1 = tagRepository.save(tag);
+        taskRepository.save(task);
+        tagRepository.save(tag);
 
         Board board1 = boardRepository.findById(boardId).get();
+
         // send update to client using WebSocket
         msgs.convertAndSend("/topic/" + boardId, board1);
 
-        return ResponseEntity.ok(task1);
+        return ResponseEntity.ok(tag);
     }
 
     @PostMapping(path = "{list}/{card}/{tag}/remove")
     public ResponseEntity<?> remove(@PathVariable("tag") long tagId, @PathVariable("card") long taskId, @PathVariable("list") long listId,@PathVariable("board") long boardId) throws RuntimeException {
-        // check if board, list and task exist
+        // check if board, list, task and tag exist
         if (!boardRepository.existsById(boardId)) return ResponseEntity.notFound().build();
         if (!taskListRepository.existsById(listId)) return ResponseEntity.notFound().build();
         if (!taskRepository.existsById(taskId)) return ResponseEntity.notFound().build();
+        if (!tagRepository.existsById(tagId)) return ResponseEntity.notFound().build();
 
         // check if they are in relation
         Task task = taskRepository.findById(taskId).get();
-        if (task.getTaskList().getId() != listId) return ResponseEntity.badRequest().build();
-        if (task.getTaskList().getBoard().getId() != boardId) return ResponseEntity.badRequest().build();
         Tag tag = tagRepository.findById(tagId).get();
+
         if(!task.getTagList().contains(tag) || !tag.getTaskList().contains(task)) return ResponseEntity.badRequest().build();
         if (tag.getBoard().getId() != boardId) return ResponseEntity.badRequest().build();
         Board board = boardRepository.findById(boardId).get();
 
         task.remove(tag);
         tag.remove(task);
-        Task task1 = taskRepository.save(task);
-        Tag tag1 = tagRepository.save(tag);
+        Tag returnTag = tag;
+
+        taskRepository.save(task);
+        tagRepository.save(tag);
 
         Board board1 = boardRepository.findById(boardId).get();
         // send update to client using WebSocket
         msgs.convertAndSend("/topic/" + boardId, board1);
 
-        return ResponseEntity.ok(task1);
+        return ResponseEntity.ok(task);
     }
 }
