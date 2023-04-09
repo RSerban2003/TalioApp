@@ -87,7 +87,7 @@ public class TagController {
     }
 
     @DeleteMapping("/{tag}/delete-tag")
-    public ResponseEntity<Object> deleteTask(@PathVariable("tag") long tagId, @PathVariable("board") long boardId) {
+    public ResponseEntity<Object> deleteTag(@PathVariable("tag") long tagId, @PathVariable("board") long boardId) {
 
         // check if the task exists
         if (!boardRepository.existsById(boardId)) return ResponseEntity.notFound().build();

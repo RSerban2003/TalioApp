@@ -76,6 +76,10 @@ public class Task {
         this.nestedTasks.remove(nestedTask);
     }
 
+    public void setTagList(List<Tag> tagList) {
+        this.tagList = tagList;
+    }
+
     public void add(Tag tag){
         tagList.add(tag);
     }
