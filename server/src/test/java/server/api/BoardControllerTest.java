@@ -32,6 +32,8 @@ public class BoardControllerTest {
 
     @InjectMocks
     private BoardController boardController;
+    @InjectMocks
+    private LongPollingController longPollingController;
 
     @BeforeEach
     void setUp() {
@@ -119,6 +121,7 @@ public class BoardControllerTest {
         requestBody.put("name", "Board Name");
         Board board = new Board();
         board.setTitle(requestBody.get("name"));
+        boardController.setLongPollingController(longPollingController);
         when(boardRepository.save(board)).thenReturn(board);
         ResponseEntity<Board> responseEntity = boardController.add(requestBody);
         verify(boardRepository, times(1)).save(board);
