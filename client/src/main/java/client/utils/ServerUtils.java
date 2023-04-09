@@ -285,10 +285,77 @@ public class ServerUtils {
     public boolean addNestedTask(Long boardId, Long taskListId, Long taskId) {
         Client client = ClientBuilder.newClient();
         Map<String, String> body = new HashMap<>();
-        body.put("name", "new Nested Task");
+        body.put("name", "New Subtask");
         Response response = client.target(SERVER).path("api/boards/" + boardId + "/" + taskListId + "/" + taskId + "/nestedTask")
                 .request(APPLICATION_JSON).accept(APPLICATION_JSON)
                 .post(Entity.entity(body, APPLICATION_JSON));
+
+        int status = response.getStatus();
+        response.close();
+        return status == 200;
+    }
+
+    public boolean createTag(Long boardId, String name) {
+        Client client = ClientBuilder.newClient();
+        Map<String, String> body = new HashMap<>();
+        if(name.trim().isEmpty() || name == null) {
+            name = "New Tag";
+        }
+        body.put("name", name);
+
+        Response response = client.target(SERVER).path("api/boards/" + boardId + "/add-tag")
+                .request(APPLICATION_JSON).accept(APPLICATION_JSON)
+                .post(Entity.entity(body, APPLICATION_JSON));
+
+        int status = response.getStatus();
+        response.close();
+        return status == 200;
+    }
+
+    public boolean editTag(Long boardId, Long tagId, String name) {
+        Client client = ClientBuilder.newClient();
+        Map<String, String> body = new HashMap<>();
+        body.put("name", name);
+
+        Response response = client.target(SERVER).path("api/boards/" + boardId + "/" + tagId + "/editTag")
+                .request(APPLICATION_JSON).accept(APPLICATION_JSON)
+                .post(Entity.entity(body, APPLICATION_JSON));
+
+        int status = response.getStatus();
+        response.close();
+        return status == 200;
+    }
+
+    public boolean deleteTag(Long boardId, Long tagId) {
+        Client client = ClientBuilder.newClient();
+
+        Response response = client.target(SERVER).path("api/boards/"+ boardId + "/"+ tagId + "/delete-tag").request().delete();
+
+        int status = response.getStatus();
+        response.close();
+        return status == 200;
+    }
+
+    public boolean addTag(Long boardId, Long listId, Long taskId, Long tagId) {
+        Client client = ClientBuilder.newClient();
+
+        Response response = client.target(SERVER)
+                .path("api/boards/" + boardId + "/" + listId + "/" + taskId + "/" + tagId)
+                .request(APPLICATION_JSON).accept(APPLICATION_JSON)
+                .post(Entity.entity(new HashMap<>(), APPLICATION_JSON));
+
+        int status = response.getStatus();
+        response.close();
+        return status == 200;
+    }
+
+    public boolean removeTag(Long boardId, Long listId, Long taskId, Long tagId) {
+        Client client = ClientBuilder.newClient();
+
+        Response response = client.target(SERVER)
+                .path("api/boards/" + boardId + "/" + listId + "/" + taskId + "/" + tagId + "/remove")
+                .request(APPLICATION_JSON).accept(APPLICATION_JSON)
+                .post(Entity.entity(new HashMap<>(), APPLICATION_JSON));
 
         int status = response.getStatus();
         response.close();
