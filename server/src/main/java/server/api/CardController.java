@@ -1,13 +1,14 @@
 package server.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import commons.*;
+import commons.Board;
+import commons.Task;
+import commons.TaskList;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.database.BoardRepository;
-import server.database.TagRepository;
 import server.database.TaskListRepository;
 import server.database.TaskRepository;
 import java.util.Map;
@@ -20,8 +21,6 @@ public class CardController {
     private final TaskListRepository taskListRepository;
     private final TaskRepository taskRepository;
     private final BoardRepository boardRepository;
-
-    private TagRepository tagRepository;
     private SimpMessagingTemplate msgs;
 
     public CardController(BoardRepository boardRepository, TaskListRepository taskListRepository, TaskRepository taskRepository, SimpMessagingTemplate msgs) {
@@ -39,8 +38,8 @@ public class CardController {
     @GetMapping(path = "/{card}/get")
     public ResponseEntity<?> getById(@PathVariable("card") long cardId) {
         //TODO : do the check if parents are good
-        var TL = taskRepository.findById(cardId);
-        if (TL.isPresent()) return ResponseEntity.ok(taskRepository.findById(cardId).get());
+        var tL = taskRepository.findById(cardId);
+        if (tL.isPresent()) return ResponseEntity.ok(taskRepository.findById(cardId).get());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Task not found");
     }
 
@@ -96,15 +95,6 @@ public class CardController {
         if (!taskListRepository.existsById(listId)) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Tasklist not found");
         TaskList taskList = taskListRepository.findById(listId).get();
         if (task.getTaskList().getId() != listId) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Task not part of tasklist");
-
-        // Iterate over the TaskTags and remove the relationship
-        for (TaskTag taskTag : task.getTaskTags()) {
-            Tag tag = taskTag.getTag();
-            tag.removeTask(taskTag);
-            task.removeTag(taskTag);
-            tagRepository.save(tag);
-            taskRepository.save(task);
-        }
 
         // update the taskList and save
         taskList.remove(task);

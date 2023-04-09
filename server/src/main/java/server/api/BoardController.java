@@ -8,10 +8,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.async.DeferredResult;
 import server.database.BoardRepository;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 @RestController
 @RequestMapping("/api/boards")
@@ -20,10 +23,12 @@ public class BoardController {
     @Autowired
     private BoardRepository boardRepository;
     private SimpMessagingTemplate msgs;
+    private LongPollingController longPollingController;
 
-    public BoardController(BoardRepository boardRepository, SimpMessagingTemplate msgs) {
+    public BoardController(BoardRepository boardRepository, SimpMessagingTemplate msgs, LongPollingController longPollingController) {
         this.boardRepository = boardRepository;
         this.msgs = msgs;
+        this.longPollingController = longPollingController;
     }
 
     @GetMapping(path = {"","/"})
@@ -32,13 +37,12 @@ public class BoardController {
     }
 
     @GetMapping("/{id}/get")
-    public ResponseEntity<?> getBoardById(@PathVariable Long id) {
+    public ResponseEntity<Board> getBoardById(@PathVariable Long id) {
         Board board = boardRepository.findById(id).orElse(null);
         if (board == null) {
             return ResponseEntity.notFound().build();
         }
-        Board retBoard = boardRepository.findById(id).get();
-        return ResponseEntity.ok(retBoard);
+        return ResponseEntity.ok(board);
     }
 
     @PutMapping(path = {"{board}/patch"})
@@ -80,17 +84,26 @@ public class BoardController {
 
     @PostMapping(path ={"/", ""})
     public ResponseEntity<Board> add(@RequestBody Map<String, String> body){
-        if(!body.containsKey("name")){
+        if(!body.containsKey("name") || isNullOrEmpty(body.get("name"))
+                || body.get("name").length() > 20 || body.get("name").length() < 3){
             return ResponseEntity.badRequest().build();
         }
 
         Board board = new Board();
         board.setTitle(body.get("name"));
+
+        // send update to client through long polling
         Board saved = boardRepository.save(board);
+        longPollingController.listeners.forEach((k, v) -> v.accept(saved));
+
         return ResponseEntity.ok(saved);
     }
 
     static boolean isNullOrEmpty(String s) {
         return s == null || s.isEmpty();
+    }
+
+    public void setLongPollingController(LongPollingController longPollingController) {
+        this.longPollingController = longPollingController;
     }
 }

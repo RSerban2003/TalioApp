@@ -1,7 +1,6 @@
 package commons;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -15,37 +14,45 @@ import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 @Entity
 @Table(name = "TAG")
 public class Tag {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
     @Column(name = "NAME")
     private String name;
-
-    @JsonManagedReference
-    @OneToMany(mappedBy = "tag", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<TaskTag> taskTags;
-
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "board_id")
     private Board board;
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(
+            name = "tag_tasks",
+            joinColumns = @JoinColumn(name = "tag_id"),
+            inverseJoinColumns = @JoinColumn(name = "task_id")
+    )
+    private List<Task> taskList;
 
-    public Tag () {
-        this.taskTags = new ArrayList<>();
+    public Tag(Long id, String name, Board board) {
+        this.id = id;
+        this.name = name;
+        this.board = board;
+        this.taskList = new ArrayList<>();
     }
+
+    public Tag() {}
 
     public Tag(String name) {
         this.name = name;
-        this.taskTags = new ArrayList<>();
+        this.taskList = new ArrayList<>();
     }
 
-    public Tag (Long id, String name) {
-        this.id = id;
+    public Tag(String name, Board board) {
         this.name = name;
-        this.taskTags = new ArrayList<>();
+        this.board = board;
+        this.taskList = new ArrayList<>();
     }
+
+
 
     public Long getId() {
         return id;
@@ -63,29 +70,20 @@ public class Tag {
         this.name = name;
     }
 
-    public List<TaskTag> getTaskTags() {
-        return taskTags;
-    }
-
-    public void setTaskTags(List<TaskTag> taskTags) {
-        this.taskTags = taskTags;
-    }
-
-    public void addTask(TaskTag taskTag) {
-        if(taskTags.contains(taskTag)) return;
-        taskTags.add(taskTag);
-    }
-    public void removeTask(TaskTag taskTag) {
-        if(!taskTags.contains(taskTag)) return;
-        taskTags.remove(taskTag);
+    public Board getBoard() {
+        return board;
     }
 
     public void setBoard(Board board) {
         this.board = board;
     }
 
-    public Board getBoard() {
-        return this.board;
+    public List<Task> getTaskList() {
+        return taskList;
+    }
+
+    public void setTaskList(List<Task> taskList) {
+        this.taskList = taskList;
     }
 
     @Override
@@ -103,4 +101,12 @@ public class Tag {
         return ToStringBuilder.reflectionToString(this, MULTI_LINE_STYLE);
     }
 
+    public void add(Task task){
+        taskList.add(task);
+    }
+
+    public void remove(Task task){
+        if(!taskList.contains(task)) return;
+        this.taskList.remove(task);
+    }
 }

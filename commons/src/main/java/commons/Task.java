@@ -1,7 +1,7 @@
 package commons;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -9,6 +9,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
@@ -28,14 +29,12 @@ public class Task {
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
     @OrderColumn(name = "index")
     private List<NestedTask> nestedTasks;
-
+    @ManyToMany(mappedBy = "taskList")
+    private List<Tag> tagList;
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "tasklist_id")
     private TaskList taskList;
-    @JsonManagedReference
-    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<TaskTag> taskTags;
 
     @Column
     private Integer index;
@@ -45,28 +44,23 @@ public class Task {
         this.name = name;
         this.description = description;
         this.nestedTasks = new ArrayList<>();
+        this.tagList = new ArrayList<>();
         this.index = -1;
-        this.taskTags = new ArrayList<>();
     }
     public Task(Long id, String name, String description, int index) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.nestedTasks = new ArrayList<>();
+        this.tagList = new ArrayList<>();
         this.index = index;
-        this.taskTags = new ArrayList<>();
     }
 
-    public Task() {
-        this.nestedTasks = new ArrayList<>();
-        this.taskTags = new ArrayList<>();
-    }
+    public Task() {}
 
     public Task(String name, String description) {
         this.name = name;
         this.description = description;
-        this.taskTags = new ArrayList<>();
-        this.nestedTasks = new ArrayList<>();
     }
 
     public void add(NestedTask nestedTask){
@@ -80,6 +74,19 @@ public class Task {
     public void remove(NestedTask nestedTask){
         if(!nestedTasks.contains(nestedTask)) return;
         this.nestedTasks.remove(nestedTask);
+    }
+
+    public void add(Tag tag){
+        tagList.add(tag);
+    }
+
+    public void remove(Tag tag){
+        if(!tagList.contains(tag)) return;
+        this.tagList.remove(tag);
+    }
+
+    public List<Tag> getTagList() {
+        return tagList;
     }
 
     public void add(int index, NestedTask nestedTask){
@@ -116,37 +123,6 @@ public class Task {
 
     public void setTaskList(TaskList taskList) {
         this.taskList = taskList;
-    }
-
-    public void addTag(TaskTag taskTag) {
-        this.taskTags.add(taskTag);
-        taskTag.setTask(this);
-    }
-
-    public void removeTag(TaskTag taskTag) {
-        if(!taskTags.contains(taskTag)) return;
-        taskTags.remove(taskTag);
-        taskTag.setTask(null);
-    }
-
-    public void setNestedTasks(List<NestedTask> nestedTasks) {
-        this.nestedTasks = nestedTasks;
-    }
-
-    public List<TaskTag> getTaskTags() {
-        return taskTags;
-    }
-
-    public void setTaskTags(List<TaskTag> taskTags) {
-        this.taskTags = taskTags;
-    }
-
-    public Integer getIndex() {
-        return index;
-    }
-
-    public void setIndex(Integer index) {
-        this.index = index;
     }
 
     @Override

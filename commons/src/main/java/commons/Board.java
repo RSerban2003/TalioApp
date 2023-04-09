@@ -3,6 +3,7 @@ package commons;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -22,21 +23,21 @@ public class Board {
     private String title;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
-    private List<Tag> listOfTags;
-    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
     private List<TaskList> listOfTaskList;
+
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+    private List<Tag> tagList;
 
 
     public Board(Long id, String title) {
         this.id = id;
         this.title = title;
         this.listOfTaskList = new ArrayList<>();
-        this.listOfTags = new ArrayList<>();
+        this.tagList = new ArrayList<>();
     }
 
     public Board() {
         this.listOfTaskList = new ArrayList<>();
-        this.listOfTags = new ArrayList<>();
     }
 
     public void setListOfTaskList(List<TaskList> listOfTaskList) {
@@ -66,25 +67,25 @@ public class Board {
         this.listOfTaskList.remove(taskList);
     }
 
+    public void add(Tag tag){
+        tagList.add(tag);
+    }
+
+    public void remove(Tag tag){
+        if (!tagList.contains(tag)) return;
+        this.tagList.remove(tag);
+    }
+
+    public List<Tag> getTagList() {
+        return tagList;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
 
     public Long getId() {
         return id;
-    }
-
-    public void addTag (Tag tag) {
-        this.listOfTags.add(tag);
-    }
-
-    public void removeTag (Tag tag){
-        if(!listOfTags.contains(tag)) return;
-        this.listOfTags.remove(tag);
-    }
-
-    public List<Tag> getListOfTags () {
-        return listOfTags;
     }
 
     @Override
