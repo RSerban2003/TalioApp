@@ -59,8 +59,8 @@ public class SubTagTaskDetailComponent extends VBox {
         GridPane.setHalignment(nameLabel, HPos.CENTER);
         gridPane.add(nameLabel, 0, 0);
         gridPane.add(deleteButton, 1, 0);
-        setMaxSize(tag.getName().length()*15, 40);
-        setMinSize(tag.getName().length()*15, 40);
+        setMaxSize(tag.getName().length()*12, 40);
+        setMinSize(tag.getName().length()*12, 40);
         getChildren().add(gridPane);
         setAlignment(Pos.CENTER);
         setStyle(style);

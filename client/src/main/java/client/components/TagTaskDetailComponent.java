@@ -52,19 +52,17 @@ public class TagTaskDetailComponent extends AnchorPane {
         Platform.runLater(
                 () -> {
                     getChildren().clear();
-                    VBox vBox = new VBox();
                     if(task.getNestedTasks() != null){
                         SubTagTaskDetailComponent[] tags = task.getTagList().stream()
                                 .map((Tag tag1) -> new SubTagTaskDetailComponent(tag1, task.getId(), taskListId, boardId, mainCtrl))
                                 .toArray(SubTagTaskDetailComponent[]::new);
-                        VBox tagContainer = new VBox(tags);
+                        HBox tagContainer = new HBox(tags);
                         tagContainer.setSpacing(10.0);
-                        AnchorPane.setTopAnchor(tagContainer, 150.0);
-                        AnchorPane.setLeftAnchor(tagContainer, 150.0);
-                        vBox.getChildren().add(tagContainer);
+                        AnchorPane.setTopAnchor(tagContainer, 0.0);
+                        AnchorPane.setLeftAnchor(tagContainer, 10.0);
+                        getChildren().clear();
+                        getChildren().add(tagContainer);
                     }
-                    getChildren().clear();
-                    getChildren().add(vBox);
                 });
     }
 
