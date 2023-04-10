@@ -191,8 +191,9 @@ public class TagController {
         Board board1 = boardRepository.findById(boardId).get();
         // send update to client using WebSocket
         msgs.convertAndSend("/topic/" + boardId, board1);
+
         Task retTask = taskRepository.findById(task.getId()).get();
-        msgs.convertAndSend("/topic/"+boardId+"/"+retTask.getTaskList().getId()+"/"+retTask.getId(), retTask);
+        msgs.convertAndSend("/topic/"+boardId+"/"+listId+"/"+taskId, retTask);
 
 
         return ResponseEntity.ok(task);
