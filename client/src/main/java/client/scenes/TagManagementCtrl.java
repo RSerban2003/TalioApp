@@ -99,10 +99,7 @@ public class TagManagementCtrl {
                 event.consume();
             }
         });
-        tagAnchorPane.getChildren().add(tagsVBox);
-        server.registerForMessages("/topic/" + boardID + "/add-tag", Tag.class, t -> {
-            observableTag.set(t);
-        });
+
     }
 
     @FXML
@@ -112,6 +109,10 @@ public class TagManagementCtrl {
         editNameButton.setVisible(true);
         createTagButton.setVisible(true);
         cancelTagButton.setVisible(true);
+        tagAnchorPane.getChildren().add(tagsVBox);
+        server.registerForMessages("/topic/" + boardID + "/add-tag", Tag.class, t -> {
+            observableTag.set(t);
+        });
     }
 
     @FXML
