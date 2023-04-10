@@ -2,6 +2,7 @@ package client.scenes;
 
 import client.components.NestedTaskComponent;
 import client.utils.ServerUtils;
+import client.utils.WebSocketUtils;
 import commons.Task;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
@@ -43,6 +44,8 @@ public class TaskOverviewCtrl {
 
     private ServerUtils server;
 
+    private final WebSocketUtils webSocket;
+
     private MainCtrl mainCtrl;
 
     private String initialTitle;
@@ -57,9 +60,10 @@ public class TaskOverviewCtrl {
     private long taskID;
 
     @Inject
-    public TaskOverviewCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public TaskOverviewCtrl(ServerUtils server, WebSocketUtils webSocket, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
+        this.webSocket = webSocket;
         nestedTaskAnchorPane = new AnchorPane();
         observableTask = new SimpleObjectProperty<Task>();
         nestedTaskComponent = new NestedTaskComponent(observableTask, server, mainCtrl);
@@ -72,7 +76,7 @@ public class TaskOverviewCtrl {
         nestedTaskComponent.setBoardId(boardID);
         nestedTaskComponent.setTaskListId(tasklistID);
         if(boardID != 0) {
-            server.registerForMessages("/topic/" + boardID + "/" + tasklistID + "/" + taskID, Task.class, q -> {
+            webSocket.registerForMessages("/topic/" + boardID + "/" + tasklistID + "/" + taskID, Task.class, q -> {
                 observableTask.set(q);
             });
         }
@@ -142,14 +146,14 @@ public class TaskOverviewCtrl {
             alert.showAndWait();
             return;
         }
-        server.unregisterForMessages("/topic/"+boardID+"/"+tasklistID+"/"+taskID);
+        webSocket.unregisterForMessages("/topic/"+boardID+"/"+tasklistID+"/"+taskID);
         mainCtrl.getPopUpStage().close();
     }
 
     @FXML
     private void onCancelButtonClicked() {
         this.resetFields();
-        server.unregisterForMessages("/topic/"+boardID+"/"+tasklistID+"/"+taskID);
+        webSocket.unregisterForMessages("/topic/"+boardID+"/"+tasklistID+"/"+taskID);
         mainCtrl.getPopUpStage().close();
     }
 

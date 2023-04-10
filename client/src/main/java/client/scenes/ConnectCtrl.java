@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
+import client.utils.WebSocketUtils;
 import commons.Board;
 import commons.ListOfBoards;
 import javafx.application.Platform;
@@ -13,14 +14,16 @@ import javax.inject.Inject;
 
 public class ConnectCtrl {
     private final ServerUtils server;
+    private final WebSocketUtils webSocket;
     private MainCtrl mainCtrl;
     @FXML
     private TextField hostname;
     @FXML
     private Button connect;
     @Inject
-    public ConnectCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public ConnectCtrl(ServerUtils server, WebSocketUtils webSocket, MainCtrl mainCtrl) {
         this.server = server;
+        this.webSocket = webSocket;
         this.mainCtrl = mainCtrl;
     }
     public void connectServer() {
@@ -28,8 +31,8 @@ public class ConnectCtrl {
         if(server.ping()) {
             mainCtrl.showBoard();
             mainCtrl.refreshBoardList();
-            server.establishConnection();
-            server.registerForMessages("/topic/boardView", Board.class, q ->
+            webSocket.establishConnection();
+            webSocket.registerForMessages("/topic/boardView", Board.class, q ->
                     Platform.runLater( () -> mainCtrl.refreshBoardList()));
         }
         else {

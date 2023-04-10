@@ -3,6 +3,7 @@ package client.scenes;
 import client.components.BoardComponent;
 import client.components.ClientBoardList;
 import client.utils.ServerUtils;
+import client.utils.WebSocketUtils;
 import client.utils.WorkspaceUtils;
 import commons.Board;
 import commons.ListOfBoards;
@@ -33,6 +34,8 @@ public class BoardCtrl implements Initializable {
     @FXML
     private AnchorPane boardAnchor;
     private final ServerUtils server;
+
+    private final WebSocketUtils webSocket;
     private final WorkspaceUtils workspaceUtils;
     private MainCtrl mainCtrl;
     @FXML
@@ -56,10 +59,11 @@ public class BoardCtrl implements Initializable {
     private BoardComponent boardComponent;
 
     @Inject
-    public BoardCtrl(MainCtrl mainCtrl, ServerUtils server, WorkspaceUtils workspaceUtils) {
+    public BoardCtrl(MainCtrl mainCtrl, ServerUtils server, WebSocketUtils webSocket, WorkspaceUtils workspaceUtils) {
         this.workspaceUtils = workspaceUtils;
         this.mainCtrl = mainCtrl;
         this.server = server;
+        this.webSocket = webSocket;
         boardAnchor = new AnchorPane();
         observableBoard = new SimpleObjectProperty<Board>();
         boardComponent = new BoardComponent(observableBoard, server, mainCtrl);
@@ -86,7 +90,7 @@ public class BoardCtrl implements Initializable {
 
     public void setBoardID(long boardID) {
         if(boardID != 0){
-            server.registerForMessages("/topic/"+boardID, Board.class, q -> {
+            webSocket.registerForMessages("/topic/"+boardID, Board.class, q -> {
                 observableBoard.set(q);
                 this.board = q;
                 if (board.getTitle().length() > 10) textBoardName.setText(board.getTitle().substring(0,10) + "..");
@@ -98,7 +102,7 @@ public class BoardCtrl implements Initializable {
 
     public void disconnectBoard(){
         mainCtrl.showBoardinput();
-        server.unregisterForMessages("/topic/"+this.boardID);
+        webSocket.unregisterForMessages("/topic/"+this.boardID);
     }
 
     public void onDeleteButtonClicked(){
@@ -117,8 +121,8 @@ public class BoardCtrl implements Initializable {
 
     public void disconnectServer(){
         mainCtrl.showConnect();
-        server.unregisterForMessages("/topic/"+this.boardID);
-        server.unregisterForMessages("topic/boardView");
+        webSocket.unregisterForMessages("/topic/"+this.boardID);
+        webSocket.unregisterForMessages("topic/boardView");
     }
 
     public void onEditBoardNameClick(){

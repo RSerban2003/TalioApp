@@ -2,6 +2,7 @@ package client.scenes;
 
 import client.components.ListBoardComponent;
 import client.utils.ServerUtils;
+import client.utils.WebSocketUtils;
 import commons.Board;
 import commons.ListOfBoards;
 import javafx.beans.property.SimpleObjectProperty;
@@ -14,7 +15,9 @@ import java.util.List;
 public class AdminDashboardCtrl {
     @FXML
     private AnchorPane boardAnchor;
-    private final ServerUtils server;
+//    private final ServerUtils server;
+
+    private final WebSocketUtils webSocket;
     private MainCtrl mainCtrl;
     private Board board;
 
@@ -22,9 +25,10 @@ public class AdminDashboardCtrl {
     private ListBoardComponent boardComponent;
 
     @Inject
-    public AdminDashboardCtrl(MainCtrl mainCtrl, ServerUtils server) {
+    public AdminDashboardCtrl(MainCtrl mainCtrl, WebSocketUtils webSocket, ServerUtils server) {
         this.mainCtrl = mainCtrl;
-        this.server = server;
+//        this.server = server;
+        this.webSocket = webSocket;
         boardAnchor = new AnchorPane();
         observableList = new SimpleObjectProperty<List<Board>>();
         boardComponent = new ListBoardComponent(observableList, server, mainCtrl);
@@ -37,7 +41,7 @@ public class AdminDashboardCtrl {
     }
 
     public void getUpdates(){
-        server.registerForMessages("/topic/admin", ListOfBoards.class, q ->{
+        webSocket.registerForMessages("/topic/admin", ListOfBoards.class, q ->{
             List<Board> boardList = q.getBoardList();
             observableList.set(boardList);
         });
@@ -45,11 +49,11 @@ public class AdminDashboardCtrl {
 
     public void disconnectBoard(){
         mainCtrl.showBoardinput();
-        server.unregisterForMessages("/topic/admin");
+        webSocket.unregisterForMessages("/topic/admin");
     }
 
     public void disconnectServer(){
         mainCtrl.showConnect();
-        server.unregisterForMessages("/topic/admin");
+        webSocket.unregisterForMessages("/topic/admin");
     }
 }

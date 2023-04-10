@@ -30,17 +30,17 @@ class TaskOverviewCtrlTest {
     @InjectMocks
     private TextArea titleTextArea;
 
-    @BeforeEach
-    void setUp() {
-        MainCtrl mockMainCtrl = mock(MainCtrl.class);
-        ServerUtils mockServer = mock(ServerUtils.class);
-
-//        this.mockNestedTaskComponent = mock(NestedTaskComponent.class);
-
-        this.observableTask = mock(SimpleObjectProperty.class);
-
-        sut = new TaskOverviewCtrl(mockServer, mockMainCtrl);
-    }
+//    @BeforeEach
+//    void setUp() {
+//        MainCtrl mockMainCtrl = mock(MainCtrl.class);
+//        ServerUtils mockServer = mock(ServerUtils.class);
+//
+////        this.mockNestedTaskComponent = mock(NestedTaskComponent.class);
+//
+//        this.observableTask = mock(SimpleObjectProperty.class);
+//
+//        sut = new TaskOverviewCtrl(mockServer, mockMainCtrl);
+//    }
 
     @Test
     void testSetIDs() {

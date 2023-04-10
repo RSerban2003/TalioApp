@@ -63,31 +63,31 @@ public class ServerUtils {
         WSSERVER = "ws://" + hostname + ":8080/";
         hostName = hostname;
     }
-    public void getQuotesTheHardWay() throws IOException {
-        var url = new URL("http://localhost:8080/api/quotes");
-        var is = url.openConnection().getInputStream();
-        var br = new BufferedReader(new InputStreamReader(is));
-        String line;
-        while ((line = br.readLine()) != null) {
-            System.out.println(line);
-        }
-    }
-
-    public List<Quote> getQuotes() {
-        return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/quotes") //
-                .request(APPLICATION_JSON) //
-                .accept(APPLICATION_JSON) //
-                .get(new GenericType<List<Quote>>() {});
-    }
-
-    public Quote addQuote(Quote quote) {
-        return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/quotes") //
-                .request(APPLICATION_JSON) //
-                .accept(APPLICATION_JSON) //
-                .post(Entity.entity(quote, APPLICATION_JSON), Quote.class);
-    }
+//    public void getQuotesTheHardWay() throws IOException {
+//        var url = new URL("http://localhost:8080/api/quotes");
+//        var is = url.openConnection().getInputStream();
+//        var br = new BufferedReader(new InputStreamReader(is));
+//        String line;
+//        while ((line = br.readLine()) != null) {
+//            System.out.println(line);
+//        }
+//    }
+//
+//    public List<Quote> getQuotes() {
+//        return ClientBuilder.newClient(new ClientConfig()) //
+//                .target(SERVER).path("api/quotes") //
+//                .request(APPLICATION_JSON) //
+//                .accept(APPLICATION_JSON) //
+//                .get(new GenericType<List<Quote>>() {});
+//    }
+//
+//    public Quote addQuote(Quote quote) {
+//        return ClientBuilder.newClient(new ClientConfig()) //
+//                .target(SERVER).path("api/quotes") //
+//                .request(APPLICATION_JSON) //
+//                .accept(APPLICATION_JSON) //
+//                .post(Entity.entity(quote, APPLICATION_JSON), Quote.class);
+//    }
 
     public boolean ping() {
         ClientConfig config = new ClientConfig();
@@ -98,7 +98,7 @@ public class ServerUtils {
                     .target(SERVER).path("api/ping")
                     .request(APPLICATION_JSON)
                     .accept(APPLICATION_JSON)
-                    .get(new GenericType<String>() {});
+                    .get(String.class);
             return pong.equals("pong");
         } catch (ProcessingException pe) {
             return false;
@@ -154,53 +154,57 @@ public class ServerUtils {
         }
 
     }
-    private StompSession session = connect("ws://localhost:8080/websocket");
 
-    public void establishConnection(){
-        this.SESSION = connect(WSSERVER +"websocket");
-    }
-    private Map<String, StompSession.Subscription> subscriptions = new HashMap<>();
-    private StompSession connect(String url){
-        var client = new StandardWebSocketClient();
-        var stomp = new WebSocketStompClient(client);
-        stomp.setMessageConverter(new MappingJackson2MessageConverter());
-        try{
-            return stomp.connect(url, new StompSessionHandlerAdapter() {}).get();
-        } catch (InterruptedException e){
-            Thread.currentThread().interrupt();
-        } catch (ExecutionException e){
-            throw new RuntimeException(e);
-        }
-        throw new IllegalStateException();
-    }
+    // for websockets
+//    private StompSession session = connect("ws://localhost:8080/websocket");
+//
+//    public void establishConnection(){
+//        this.SESSION = connect(WSSERVER +"websocket");
+//    }
+//    private Map<String, StompSession.Subscription> subscriptions = new HashMap<>();
+//    private StompSession connect(String url){
+//        var client = new StandardWebSocketClient();
+//        var stomp = new WebSocketStompClient(client);
+//        stomp.setMessageConverter(new MappingJackson2MessageConverter());
+//        try{
+//            return stomp.connect(url, new StompSessionHandlerAdapter() {}).get();
+//        } catch (InterruptedException e){
+//            Thread.currentThread().interrupt();
+//        } catch (ExecutionException e){
+//            throw new RuntimeException(e);
+//        }
+//        throw new IllegalStateException();
+//    }
+//
+//    public <T> void registerForMessages(String dest, Class<T> type, Consumer<T> consumer){
+//        StompSession.Subscription subscription = SESSION.subscribe(dest, new StompFrameHandler() {
+//            @Override
+//            public Type getPayloadType(StompHeaders headers) {
+//                return type;
+//            }
+//
+//            @Override
+//            @SuppressWarnings("unchecked")
+//            public void handleFrame(StompHeaders headers, Object payload) {
+//                consumer.accept((T) payload);
+//            }
+//        });
+//        subscriptions.put(dest, subscription);
+//    }
+//
+//    public void unregisterForMessages(String dest) {
+//        StompSession.Subscription subscription = subscriptions.get(dest);
+//        if (subscription != null) {
+//            subscription.unsubscribe();
+//            subscriptions.remove(dest);
+//        }
+//    }
+//
+//    public void send(String dest, Object o){
+//        SESSION.send(dest, o);
+//    }
 
-    public <T> void registerForMessages(String dest, Class<T> type, Consumer<T> consumer){
-        StompSession.Subscription subscription = SESSION.subscribe(dest, new StompFrameHandler() {
-            @Override
-            public Type getPayloadType(StompHeaders headers) {
-                return type;
-            }
-
-            @Override
-            @SuppressWarnings("unchecked")
-            public void handleFrame(StompHeaders headers, Object payload) {
-                consumer.accept((T) payload);
-            }
-        });
-        subscriptions.put(dest, subscription);
-    }
-
-    public void unregisterForMessages(String dest) {
-        StompSession.Subscription subscription = subscriptions.get(dest);
-        if (subscription != null) {
-            subscription.unsubscribe();
-            subscriptions.remove(dest);
-        }
-    }
-
-    public void send(String dest, Object o){
-        SESSION.send(dest, o);
-    }
+    // ending for websockets
 
     public boolean deleteTaskList(Long boardId, Long taskListId){
         Client client = ClientBuilder.newClient(new ClientConfig());
@@ -240,11 +244,9 @@ public class ServerUtils {
         Client client = ClientBuilder.newClient();
         Response response = client.target(SERVER).path("api/boards/"+ boardID + "/"+ taskListID + "/" + taskID + "/edit-card")
                 .queryParam("name", title.trim())
-                .queryParam("description", description.trim())
-                .request(APPLICATION_JSON)
+                .queryParam("description", description.trim())                .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .post(Entity.text(""));
-
         int status = response.getStatus();
         response.close();
         return status == 200;
@@ -318,4 +320,13 @@ public class ServerUtils {
     public static String getHost() {
         return hostName;
     }
+
+    public static String getSERVER() {
+        return SERVER;
+    }
+
+    public static String getWSSERVER() {
+        return WSSERVER;
+    }
+
 }

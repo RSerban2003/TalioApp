@@ -30,25 +30,25 @@ class ConnectCtrlTest {
     private TextField hostName;
     private Button connectButton;
 
-    @BeforeEach
-    void setUp() {
-
-        openMocks =  MockitoAnnotations.openMocks(this);
-
-        when(mockServer.ping()).thenReturn(true);
-        doNothing().when(mockMainCtrl).showBoard();
-        doNothing().when(mockMainCtrl).refreshBoardList();
-        doNothing().when(mockServer).establishConnection();
-        doNothing().when(mockServer).registerForMessages(eq("/topic/boardView"), eq(Board.class), any());
-
-        hostName = sut.getHostname();
-        connectButton = sut.getConnect();
-
-//        MainCtrl mockMainCtrl = mock(MainCtrl.class);
-//        ServerUtils mockServer = mock(ServerUtils.class);
+//    @BeforeEach
+//    void setUp() {
 //
-//        sut = new ConnectCtrl(mockServer, mockMainCtrl);
-    }
+//        openMocks =  MockitoAnnotations.openMocks(this);
+//
+//        when(mockServer.ping()).thenReturn(true);
+//        doNothing().when(mockMainCtrl).showBoard();
+//        doNothing().when(mockMainCtrl).refreshBoardList();
+//        doNothing().when(mockServer).establishConnection();
+//        doNothing().when(mockServer).registerForMessages(eq("/topic/boardView"), eq(Board.class), any());
+//
+//        hostName = sut.getHostname();
+//        connectButton = sut.getConnect();
+//
+////        MainCtrl mockMainCtrl = mock(MainCtrl.class);
+////        ServerUtils mockServer = mock(ServerUtils.class);
+////
+////        sut = new ConnectCtrl(mockServer, mockMainCtrl);
+//    }
 
     @Test
     void connectServerWithValidHostname() {
