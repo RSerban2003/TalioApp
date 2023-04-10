@@ -15,10 +15,10 @@
  */
 package client.scenes;
 
-import client.components.TaskListComponent;
 import commons.Task;
 import client.utils.ServerUtils;
 import commons.Board;
+import javafx.collections.ObservableList;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -69,8 +69,7 @@ public class MainCtrl {
     private Task task;
     private Board boardObject;
 
-    public void initialize(Stage primaryStage,
-                           Pair<ConnectCtrl, Parent> connect, Pair<BoardInputCtrl, Parent> boardInput,
+    public void initialize(Stage primaryStage, Pair<ConnectCtrl, Parent> connect, Pair<BoardInputCtrl, Parent> boardInput,
                            Pair<BoardCtrl, Parent> board, Pair<AddTaskListCtrl, Parent> taskList1, Pair<AddTaskCtrl, Parent> addTask,
                            Pair<TaskOverviewCtrl, Parent> taskOverview, Pair<CreateBoardCtrl, Parent> createBoard, ServerUtils server,
                            Pair<AdminPassCtrl, Parent> adminPass, Pair<AdminDashboardCtrl, Parent> admindash, Pair<TagManagementCtrl, Parent> tagManagement) {
@@ -125,6 +124,9 @@ public class MainCtrl {
         return primaryStage;
     }
 
+    public void stop(){
+        server.stop();
+    }
     public void showConnect() {
         primaryStage.setTitle("Connect: select a hostname");
         primaryStage.setScene(connect);

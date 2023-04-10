@@ -1,8 +1,5 @@
 package client.utils;
 
-import org.checkerframework.checker.units.qual.A;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -21,9 +18,9 @@ public class WorkspaceUtils {
         return result;
     }
     public void addBoardId(FileWriter hostWriter, long boardId) {
-            PrintWriter writer = new PrintWriter(hostWriter);
-            writer.println(boardId);
-            writer.close();
+        PrintWriter writer = new PrintWriter(hostWriter);
+        writer.println(boardId);
+        writer.close();
     }
     public void removeBoardId(List<String> oldFile, FileWriter writeHost, long boardId) {
         PrintWriter printHost = new PrintWriter(writeHost);
@@ -33,8 +30,8 @@ public class WorkspaceUtils {
             if(nextLine != boardId) temp.add(nextLine);
         }
         System.out.println(temp.size());
-        for(Long Id : temp) {
-            printHost.println(Id);
+        for(Long id : temp) {
+            printHost.println(id);
         }
         printHost.close();
     }

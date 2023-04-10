@@ -1,6 +1,5 @@
 package client.components;
 
-import client.scenes.BoardCtrl;
 import client.scenes.MainCtrl;
 import client.utils.ServerUtils;
 import client.utils.WorkspaceUtils;
@@ -15,11 +14,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import org.springframework.stereotype.Component;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.util.List;
 @Component
 public class ClientBoardList extends ListView<Board> {
     private WorkspaceUtils workspaceUtils;

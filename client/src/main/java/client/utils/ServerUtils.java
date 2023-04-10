@@ -16,6 +16,7 @@
 package client.utils;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
+import static java.net.HttpURLConnection.HTTP_OK;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -26,6 +27,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
 import commons.*;
@@ -33,7 +36,6 @@ import jakarta.ws.rs.ProcessingException;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import javafx.scene.control.Alert;
 import org.glassfish.jersey.client.ClientConfig;
 
 import jakarta.ws.rs.client.ClientBuilder;
@@ -62,6 +64,30 @@ public class ServerUtils {
         SERVER = "http://" + hostname + ":8080/";
         WSSERVER = "ws://" + hostname + ":8080/";
         hostName = hostname;
+    }
+    private static ExecutorService EXEC;
+
+    public void registerForUpdates(Consumer<Board> consumer) {
+        if (EXEC == null || EXEC.isShutdown()) {
+            EXEC = Executors.newSingleThreadExecutor();
+        }
+        EXEC.submit(() -> {
+            while (!Thread.interrupted()) {
+                var res = ClientBuilder.newClient(new ClientConfig())
+                        .target(SERVER).path("api/boards/polling/updates")
+                        .request(APPLICATION_JSON)
+                        .accept(APPLICATION_JSON)
+                        .get(Response.class);
+                if (res.getStatus() == HTTP_OK) {
+                    var board = res.readEntity(Board.class);
+                    consumer.accept(board);
+                }
+            }
+        });
+    }
+
+    public void stop() {
+        EXEC.shutdownNow();
     }
 
     public boolean ping() {
@@ -259,10 +285,77 @@ public class ServerUtils {
     public boolean addNestedTask(Long boardId, Long taskListId, Long taskId) {
         Client client = ClientBuilder.newClient();
         Map<String, String> body = new HashMap<>();
-        body.put("name", "new Nested Task");
+        body.put("name", "New Subtask");
         Response response = client.target(SERVER).path("api/boards/" + boardId + "/" + taskListId + "/" + taskId + "/nestedTask")
                 .request(APPLICATION_JSON).accept(APPLICATION_JSON)
                 .post(Entity.entity(body, APPLICATION_JSON));
+
+        int status = response.getStatus();
+        response.close();
+        return status == 200;
+    }
+
+    public boolean createTag(Long boardId, String name) {
+        Client client = ClientBuilder.newClient();
+        Map<String, String> body = new HashMap<>();
+        if(name.trim().isEmpty() || name == null) {
+            name = "New Tag";
+        }
+        body.put("name", name);
+
+        Response response = client.target(SERVER).path("api/boards/" + boardId + "/add-tag")
+                .request(APPLICATION_JSON).accept(APPLICATION_JSON)
+                .post(Entity.entity(body, APPLICATION_JSON));
+
+        int status = response.getStatus();
+        response.close();
+        return status == 200;
+    }
+
+    public boolean editTag(Long boardId, Long tagId, String name) {
+        Client client = ClientBuilder.newClient();
+        Map<String, String> body = new HashMap<>();
+        body.put("name", name);
+
+        Response response = client.target(SERVER).path("api/boards/" + boardId + "/" + tagId + "/editTag")
+                .request(APPLICATION_JSON).accept(APPLICATION_JSON)
+                .post(Entity.entity(body, APPLICATION_JSON));
+
+        int status = response.getStatus();
+        response.close();
+        return status == 200;
+    }
+
+    public boolean deleteTag(Long boardId, Long tagId) {
+        Client client = ClientBuilder.newClient();
+
+        Response response = client.target(SERVER).path("api/boards/"+ boardId + "/"+ tagId + "/delete-tag").request().delete();
+
+        int status = response.getStatus();
+        response.close();
+        return status == 200;
+    }
+
+    public boolean addTag(Long boardId, Long listId, Long taskId, Long tagId) {
+        Client client = ClientBuilder.newClient();
+
+        Response response = client.target(SERVER)
+                .path("api/boards/" + boardId + "/" + listId + "/" + taskId + "/" + tagId)
+                .request(APPLICATION_JSON).accept(APPLICATION_JSON)
+                .post(Entity.entity(new HashMap<>(), APPLICATION_JSON));
+
+        int status = response.getStatus();
+        response.close();
+        return status == 200;
+    }
+
+    public boolean removeTag(Long boardId, Long listId, Long taskId, Long tagId) {
+        Client client = ClientBuilder.newClient();
+
+        Response response = client.target(SERVER)
+                .path("api/boards/" + boardId + "/" + listId + "/" + taskId + "/" + tagId + "/remove")
+                .request(APPLICATION_JSON).accept(APPLICATION_JSON)
+                .post(Entity.entity(new HashMap<>(), APPLICATION_JSON));
 
         int status = response.getStatus();
         response.close();
