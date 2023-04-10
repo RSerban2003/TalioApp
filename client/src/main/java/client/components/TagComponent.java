@@ -124,9 +124,6 @@ public class TagComponent extends VBox {
 
         // Delete button
         deleteButton.setOnAction(event -> {
-            server.registerForMessages("/topic/" + boardId, Tag.class, t -> {
-                observableTag.set(t);
-            });
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Delete Tag");
             alert.setHeaderText("This tag will be deleted and removed from all associated tasks. Are you sure you want to proceed? ");
@@ -143,15 +140,10 @@ public class TagComponent extends VBox {
             } else {
                 alert.close();
             }
-            server.send("/topic/" + boardId + "/" + this.tag.getId() + "/delete-tag", tag);
-            server.unregisterForMessages("/topic/" + boardId + "/" + this.tag.getId() + "/delete-tag");
         });
 
         // Edit button
         editNameButton.setOnAction(event -> {
-            server.registerForMessages("/topic/" + boardId, Tag.class, t -> {
-                observableTag.set(t);
-            });
             tagNameLabel.setVisible(false);
             saveNameButton.setVisible(true);
             cancelNameButton.setVisible(true);
@@ -185,8 +177,6 @@ public class TagComponent extends VBox {
                     alert.setContentText("Failed to edit the tag: Unable to send the request.");
                     alert.showAndWait();
                 }
-                server.send("/topic/" + boardId + "/" + this.tag.getId() + "/edit-tag", tag);
-                server.unregisterForMessages("/topic/" + boardId + "/" + this.tag.getId() + "/edit-tag");
             }
         });
 
@@ -199,7 +189,6 @@ public class TagComponent extends VBox {
             tagNameField.setVisible(false);
             tagNameField.setEditable(false);
             tagNameLabel.setVisible(true);
-            server.unregisterForMessages("/topic/" + boardId + "/" + this.tag.getId() + "/edit-tag");
 
         });
     }

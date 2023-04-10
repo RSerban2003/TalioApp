@@ -66,7 +66,6 @@ public class TagManagementCtrl {
     private long tagID;
     private Board board;
     private VBox tagsVBox;
-    private SimpleObjectProperty<Tag> observableTag;
 
     @Inject
     public TagManagementCtrl(ServerUtils server, MainCtrl mainCtrl) {
@@ -85,6 +84,9 @@ public class TagManagementCtrl {
         this.boardID = boardID;
         this.tasklistID = tasklistID;
         this.taskID = taskID;
+        server.registerForMessages("/topic/" + boardID, Board.class, b -> {
+            observableBoard.set(b);
+        });
     }
 
     @FXML
@@ -110,9 +112,6 @@ public class TagManagementCtrl {
         createTagButton.setVisible(true);
         cancelTagButton.setVisible(true);
         tagAnchorPane.getChildren().add(tagsVBox);
-        server.registerForMessages("/topic/" + boardID + "/add-tag", Tag.class, t -> {
-            observableTag.set(t);
-        });
     }
 
     @FXML
@@ -219,7 +218,7 @@ public class TagManagementCtrl {
     }
 
     public void unregisterMessages() {
-        server.unregisterForMessages("/topic/" + boardID + "/add-tag");
+        server.unregisterForMessages("/topic/" + boardID);
     }
 
     private void resetFields() {
