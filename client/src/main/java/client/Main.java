@@ -39,7 +39,6 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-
         var connect = FXML.load(ConnectCtrl.class, "client", "scenes", "Connect.fxml");
         var boardInput = FXML.load(BoardInputCtrl.class, "client", "scenes", "BoardInput.fxml");
         var board = FXML.load(BoardCtrl.class, "client", "scenes", "Board.fxml");

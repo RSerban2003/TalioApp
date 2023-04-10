@@ -2,17 +2,16 @@ package client.components;
 
 import client.utils.ServerUtils;
 import client.scenes.MainCtrl;
+import client.utils.ServerUtils;
 import commons.Board;
 import commons.TaskList;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
-
-
 import javafx.scene.control.Alert;
+import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.input.Dragboard;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.util.Map;
