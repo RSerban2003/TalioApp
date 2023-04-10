@@ -22,13 +22,9 @@ public class TagComponent extends VBox {
 
     private SimpleObjectProperty<Board> observableBoard;
 
-    private String initialName;
-
     private TagManagementCtrl tagManagementCtrl;
 
     private ServerUtils server;
-
-    private SimpleObjectProperty<Tag> observableTag;
 
     private static final String style = "-fx-background-color: #615f5e; -fx-border-width: 2; -fx-border-color: #615f5e;"
             + "-fx-border-radius: 10 10 10 10;-fx-background-radius: 10 10 10 10;";
@@ -124,6 +120,9 @@ public class TagComponent extends VBox {
 
         // Delete button
         deleteButton.setOnAction(event -> {
+            server.registerForMessages("/topic/" + boardId, Board.class, b -> {
+                observableBoard.set(b);
+            });
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Delete Tag");
             alert.setHeaderText("This tag will be deleted and removed from all associated tasks. Are you sure you want to proceed? ");
@@ -140,17 +139,20 @@ public class TagComponent extends VBox {
             } else {
                 alert.close();
             }
+            server.unregisterForMessages("/topic/" + boardId);
         });
 
         // Edit button
         editNameButton.setOnAction(event -> {
+            server.registerForMessages("/topic/" + boardId, Board.class, b -> {
+                observableBoard.set(b);
+            });
             tagNameLabel.setVisible(false);
             saveNameButton.setVisible(true);
             cancelNameButton.setVisible(true);
             tagNameField.setVisible(true);
             tagNameField.setEditable(true);
             tagNameField.setText(tagNameLabel.getText());
-            initialName = tagNameField.getText();
         });
 
         // Save button
@@ -177,6 +179,7 @@ public class TagComponent extends VBox {
                     alert.setContentText("Failed to edit the tag: Unable to send the request.");
                     alert.showAndWait();
                 }
+                server.unregisterForMessages("/topic/" + boardId);
             }
         });
 
@@ -189,6 +192,7 @@ public class TagComponent extends VBox {
             tagNameField.setVisible(false);
             tagNameField.setEditable(false);
             tagNameLabel.setVisible(true);
+            server.unregisterForMessages("/topic/" + boardId);
 
         });
     }
