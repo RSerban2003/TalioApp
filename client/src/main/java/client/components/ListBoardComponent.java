@@ -40,6 +40,7 @@ public class ListBoardComponent extends AnchorPane {
             hbox.setSpacing(20.0);
             hbox.setLayoutX(50.0);
             hbox.setLayoutY(50.0);
+            hbox.setPrefSize(1000, 1300 );
 
             getChildren().clear();
             getChildren().add(hbox);

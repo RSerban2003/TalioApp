@@ -25,14 +25,18 @@ public class ClientBoardList extends ListView<Board> {
         private Button open;
         private HBox root;
         private Region padding;
+        //("-fx-background-color: #454342")
         private ListView listView;
         public BoardCell(ListView<Board> boardListView) {
             super();
+            super.setStyle("-fx-background-color: #615f5e");
             this.listView = boardListView;
-            root = new HBox(10);
+            root = new HBox(5);
             root.setAlignment(Pos.CENTER_LEFT);
-            root.setPadding(new Insets(5, 5, 5, 5));
+            root.setPadding(new Insets(10, 10, 10, 10));
+            root.setStyle("-fx-background-color: #615f5e");
             leave = new Button("Leave");
+            leave.setStyle("-fx-background-color: #454342; -fx-text-fill: #FFFFFF");
             leave.setOnAction(a -> {
                 workspaceUtils.deleteFromFile(ServerUtils.getHost(), board.getId());
                 mainCtrl.refreshBoardList();
@@ -40,6 +44,7 @@ public class ClientBoardList extends ListView<Board> {
 
             });
             open = new Button("Open");
+            open.setStyle("-fx-background-color: #454342; -fx-text-fill: #FFFFFF");
             open.setOnAction(event -> {
                 mainCtrl.updateBoard(board);
             });
@@ -56,6 +61,7 @@ public class ClientBoardList extends ListView<Board> {
                 setText(null);
                 setGraphic(null);
             } else {
+                boardTitle.setStyle("-fx-text-fill: #FFFFFF");
                 boardTitle.setText(board.getTitle());
                 this.board = board;
                 setGraphic(root);
