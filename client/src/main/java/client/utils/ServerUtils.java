@@ -332,6 +332,7 @@ public class ServerUtils {
         Response response = client.target(SERVER).path("api/boards/"+ boardId + "/"+ tagId + "/delete-tag").request().delete();
 
         int status = response.getStatus();
+        System.out.println(status);
         response.close();
         return status == 200;
     }

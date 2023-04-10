@@ -181,7 +181,7 @@ public class TagManagementCtrl {
             alert.showAndWait();
         }
         else {
-            TagComponent newTagComponent = new TagComponent(observableBoard, mainCtrl, server);
+            TagComponent newTagComponent = new TagComponent(observableBoard, mainCtrl, this);
             newTagComponent.setTag(newTag);
             tagsVBox.getChildren().add(newTagComponent);
         }
@@ -201,11 +201,15 @@ public class TagManagementCtrl {
         tagsVBox.getChildren().clear();
 
         for (Tag tag : board.getTagList()) {
-            TagComponent tagComponent = new TagComponent(observableBoard, mainCtrl, server);
+            TagComponent tagComponent = new TagComponent(observableBoard, mainCtrl, this);
             tagComponent.setTag(tag);
             tagsVBox.getChildren().add(tagComponent);
         }
 
+    }
+
+    public VBox getTagsVBox() {
+        return tagsVBox;
     }
 
     private void resetFields() {

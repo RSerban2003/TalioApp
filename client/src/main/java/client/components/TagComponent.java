@@ -1,6 +1,7 @@
 package client.components;
 
 import client.scenes.MainCtrl;
+import client.scenes.TagManagementCtrl;
 import client.utils.ServerUtils;
 import commons.*;
 import javafx.beans.property.SimpleObjectProperty;
@@ -9,6 +10,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import javax.inject.Inject;
 
@@ -23,19 +25,19 @@ public class TagComponent extends VBox {
 
     private SimpleObjectProperty<Board> observableBoard;
 
-    private ServerUtils serverUtils;
-
     private String initialName;
+
+    private TagManagementCtrl tagManagementCtrl;
 
     private static final String style = "-fx-background-color: #615f5e; -fx-border-width: 2; -fx-border-color: #615f5e;"
             + "-fx-border-radius: 10 10 10 10;-fx-background-radius: 10 10 10 10;";
 
     @Inject
-    public TagComponent(SimpleObjectProperty<Board> observableBoard, MainCtrl mainCtrl, ServerUtils serverUtils) {
+    public TagComponent(SimpleObjectProperty<Board> observableBoard, MainCtrl mainCtrl, TagManagementCtrl tagManagementCtrl) {
         super();
         this.observableBoard = observableBoard;
         this.mainCtrl = mainCtrl;
-        this.serverUtils = serverUtils;
+        this.tagManagementCtrl = tagManagementCtrl;
 
     }
     private void initializeTagComponent() {
@@ -47,6 +49,9 @@ public class TagComponent extends VBox {
         tagNameField.setText(tag.getName());
         tagNameField.setVisible(false);
 
+        tagNameLabel.setPadding(new Insets(5, 0, 5, 6));
+        tagNameField.setPadding(new Insets(5, 0, 5, 5));
+
         tagNameLabel.setStyle("-fx-background-color: #615f5e; -fx-text-fill: white;");
         tagNameField.setStyle("-fx-background-color: #8c8886; -fx-text-fill: white;");
 
@@ -57,7 +62,7 @@ public class TagComponent extends VBox {
 
         //Tag delete button
         Button deleteButton = new Button("X");
-        deleteButton.setStyle("-fx-background-color: #454342; -fx-text-fill: white;");
+        deleteButton.setStyle("-fx-background-color: #454342; -fx-text-fill:  #FFFFFF;");
         deleteButton.setMinWidth(25);
         deleteButton.setMaxWidth(25);
 
@@ -102,7 +107,14 @@ public class TagComponent extends VBox {
         // Apply the style to the component
         this.setStyle(style);
 
-        //Add functionalities for all UI elements
+        // Add functionalities for all UI elements
+        AnnotationConfigApplicationContext context
+                = new AnnotationConfigApplicationContext();
+        context.scan("client");
+        context.refresh();
+        ServerUtils server = context.getBean(ServerUtils.class);
+
+        // Add character limit for name field
         tagNameField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.length() > 20) {
                 tagNameField.setText(oldValue);
@@ -114,16 +126,17 @@ public class TagComponent extends VBox {
             }
         });
 
+        // Delete button
         deleteButton.setOnAction(event -> {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Delete Tag");
             alert.setHeaderText("This tag will be deleted and removed from all associated tasks. Are you sure you want to proceed? ");
             alert.showAndWait();
             if (alert.getResult().getText().equals("OK")) {
-                boolean isDeleted = serverUtils.deleteTag(board.getId(), tag.getId());
-                if (isDeleted) {
 
-                } else {
+                tagManagementCtrl.getTagsVBox().getChildren().remove(this);
+
+                if(!server.deleteTag(board.getId(), tag.getId())) {
                     Alert deletionAlert = new Alert(Alert.AlertType.ERROR);
                     deletionAlert.setContentText("Failed to delete the tag: Unable to send the request.");
                     deletionAlert.showAndWait();
@@ -133,6 +146,7 @@ public class TagComponent extends VBox {
             }
         });
 
+        // Edit button
         editNameButton.setOnAction(event -> {
             tagNameLabel.setVisible(false);
             saveNameButton.setVisible(true);
@@ -143,6 +157,7 @@ public class TagComponent extends VBox {
             initialName = tagNameField.getText();
         });
 
+        // Save button
         saveNameButton.setOnAction(event -> {
             String name = tagNameField.getText();
 
@@ -153,8 +168,7 @@ public class TagComponent extends VBox {
                 return;
             }
             else {
-
-                serverUtils.editTag(board.getId(), tag.getId(), name);
+                Tag newTag = new Tag(name, board);
 
                 tagNameLabel.setText(name);
                 saveNameButton.setVisible(false);
@@ -163,9 +177,19 @@ public class TagComponent extends VBox {
                 tagNameField.setVisible(false);
                 tagNameField.setEditable(false);
                 tagNameLabel.setVisible(true);
+
+                if (!server.editTag(board.getId(), tag.getId(), name)) {
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setContentText("Failed to edit the tag: Unable to send the request.");
+                    alert.showAndWait();
+                }
+                else {
+                    this.setTag(newTag);
+                }
             }
         });
 
+        // Cancel button
         cancelNameButton.setOnAction(event -> {
             tagNameField.setText(tagNameLabel.getText());
             saveNameButton.setVisible(false);
@@ -180,6 +204,7 @@ public class TagComponent extends VBox {
 
     public void setTag(Tag tag) {
         this.tag = tag;
+        this.board = this.tag.getBoard();
         initializeTagComponent();
     }
 }
