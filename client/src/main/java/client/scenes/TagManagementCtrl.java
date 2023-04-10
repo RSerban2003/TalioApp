@@ -6,17 +6,17 @@ import commons.Board;
 import commons.Tag;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 import javax.inject.Inject;
-import java.util.HashMap;
-import java.util.Map;
 
 public class TagManagementCtrl {
     @FXML
@@ -64,6 +64,8 @@ public class TagManagementCtrl {
     private long taskID;
 
     private long tagID;
+    private Board board;
+    private VBox tagsVBox;
 
     @Inject
     public TagManagementCtrl(ServerUtils server, MainCtrl mainCtrl) {
@@ -71,11 +73,14 @@ public class TagManagementCtrl {
         this.server = server;
         tagAnchorPane = new AnchorPane();
         observableBoard = new SimpleObjectProperty<Board>();
+        this.tagsVBox = new VBox(3);
+        tagsVBox.setAlignment(Pos.CENTER);
 
         observableBoard.addListener((obs, oldBoard, newBoard) -> updateScene(newBoard));
     }
 
-    public void setIDs(long boardID, long tasklistID, long taskID) {
+    public void setIDs(long boardID, long tasklistID, long taskID, Board board) {
+        this.board = board;
         this.boardID = boardID;
         this.tasklistID = tasklistID;
         this.taskID = taskID;
@@ -84,7 +89,7 @@ public class TagManagementCtrl {
     @FXML
     private void initialize() {
         tagNameTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.length() > 30) {
+            if (newValue.length() > 20) {
                 tagNameTextField.setText(oldValue);
             }
         });
@@ -93,6 +98,7 @@ public class TagManagementCtrl {
                 event.consume();
             }
         });
+        tagAnchorPane.getChildren().add(tagsVBox);
     }
 
     @FXML
@@ -167,10 +173,17 @@ public class TagManagementCtrl {
         tagNameTextField.setText("New Tag");
         tagNameTextField.setEditable(false);
 
+        Tag newTag = new Tag(name, board);
+
         if (!server.createTag(boardID, name)) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setContentText("Failed to add the tag: Unable to send the request.");
             alert.showAndWait();
+        }
+        else {
+            TagComponent newTagComponent = new TagComponent(observableBoard, mainCtrl, server);
+            newTagComponent.setTag(newTag);
+            tagsVBox.getChildren().add(newTagComponent);
         }
     }
 
@@ -184,11 +197,13 @@ public class TagManagementCtrl {
 
         observableBoard.set(board);
         tagAnchorPane.getChildren().clear();
+        tagAnchorPane.getChildren().add(tagsVBox);
+        tagsVBox.getChildren().clear();
 
         for (Tag tag : board.getTagList()) {
             TagComponent tagComponent = new TagComponent(observableBoard, mainCtrl, server);
             tagComponent.setTag(tag);
-            tagAnchorPane.getChildren().add(tagComponent);
+            tagsVBox.getChildren().add(tagComponent);
         }
 
     }

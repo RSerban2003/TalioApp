@@ -15,6 +15,7 @@
  */
 package client.scenes;
 
+import client.components.TagComponent;
 import commons.Task;
 import client.utils.ServerUtils;
 import commons.Board;
@@ -229,7 +230,7 @@ public class MainCtrl {
     }
 
     public void showTagManagement() {
-        tagManagementCtrl.setIDs(boardID, taskListID, taskID);
+        tagManagementCtrl.setIDs(boardID, taskListID, taskID, boardObject);
         tagManagementCtrl.updateScene(boardObject);
         popUpStage.setTitle("Tag Management");
         popUpStage.setScene(tagManagement);

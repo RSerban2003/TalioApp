@@ -57,13 +57,13 @@
             <Font size="18.0" />
          </font>
       </Text>
-      <AnchorPane layoutX="54.0" layoutY="132.0" prefHeight="291.0" prefWidth="269.0">
+      <AnchorPane layoutX="54.0" layoutY="132.0" prefHeight="291.0" prefWidth="197.0">
          <children>
             <VBox layoutX="-4.0" prefHeight="291.0" prefWidth="240.0" AnchorPane.leftAnchor="-4.0" AnchorPane.rightAnchor="-2.0">
                <children>
-                  <ScrollPane style="-fx-border-color: transparent; -fx-background-color: #8c8886; -fx-control-inner-background: #8c8886;" VBox.vgrow="ALWAYS">
+                  <ScrollPane prefHeight="292.0" prefWidth="263.0" style="-fx-border-color: transparent; -fx-background-color: #8c8886; -fx-control-inner-background: #8c8886;" VBox.vgrow="ALWAYS">
                      <content>
-                        <AnchorPane fx:id="tagAnchorPane" prefHeight="288.0" prefWidth="250.0" />
+                        <AnchorPane fx:id="tagAnchorPane" prefHeight="288.0" prefWidth="186.0" />
                      </content>
                   </ScrollPane>
                </children>
