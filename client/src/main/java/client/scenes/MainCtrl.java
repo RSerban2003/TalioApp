@@ -237,6 +237,9 @@ public class MainCtrl {
         popUpStage.show();
         popUpStage.setX(Screen.getPrimary().getVisualBounds().getWidth() / 2 - tagManagement.getWidth() / 2);
         popUpStage.setY(Screen.getPrimary().getVisualBounds().getHeight() / 2 - tagManagement.getHeight() / 2);
+        popUpStage.setOnHidden(e -> {
+            tagManagementCtrl.unregisterMessages();
+        });
     }
 
     public void updateAdminDash(List<Board> board) {

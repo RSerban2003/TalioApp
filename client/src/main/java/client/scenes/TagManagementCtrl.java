@@ -4,6 +4,7 @@ import client.components.TagComponent;
 import client.utils.ServerUtils;
 import commons.Board;
 import commons.Tag;
+import commons.Task;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -62,10 +63,10 @@ public class TagManagementCtrl {
     private long boardID;
     private long tasklistID;
     private long taskID;
-
     private long tagID;
     private Board board;
     private VBox tagsVBox;
+    private SimpleObjectProperty<Tag> observableTag;
 
     @Inject
     public TagManagementCtrl(ServerUtils server, MainCtrl mainCtrl) {
@@ -99,6 +100,9 @@ public class TagManagementCtrl {
             }
         });
         tagAnchorPane.getChildren().add(tagsVBox);
+        server.registerForMessages("/topic/" + boardID + "/add-tag", Tag.class, t -> {
+            observableTag.set(t);
+        });
     }
 
     @FXML
@@ -184,6 +188,7 @@ public class TagManagementCtrl {
             TagComponent newTagComponent = new TagComponent(observableBoard, mainCtrl, this, server);
             newTagComponent.setTag(newTag, boardID);
             tagsVBox.getChildren().add(newTagComponent);
+            server.send("/topic/" + boardID + "/add-tag", newTag);
         }
     }
 
@@ -210,6 +215,10 @@ public class TagManagementCtrl {
 
     public VBox getTagsVBox() {
         return tagsVBox;
+    }
+
+    public void unregisterMessages() {
+        server.unregisterForMessages("/topic/" + boardID + "/add-tag");
     }
 
     private void resetFields() {
