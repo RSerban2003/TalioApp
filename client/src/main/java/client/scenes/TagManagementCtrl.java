@@ -173,16 +173,16 @@ public class TagManagementCtrl {
         tagNameTextField.setText("New Tag");
         tagNameTextField.setEditable(false);
 
-        Tag newTag = new Tag(name, board);
+        Tag newTag = server.createTag(boardID, name);
 
-        if (!server.createTag(boardID, name)) {
+        if (newTag==null) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setContentText("Failed to add the tag: Unable to send the request.");
             alert.showAndWait();
         }
         else {
-            TagComponent newTagComponent = new TagComponent(observableBoard, mainCtrl, this);
-            newTagComponent.setTag(newTag);
+            TagComponent newTagComponent = new TagComponent(observableBoard, mainCtrl, this, server);
+            newTagComponent.setTag(newTag, boardID);
             tagsVBox.getChildren().add(newTagComponent);
         }
     }
@@ -201,8 +201,8 @@ public class TagManagementCtrl {
         tagsVBox.getChildren().clear();
 
         for (Tag tag : board.getTagList()) {
-            TagComponent tagComponent = new TagComponent(observableBoard, mainCtrl, this);
-            tagComponent.setTag(tag);
+            TagComponent tagComponent = new TagComponent(observableBoard, mainCtrl, this, server);
+            tagComponent.setTag(tag, boardID);
             tagsVBox.getChildren().add(tagComponent);
         }
 

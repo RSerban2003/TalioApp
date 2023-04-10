@@ -16,10 +16,7 @@ import javax.inject.Inject;
 
 public class TagComponent extends VBox {
 
-    private long tagId;
-
-    private Board board;
-
+    private Long boardId;
     private Tag tag;
     private MainCtrl mainCtrl;
 
@@ -29,15 +26,18 @@ public class TagComponent extends VBox {
 
     private TagManagementCtrl tagManagementCtrl;
 
+    private ServerUtils server;
+
     private static final String style = "-fx-background-color: #615f5e; -fx-border-width: 2; -fx-border-color: #615f5e;"
             + "-fx-border-radius: 10 10 10 10;-fx-background-radius: 10 10 10 10;";
 
     @Inject
-    public TagComponent(SimpleObjectProperty<Board> observableBoard, MainCtrl mainCtrl, TagManagementCtrl tagManagementCtrl) {
+    public TagComponent(SimpleObjectProperty<Board> observableBoard, MainCtrl mainCtrl, TagManagementCtrl tagManagementCtrl, ServerUtils serverUtils) {
         super();
         this.observableBoard = observableBoard;
         this.mainCtrl = mainCtrl;
         this.tagManagementCtrl = tagManagementCtrl;
+        this.server = serverUtils;
 
     }
     private void initializeTagComponent() {
@@ -108,12 +108,6 @@ public class TagComponent extends VBox {
         this.setStyle(style);
 
         // Add functionalities for all UI elements
-        AnnotationConfigApplicationContext context
-                = new AnnotationConfigApplicationContext();
-        context.scan("client");
-        context.refresh();
-        ServerUtils server = context.getBean(ServerUtils.class);
-
         // Add character limit for name field
         tagNameField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.length() > 20) {
@@ -136,7 +130,7 @@ public class TagComponent extends VBox {
 
                 tagManagementCtrl.getTagsVBox().getChildren().remove(this);
 
-                if(!server.deleteTag(board.getId(), tag.getId())) {
+                if(!server.deleteTag(boardId, tag.getId())) {
                     Alert deletionAlert = new Alert(Alert.AlertType.ERROR);
                     deletionAlert.setContentText("Failed to delete the tag: Unable to send the request.");
                     deletionAlert.showAndWait();
@@ -168,8 +162,6 @@ public class TagComponent extends VBox {
                 return;
             }
             else {
-                Tag newTag = new Tag(name, board);
-
                 tagNameLabel.setText(name);
                 saveNameButton.setVisible(false);
                 cancelNameButton.setVisible(false);
@@ -178,13 +170,10 @@ public class TagComponent extends VBox {
                 tagNameField.setEditable(false);
                 tagNameLabel.setVisible(true);
 
-                if (!server.editTag(board.getId(), tag.getId(), name)) {
+                if (!server.editTag(boardId, tag.getId(), name)) {
                     Alert alert = new Alert(Alert.AlertType.WARNING);
                     alert.setContentText("Failed to edit the tag: Unable to send the request.");
                     alert.showAndWait();
-                }
-                else {
-                    this.setTag(newTag);
                 }
             }
         });
@@ -202,9 +191,14 @@ public class TagComponent extends VBox {
         });
     }
 
-    public void setTag(Tag tag) {
+    public void setTag(Tag tag, Long boardId) {
         this.tag = tag;
-        this.board = this.tag.getBoard();
-        initializeTagComponent();
+        this.boardId = boardId;
+        if(!(boardId == null)) {
+            initializeTagComponent();
+        }
+        else {
+            System.out.println("Error: Board is null in the TagComponent.");
+        }
     }
 }
