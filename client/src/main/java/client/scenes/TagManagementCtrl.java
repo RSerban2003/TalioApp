@@ -3,6 +3,7 @@ package client.scenes;
 import client.components.TagComponent;
 import client.utils.ServerUtils;
 import commons.Board;
+import commons.Tag;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -184,7 +185,7 @@ public class TagManagementCtrl {
         observableBoard.set(board);
         tagAnchorPane.getChildren().clear();
 
-        for (Tag tag : board.getListOfTags()) {
+        for (Tag tag : board.getTagList()) {
             TagComponent tagComponent = new TagComponent(observableBoard, mainCtrl, server);
             tagComponent.setTag(tag);
             tagAnchorPane.getChildren().add(tagComponent);
@@ -194,5 +195,12 @@ public class TagManagementCtrl {
 
     private void resetFields() {
         tagNameTextField.setText("New Tag");
+        tagNameTextField.setVisible(false);
+        tagNameText.setVisible(false);
+        createTagButton.setVisible(false);
+        cancelTagButton.setVisible(false);
+        editNameButton.setVisible(false);
+        saveNameButton.setVisible(false);
+        cancelNameButton.setVisible(false);
     }
 }

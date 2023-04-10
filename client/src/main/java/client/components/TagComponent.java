@@ -2,7 +2,7 @@ package client.components;
 
 import client.scenes.MainCtrl;
 import client.utils.ServerUtils;
-import commons.Board;
+import commons.*;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
