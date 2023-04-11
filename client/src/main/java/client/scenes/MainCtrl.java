@@ -168,6 +168,7 @@ public class MainCtrl {
     public void updateBoard(Board board) {
         this.boardID = board.getId();
         boardCtrl.updateBoard(board);
+        addTagCtrl.update(task);
     }
     public void showAddTaskList() {
         addTaskListCtrl.setIDs(boardID);
@@ -180,8 +181,11 @@ public class MainCtrl {
     }
 
     public void showAddTag() {
+        addTagCtrl.setIDs(boardID,taskListID,taskID);
+        setTask(task);
         popUpStage.setTitle("Add some tags");
         popUpStage.setScene(addTag);
+        addTagCtrl.update(task);
         popUpStage.show();
         popUpStage.setX(Screen.getPrimary().getVisualBounds().getWidth() / 2 - taskList1.getWidth() / 2);
         popUpStage.setY(Screen.getPrimary().getVisualBounds().getHeight() / 2 - taskList1.getHeight() / 2);

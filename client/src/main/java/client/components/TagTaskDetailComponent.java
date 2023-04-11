@@ -31,8 +31,6 @@ public class TagTaskDetailComponent extends AnchorPane {
 
     private ServerUtils server;
 
-    private Button addLabelButton;
-
     private static final String style = "-fx-background-color: #615f5e; -fx-border-width: 2; -fx-border-color: #615f5e;"
             + "-fx-border-radius: 10 10 10 10;-fx-background-radius: 10 10 10 10;";
 
@@ -51,12 +49,6 @@ public class TagTaskDetailComponent extends AnchorPane {
         this.mainCtrl = mainCtrl;
         this.server = server;
         taskSimpleObjectProperty.addListener((observable, oldValue, newValue) -> update(newValue));
-
-        addLabelButton = new Button("+");
-        addLabelButton.setOnAction(event -> {
-                addTag();
-        });
-
     }
 
     private void addTag() {
@@ -67,18 +59,23 @@ public class TagTaskDetailComponent extends AnchorPane {
         Platform.runLater(
                 () -> {
                     getChildren().clear();
-                    if(task.getNestedTasks() != null){
+                    HBox tagContainer = new HBox();
+                    if(task.getTagList() != null){
                         SubTagTaskDetailComponent[] tags = task.getTagList().stream()
                                 .map((Tag tag1) -> new SubTagTaskDetailComponent(tag1, task.getId(), taskListId, boardId, mainCtrl))
                                 .toArray(SubTagTaskDetailComponent[]::new);
-                        HBox tagContainer = new HBox(tags);
-                        tagContainer.setSpacing(10.0);
+                        tagContainer.getChildren().addAll(tags);
+
                         AnchorPane.setTopAnchor(tagContainer, 0.0);
                         AnchorPane.setLeftAnchor(tagContainer, 10.0);
-                        getChildren().clear();
-                        getChildren().add(tagContainer);
-                        getChildren().add(addLabelButton);
                     }
+                    Button addLabelButton = new Button("+");
+                    addLabelButton.setOnAction(event -> {
+                        addTag();
+                    });
+                    tagContainer.getChildren().add(addLabelButton);
+                    tagContainer.setSpacing(10.0);
+                    getChildren().add(tagContainer);
                 });
     }
 

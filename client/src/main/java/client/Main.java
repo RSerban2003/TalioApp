@@ -55,6 +55,7 @@ public class Main extends Application {
         primaryStage.setOnCloseRequest(event -> {
             mainCtrl.stop();
         });
+        System.out.println(addTag);
         mainCtrl.initialize(primaryStage, connect, boardInput, board, addTag, taskList1, addTask, taskOverview, createBoard, server, adminPass, adminDash);
     }
 }

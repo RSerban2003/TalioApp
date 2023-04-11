@@ -41,8 +41,8 @@ public class SubTagTaskDetailComponent extends VBox {
         Button deleteButton = new Button("X");
         deleteButton.setOnAction(event -> {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setHeaderText("Delete Task");
-            alert.setContentText("Are you sure you want to delete this task? This action cannot be undone.");
+            alert.setHeaderText("Delete Tag");
+            alert.setContentText("Are you sure you want to delete this tag? This action cannot be undone.");
             alert.showAndWait();
             if (alert.getResult().getText().equals("OK")) {
                 server.removeTag(boardId, taskListId, taskId, tagId);
