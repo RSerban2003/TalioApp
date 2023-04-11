@@ -8,6 +8,9 @@ import commons.*;
 import javafx.beans.property.SimpleObjectProperty;
 import commons.Task;
 import javafx.application.Platform;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -48,21 +51,31 @@ public class TagTaskDetailComponent extends AnchorPane {
         taskSimpleObjectProperty.addListener((observable, oldValue, newValue) -> update(newValue));
     }
 
+    private void addTag() {
+        mainCtrl.showAddTag();
+    }
+
     public void update(Task task) {
         Platform.runLater(
                 () -> {
                     getChildren().clear();
-                    if(task.getNestedTasks() != null){
+                    HBox tagContainer = new HBox();
+                    if(task.getTagList() != null){
                         SubTagTaskDetailComponent[] tags = task.getTagList().stream()
                                 .map((Tag tag1) -> new SubTagTaskDetailComponent(tag1, task.getId(), taskListId, boardId, mainCtrl))
                                 .toArray(SubTagTaskDetailComponent[]::new);
-                        HBox tagContainer = new HBox(tags);
-                        tagContainer.setSpacing(10.0);
+                        tagContainer.getChildren().addAll(tags);
+
                         AnchorPane.setTopAnchor(tagContainer, 0.0);
                         AnchorPane.setLeftAnchor(tagContainer, 10.0);
-                        getChildren().clear();
-                        getChildren().add(tagContainer);
                     }
+                    Button addLabelButton = new Button("+");
+                    addLabelButton.setOnAction(event -> {
+                        addTag();
+                    });
+                    tagContainer.getChildren().add(addLabelButton);
+                    tagContainer.setSpacing(10.0);
+                    getChildren().add(tagContainer);
                 });
     }
 

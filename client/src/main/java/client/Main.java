@@ -42,6 +42,7 @@ public class Main extends Application {
         var connect = FXML.load(ConnectCtrl.class, "client", "scenes", "Connect.fxml");
         var boardInput = FXML.load(BoardInputCtrl.class, "client", "scenes", "BoardInput.fxml");
         var board = FXML.load(BoardCtrl.class, "client", "scenes", "Board.fxml");
+        var addTag = FXML.load(AddTagCtrl.class, "client","scenes", "addTag.fxml");
         var taskList1 = FXML.load(AddTaskListCtrl.class, "client", "scenes", "TaskListPanel.fxml");
         var addTask = FXML.load(AddTaskCtrl.class, "client", "scenes", "AddTask.fxml");
         var adminPass = FXML.load(AdminPassCtrl.class, "client", "scenes", "AdminPass.fxml");
@@ -56,6 +57,6 @@ public class Main extends Application {
         primaryStage.setOnCloseRequest(event -> {
             mainCtrl.stop();
         });
-        mainCtrl.initialize(primaryStage, connect, boardInput, board, taskList1, addTask, taskOverview, createBoard, server, adminPass, adminDash, tagManagement);
+        mainCtrl.initialize(primaryStage, connect, boardInput, board, addTag, taskList1, addTask, taskOverview, createBoard, server, adminPass, adminDash, tagManagement);
     }
 }
