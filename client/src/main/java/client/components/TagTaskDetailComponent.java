@@ -51,10 +51,6 @@ public class TagTaskDetailComponent extends AnchorPane {
         taskSimpleObjectProperty.addListener((observable, oldValue, newValue) -> update(newValue));
     }
 
-    private void addTag() {
-        mainCtrl.showAddTag();
-    }
-
     public void update(Task task) {
         Platform.runLater(
                 () -> {
@@ -69,11 +65,6 @@ public class TagTaskDetailComponent extends AnchorPane {
                         AnchorPane.setTopAnchor(tagContainer, 0.0);
                         AnchorPane.setLeftAnchor(tagContainer, 10.0);
                     }
-                    Button addLabelButton = new Button("+");
-                    addLabelButton.setOnAction(event -> {
-                        addTag();
-                    });
-                    tagContainer.getChildren().add(addLabelButton);
                     tagContainer.setSpacing(10.0);
                     getChildren().add(tagContainer);
                 });

@@ -43,8 +43,6 @@ public class MainCtrl {
     private Scene boardInput;
     private Scene taskList1;
     private AddTaskListCtrl addTaskListCtrl;
-    private Scene addTag;
-    private AddTagCtrl addTagCtrl;
     private Scene board;
     private Scene createBoard;
     private ServerUtils server;
@@ -73,7 +71,7 @@ public class MainCtrl {
     private Board boardObject;
 
     public void initialize(Stage primaryStage, Pair<ConnectCtrl, Parent> connect, Pair<BoardInputCtrl, Parent> boardInput,
-                           Pair<BoardCtrl, Parent> board, Pair<AddTagCtrl, Parent> addTag, Pair<AddTaskListCtrl, Parent> taskList1, Pair<AddTaskCtrl, Parent> addTask,
+                           Pair<BoardCtrl, Parent> board, Pair<AddTaskListCtrl, Parent> taskList1, Pair<AddTaskCtrl, Parent> addTask,
                            Pair<TaskOverviewCtrl, Parent> taskOverview, Pair<CreateBoardCtrl, Parent> createBoard, ServerUtils server,
                            Pair<AdminPassCtrl, Parent> adminPass, Pair<AdminDashboardCtrl, Parent> admindash, Pair<TagManagementCtrl, Parent> tagManagement) {
 
@@ -99,9 +97,6 @@ public class MainCtrl {
 
         this.addTaskListCtrl = taskList1.getKey();
         this.taskList1 = new Scene(taskList1.getValue(),900, 500);
-
-        this.addTagCtrl = addTag.getKey();
-        this.addTag = new Scene(addTag.getValue(),900,500);
 
         this.createBoardCtrl = createBoard.getKey();
         this.createBoard = new Scene(createBoard.getValue(), 900, 500);
@@ -187,7 +182,6 @@ public class MainCtrl {
     public void updateBoard(Board board) {
         this.boardID = board.getId();
         boardCtrl.updateBoard(board);
-        addTagCtrl.update(task);
     }
     public void showAddTaskList() {
         popUpStage.setResizable(false);
@@ -200,16 +194,6 @@ public class MainCtrl {
         taskList1.setOnKeyPressed(e -> addTaskListCtrl.keyPressed(e));
     }
 
-    public void showAddTag() {
-        addTagCtrl.setIDs(boardID,taskListID,taskID);
-        setTask(task);
-        popUpStage.setTitle("Add some tags");
-        popUpStage.setScene(addTag);
-        addTagCtrl.update(task);
-        popUpStage.show();
-        popUpStage.setX(Screen.getPrimary().getVisualBounds().getWidth() / 2 - taskList1.getWidth() / 2);
-        popUpStage.setY(Screen.getPrimary().getVisualBounds().getHeight() / 2 - taskList1.getHeight() / 2);
-    }
     public void setTask(Task task) {
         this.taskID = task.getId();
         this.task = task;
