@@ -187,7 +187,6 @@ public class MainCtrl {
     public void updateBoard(Board board) {
         this.boardID = board.getId();
         boardCtrl.updateBoard(board);
-        addTagCtrl.update(task);
     }
     public void showAddTaskList() {
         popUpStage.setResizable(false);
@@ -201,11 +200,12 @@ public class MainCtrl {
     }
 
     public void showAddTag() {
+        addTagCtrl.setTask(task);
+        addTagCtrl.updateScene(boardObject);
         addTagCtrl.setIDs(boardID,taskListID,taskID);
-        setTask(task);
+        addTagCtrl.update(task);
         popUpStage.setTitle("Add some tags");
         popUpStage.setScene(addTag);
-        addTagCtrl.update(task);
         popUpStage.show();
         popUpStage.setX(Screen.getPrimary().getVisualBounds().getWidth() / 2 - taskList1.getWidth() / 2);
         popUpStage.setY(Screen.getPrimary().getVisualBounds().getHeight() / 2 - taskList1.getHeight() / 2);
@@ -281,4 +281,8 @@ public class MainCtrl {
     public Long getBoardId() {
         return boardID;
     }
+
+    public Long getTaskListId() { return taskListID; }
+
+    public Long getTaskId() {return taskID; }
 }
