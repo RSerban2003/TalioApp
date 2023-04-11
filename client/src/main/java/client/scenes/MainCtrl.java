@@ -42,6 +42,8 @@ public class MainCtrl {
     private Scene boardInput;
     private Scene taskList1;
     private AddTaskListCtrl addTaskListCtrl;
+    private Scene addTag;
+    private AddTagCtrl addTagCtrl;
     private Scene board;
     private Scene createBoard;
     private ServerUtils server;
@@ -67,7 +69,7 @@ public class MainCtrl {
     private Task task;
 
     public void initialize(Stage primaryStage, Pair<ConnectCtrl, Parent> connect, Pair<BoardInputCtrl, Parent> boardInput,
-                           Pair<BoardCtrl, Parent> board, Pair<AddTaskListCtrl, Parent> taskList1, Pair<AddTaskCtrl, Parent> addTask,
+                           Pair<BoardCtrl, Parent> board, Pair<AddTagCtrl, Parent> addTag, Pair<AddTaskListCtrl, Parent> taskList1, Pair<AddTaskCtrl, Parent> addTask,
                            Pair<TaskOverviewCtrl, Parent> taskOverview, Pair<CreateBoardCtrl, Parent> createBoard, ServerUtils server,
                            Pair<AdminPassCtrl, Parent> adminPass, Pair<AdminDashboardCtrl, Parent> admindash) {
 
@@ -92,6 +94,9 @@ public class MainCtrl {
 
         this.addTaskListCtrl = taskList1.getKey();
         this.taskList1 = new Scene(taskList1.getValue(),900, 500);
+
+        this.addTagCtrl = addTag.getKey();
+        this.addTag = new Scene(addTag.getValue(),900,500);
 
         this.createBoardCtrl = createBoard.getKey();
         this.createBoard = new Scene(createBoard.getValue(), 900, 500);
@@ -172,6 +177,9 @@ public class MainCtrl {
         popUpStage.setX(Screen.getPrimary().getVisualBounds().getWidth() / 2 - taskList1.getWidth() / 2);
         popUpStage.setY(Screen.getPrimary().getVisualBounds().getHeight() / 2 - taskList1.getHeight() / 2);
         taskList1.setOnKeyPressed(e -> addTaskListCtrl.keyPressed(e));
+    }
+
+    public void showAddTag() {
     }
     public void setTask(Task task) {
         this.taskID = task.getId();

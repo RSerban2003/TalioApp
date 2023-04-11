@@ -150,6 +150,7 @@ public class BoardCtrl implements Initializable {
     public void addTaskList(){
         mainCtrl.showAddTaskList();
     }
+    public void addTag() {mainCtrl.showAddTag(); }
     public void refreshBoardList() {
         List<Long> boardIds = new ArrayList<>();
         try {

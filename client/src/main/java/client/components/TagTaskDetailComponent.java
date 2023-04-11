@@ -8,6 +8,9 @@ import commons.*;
 import javafx.beans.property.SimpleObjectProperty;
 import commons.Task;
 import javafx.application.Platform;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -28,6 +31,8 @@ public class TagTaskDetailComponent extends AnchorPane {
 
     private ServerUtils server;
 
+    private Button addLabelButton;
+
     private static final String style = "-fx-background-color: #615f5e; -fx-border-width: 2; -fx-border-color: #615f5e;"
             + "-fx-border-radius: 10 10 10 10;-fx-background-radius: 10 10 10 10;";
 
@@ -46,6 +51,16 @@ public class TagTaskDetailComponent extends AnchorPane {
         this.mainCtrl = mainCtrl;
         this.server = server;
         taskSimpleObjectProperty.addListener((observable, oldValue, newValue) -> update(newValue));
+
+        addLabelButton = new Button("+");
+        addLabelButton.setOnAction(event -> {
+                addTag();
+        });
+
+    }
+
+    private void addTag() {
+        mainCtrl.showAddTag();
     }
 
     public void update(Task task) {
@@ -62,6 +77,7 @@ public class TagTaskDetailComponent extends AnchorPane {
                         AnchorPane.setLeftAnchor(tagContainer, 10.0);
                         getChildren().clear();
                         getChildren().add(tagContainer);
+                        getChildren().add(addLabelButton);
                     }
                 });
     }
