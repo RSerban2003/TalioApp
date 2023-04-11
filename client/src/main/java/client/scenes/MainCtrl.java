@@ -15,6 +15,7 @@
  */
 package client.scenes;
 
+import client.components.TagComponent;
 import commons.Task;
 import client.utils.ServerUtils;
 import commons.Board;
@@ -59,17 +60,20 @@ public class MainCtrl {
 
     private Scene taskOverview;
     private TaskOverviewCtrl taskOverviewCtrl;
-    private Scene editTask;
+
+    private Scene tagManagement;
+    private TagManagementCtrl tagManagementCtrl;
 
     private long boardID;
     private long taskListID;
     private long taskID;
     private Task task;
+    private Board boardObject;
 
     public void initialize(Stage primaryStage, Pair<ConnectCtrl, Parent> connect, Pair<BoardInputCtrl, Parent> boardInput,
                            Pair<BoardCtrl, Parent> board, Pair<AddTaskListCtrl, Parent> taskList1, Pair<AddTaskCtrl, Parent> addTask,
                            Pair<TaskOverviewCtrl, Parent> taskOverview, Pair<CreateBoardCtrl, Parent> createBoard, ServerUtils server,
-                           Pair<AdminPassCtrl, Parent> adminPass, Pair<AdminDashboardCtrl, Parent> admindash) {
+                           Pair<AdminPassCtrl, Parent> adminPass, Pair<AdminDashboardCtrl, Parent> admindash, Pair<TagManagementCtrl, Parent> tagManagement) {
 
         this.primaryStage = primaryStage;
 
@@ -102,6 +106,9 @@ public class MainCtrl {
 
         this.adminPassCtrl = adminPass.getKey();
         this.adminPass = new Scene(adminPass.getValue(), 900, 500);
+
+        this.tagManagementCtrl = tagManagement.getKey();
+        this.tagManagement = new Scene(tagManagement.getValue(), 900, 500);
 
         this.adminDashboardCtrl = admindash.getKey();
         this.adminDashboard = new Scene(admindash.getValue(), Screen.getPrimary().getVisualBounds().getWidth(), Screen.getPrimary().getVisualBounds().getHeight());
@@ -167,6 +174,11 @@ public class MainCtrl {
         primaryStage.setX(Screen.getPrimary().getVisualBounds().getWidth() / 2 - boardInput.getWidth() / 2);
         primaryStage.setY(Screen.getPrimary().getVisualBounds().getHeight() / 2 - boardInput.getHeight() / 2);
     }
+
+    public void setBoardId(Long boardID, Board board) {
+        this.boardID = boardID;
+        this.boardObject = board;
+    }
     public void updateBoard(Board board) {
         this.boardID = board.getId();
         boardCtrl.updateBoard(board);
@@ -228,6 +240,20 @@ public class MainCtrl {
         primaryStage.setMaximized(true);
         adminDashboardCtrl.getUpdates();
     }
+
+    public void showTagManagement() {
+        tagManagementCtrl.setIDs(boardID, boardObject);
+        tagManagementCtrl.updateScene(boardObject);
+        popUpStage.setTitle("Tag Management");
+        popUpStage.setScene(tagManagement);
+        popUpStage.show();
+        popUpStage.setX(Screen.getPrimary().getVisualBounds().getWidth() / 2 - tagManagement.getWidth() / 2);
+        popUpStage.setY(Screen.getPrimary().getVisualBounds().getHeight() / 2 - tagManagement.getHeight() / 2);
+        popUpStage.setOnHidden(e -> {
+            tagManagementCtrl.unregisterMessages();
+        });
+    }
+
     public void updateAdminDash(List<Board> board) {
         adminDashboardCtrl.updateAdmin(board);
     }

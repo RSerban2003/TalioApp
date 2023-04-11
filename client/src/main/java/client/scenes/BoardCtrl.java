@@ -50,7 +50,6 @@ public class BoardCtrl implements Initializable {
     private ClientBoardList boardList;
     private ObservableList<Board> boardListSource;
     private Board board;
-
     private SimpleObjectProperty<Board> observableBoard;
     private BoardComponent boardComponent;
 
@@ -114,6 +113,12 @@ public class BoardCtrl implements Initializable {
         else {
             alert.close();
         }
+    }
+
+    public void onTagManagementButtonClicked() {
+        mainCtrl.setBoardId(boardID, board);
+        mainCtrl.showTagManagement();
+
     }
 
     public void disconnectServer(){
