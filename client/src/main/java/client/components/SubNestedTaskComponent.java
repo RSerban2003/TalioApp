@@ -30,9 +30,11 @@ public class SubNestedTaskComponent extends VBox {
 
         // Create Edit button to edit label
         Button editButton = new Button("Edit");
+        editButton.setStyle("-fx-background-color: #8d8d8d; -fx-text-fill: #000000");
         TextField nameField = new TextField();
         nameField.setPromptText("e.g. School");
         Button saveButton = new Button("Save");
+        saveButton.setStyle("-fx-background-color: #8d8d8d; -fx-text-fill: #000000");
 
         // hide text field and save button at the start
         nameField.setVisible(false);
@@ -42,6 +44,7 @@ public class SubNestedTaskComponent extends VBox {
 
         // create checkbox
         CheckBox checkBox = new CheckBox();
+        checkBox.setStyle("-fx-background-color: #8d8d8d; -fx-text-fill: #000000");
         checkBox.setSelected(nestedTask.getComplete());
         AnnotationConfigApplicationContext context
                 = new AnnotationConfigApplicationContext();
@@ -58,6 +61,7 @@ public class SubNestedTaskComponent extends VBox {
 
         // Create delete button
         Button deleteButton = new Button("X");
+        deleteButton.setStyle("-fx-background-color: #8d8d8d; -fx-text-fill: #000000");
         deleteButton.setOnAction(event -> {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setHeaderText("Delete Task");

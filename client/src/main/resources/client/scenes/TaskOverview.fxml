@@ -9,8 +9,8 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
-<AnchorPane fx:id="anchorPane" maxHeight="650.0" maxWidth="900.0" minHeight="650.0" minWidth="900.0" prefHeight="650.0" prefWidth="900.0" style="-fx-background-color: #615f5e;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.TaskOverviewCtrl">   <children>
+<AnchorPane fx:id="anchorPane" maxHeight="650.0" maxWidth="900.0" minHeight="650.0" minWidth="900.0" prefHeight="650.0" prefWidth="900.0" style="-fx-background-color: #615f5e;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.TaskOverviewCtrl">
+    <children>
       <TextArea fx:id="titleTextArea" editable="false" maxWidth="900.0" prefHeight="61.0" prefWidth="900.0" style="-fx-border-color: transparent; -fx-border-width: 0; -fx-background-size: 10; -fx-background-color: transparent; -fx-control-inner-background: #454342; -fx-font-size: 20; -fx-text-fill: #FFFFFF;" text="New Task" wrapText="true">
          <font>
             <Font size="20.0" />
@@ -31,9 +31,9 @@
          <children>
             <VBox prefHeight="150.0" prefWidth="500.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                <children>
-                  <ScrollPane style="-fx-border-color: transparent; -fx-background-color: #8c8886; -fx-control-inner-background: #8c8886;" VBox.vgrow="ALWAYS">
+                  <ScrollPane hbarPolicy="NEVER" style="-fx-border-color: transparent; -fx-background-color: #8c8886; -fx-control-inner-background: #8c8886;" stylesheets="@../../css/ScrollPane.css" VBox.vgrow="ALWAYS">
                      <content>
-                        <AnchorPane fx:id="nestedTaskAnchorPane" prefHeight="200.0" prefWidth="200.0" />
+                        <AnchorPane fx:id="nestedTaskAnchorPane" minHeight="200.0" minWidth="794.0" prefHeight="200.0" prefWidth="796.0" style="-fx-background-color: #8c8886;" />
                      </content>
                   </ScrollPane>
                </children>
@@ -47,9 +47,9 @@
          <children>
             <VBox layoutX="-142.0" prefHeight="40.0" prefWidth="642.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                <children>
-                  <ScrollPane prefWidth="500.0" style="-fx-border-color: transparent; -fx-background-color: #8c8886; -fx-control-inner-background: #8c8886;" VBox.vgrow="ALWAYS">
+                  <ScrollPane hbarPolicy="NEVER" prefWidth="500.0" stylesheets="@../../css/ScrollPane.css" vbarPolicy="NEVER" VBox.vgrow="ALWAYS">
                      <content>
-                        <AnchorPane fx:id="tagAnchorPane" prefHeight="36.0" prefWidth="200.0" />
+                        <AnchorPane fx:id="tagAnchorPane" prefHeight="38.0" prefWidth="814.0" style="-fx-background-color: #8c8886;" />
                      </content>
                   </ScrollPane>
                </children>

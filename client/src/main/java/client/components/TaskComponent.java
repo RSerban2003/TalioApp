@@ -43,6 +43,7 @@ public class TaskComponent extends VBox {
 
         // Creates button for editing tasks
         Button editButton = new Button("Edit");
+        editButton.setStyle("-fx-background-color: #8d8d8d; -fx-text-fill: #000000");
         editButton.setMinWidth(50);
         editButton.setMaxWidth(50);
         editButton.setOnAction(event -> {
@@ -53,6 +54,7 @@ public class TaskComponent extends VBox {
 
         // Creates button for deleting tasks
         Button deleteButton = new Button("X");
+        deleteButton.setStyle("-fx-background-color: #8d8d8d; -fx-text-fill: #000000");
         AnnotationConfigApplicationContext context
             = new AnnotationConfigApplicationContext();
         context.scan("client");
