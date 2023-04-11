@@ -173,6 +173,7 @@ public class MainCtrl {
         this.boardObject = board;
     }
     public void updateBoard(Board board) {
+        this.boardID = board.getId();
         boardCtrl.updateBoard(board);
     }
     public void showAddTaskList() {
