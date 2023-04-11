@@ -15,8 +15,6 @@ import java.util.List;
 public class AdminDashboardCtrl {
     @FXML
     private AnchorPane boardAnchor;
-//    private final ServerUtils server;
-
     private final WebSocketUtils webSocket;
     private MainCtrl mainCtrl;
     private Board board;
@@ -27,7 +25,6 @@ public class AdminDashboardCtrl {
     @Inject
     public AdminDashboardCtrl(MainCtrl mainCtrl, WebSocketUtils webSocket, ServerUtils server) {
         this.mainCtrl = mainCtrl;
-//        this.server = server;
         this.webSocket = webSocket;
         boardAnchor = new AnchorPane();
         observableList = new SimpleObjectProperty<List<Board>>();

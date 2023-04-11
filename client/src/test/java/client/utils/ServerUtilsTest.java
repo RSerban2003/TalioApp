@@ -84,29 +84,6 @@ public class ServerUtilsTest {
         assertEquals(false, sut.ping());
     }
 
-//    @Test
-//    void testMoveTask() {
-//
-//        //Entity entity = Entity.entity(any(Map.class), anyString());
-//        TaskList taskList = new TaskList(1L, "test");
-//
-//        //when(mockInvocation.post(any(Entity.class), TaskList.class)).thenReturn(taskList);
-//        when(mockInvocation.post(Entity.entity(any(Map.class), anyString()), TaskList.class)).thenReturn(taskList);
-//
-//        assertEquals(taskList, sut.moveTask(1L, 1L, 1L, 1L, 2));
-//    }
-
-//    @Test
-//    void testMoveTask() {
-//        sut.moveTask(1L, 1L, 1L, 1L, 2);
-//        Entity entity = Entity.entity(any(Map.class), anyString());
-//        TaskList taskList = new TaskList();
-//
-//        when(mockInvocation.post(entity, TaskList.class)).thenReturn(taskList);
-//
-//        assertEquals();
-//    }
-
     @Test
     void testBoardExists(){
         Board board = new Board(1L, "test");
