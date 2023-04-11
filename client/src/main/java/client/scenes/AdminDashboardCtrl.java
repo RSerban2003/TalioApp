@@ -24,6 +24,7 @@ public class AdminDashboardCtrl {
 
     @Inject
     public AdminDashboardCtrl(MainCtrl mainCtrl, WebSocketUtils webSocket, ServerUtils server) {
+        this.server = server;
         this.mainCtrl = mainCtrl;
         this.webSocket = webSocket;
         boardAnchor = new AnchorPane();
