@@ -180,6 +180,11 @@ public class MainCtrl {
     }
 
     public void showAddTag() {
+        popUpStage.setTitle("Add some tags");
+        popUpStage.setScene(addTag);
+        popUpStage.show();
+        popUpStage.setX(Screen.getPrimary().getVisualBounds().getWidth() / 2 - taskList1.getWidth() / 2);
+        popUpStage.setY(Screen.getPrimary().getVisualBounds().getHeight() / 2 - taskList1.getHeight() / 2);
     }
     public void setTask(Task task) {
         this.taskID = task.getId();
