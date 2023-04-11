@@ -4,6 +4,7 @@ import client.scenes.MainCtrl;
 import client.utils.ServerUtils;
 import commons.Tag;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -19,10 +20,12 @@ public class SubTagComponent extends VBox{
 
     private static final String style = "-fx-background-color: #615f5e; -fx-border-width: 2; -fx-border-color: #615f5e;"
             + "-fx-border-radius: 10 10 10 10;-fx-background-radius: 10 10 10 10;";
+    private Tag tag;
     public SubTagComponent(Tag tag, MainCtrl mainCtrl, Long boardId, ServerUtils server){
+        super();
+        this.tag = tag;
         //Tag name box
-        Label tagNameLabel = new Label();
-        tagNameLabel.setText(tag.getName());
+        Label tagNameLabel = new Label(tag.getName());
 
         TextField tagNameField = new TextField();
         tagNameField.setText(tag.getName());
@@ -168,7 +171,7 @@ public class SubTagComponent extends VBox{
             tagNameField.setVisible(false);
             tagNameField.setEditable(false);
             tagNameLabel.setVisible(true);
-
         });
+
     }
 }

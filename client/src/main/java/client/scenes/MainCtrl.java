@@ -230,7 +230,7 @@ public class MainCtrl {
     }
 
     public void showTagManagement() {
-        tagManagementCtrl.setIDs(boardID, taskListID, taskID, boardObject);
+        tagManagementCtrl.setIDs(boardID, boardObject);
         tagManagementCtrl.updateScene(boardObject);
         popUpStage.setTitle("Tag Management");
         popUpStage.setScene(tagManagement);

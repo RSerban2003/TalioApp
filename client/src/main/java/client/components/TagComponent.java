@@ -20,7 +20,6 @@ public class TagComponent extends VBox {
 
     private SimpleObjectProperty<Tag> observableTag;
 
-    private TagManagementCtrl tagManagementCtrl;
 
     private ServerUtils server;
 
@@ -28,15 +27,13 @@ public class TagComponent extends VBox {
             + "-fx-border-radius: 10 10 10 10;-fx-background-radius: 10 10 10 10;";
 
     @Inject
-    public TagComponent(SimpleObjectProperty<Board> board, MainCtrl mainCtrl, TagManagementCtrl tagManagementCtrl, ServerUtils serverUtils) {
+    public TagComponent(SimpleObjectProperty<Board> board, MainCtrl mainCtrl, ServerUtils serverUtils) {
         super();
         this.board = board;
         this.observableTag = new SimpleObjectProperty<Tag>();
         this.mainCtrl = mainCtrl;
-        this.tagManagementCtrl = tagManagementCtrl;
         this.server = serverUtils;
         board.addListener((observable, oldValue, newValue) -> update(newValue));
-
     }
 
     private void update(Board board) {

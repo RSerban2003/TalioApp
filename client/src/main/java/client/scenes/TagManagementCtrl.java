@@ -75,15 +75,13 @@ public class TagManagementCtrl {
         observableBoard = new SimpleObjectProperty<Board>();
         this.tagsVBox = new VBox(3);
         tagsVBox.setAlignment(Pos.CENTER);
-
-        observableBoard.addListener((obs, oldBoard, newBoard) -> updateScene(newBoard));
+        tagComponent = new TagComponent(observableBoard, mainCtrl, server);
     }
 
-    public void setIDs(long boardID, long tasklistID, long taskID, Board board) {
+    public void setIDs(long boardID, Board board) {
         this.board = board;
         this.boardID = boardID;
-        this.tasklistID = tasklistID;
-        this.taskID = taskID;
+
         server.registerForMessages("/topic/" + boardID, Board.class, b -> {
             observableBoard.set(b);
         });
@@ -196,13 +194,11 @@ public class TagManagementCtrl {
     }
 
     public void updateScene(Board board) {
-
         observableBoard.set(board);
         tagAnchorPane.getChildren().clear();
         tagAnchorPane.getChildren().add(tagsVBox);
         tagsVBox.getChildren().clear();
-
-
+        tagsVBox.getChildren().add(tagComponent);
     }
 
     public VBox getTagsVBox() {
