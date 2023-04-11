@@ -33,6 +33,13 @@ public class TaskListComponent extends VBox {
                 db.setContent(content);
                 event.consume();
             });
+
+            task.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2) {
+                    System.out.println("Double clicked");
+                    task.openTaskOverview(task.getTask(), taskList);
+                }
+            });
         }
 
         // Create label for task list name
