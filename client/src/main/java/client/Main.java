@@ -39,9 +39,6 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-
-        var overview = FXML.load(QuoteOverviewCtrl.class, "client", "scenes", "QuoteOverview.fxml");
-        var add = FXML.load(AddQuoteCtrl.class, "client", "scenes", "AddQuote.fxml");
         var connect = FXML.load(ConnectCtrl.class, "client", "scenes", "Connect.fxml");
         var boardInput = FXML.load(BoardInputCtrl.class, "client", "scenes", "BoardInput.fxml");
         var board = FXML.load(BoardCtrl.class, "client", "scenes", "Board.fxml");
@@ -49,11 +46,16 @@ public class Main extends Application {
         var addTask = FXML.load(AddTaskCtrl.class, "client", "scenes", "AddTask.fxml");
         var adminPass = FXML.load(AdminPassCtrl.class, "client", "scenes", "AdminPass.fxml");
         var adminDash = FXML.load(AdminDashboardCtrl.class, "client", "scenes", "AdminDashboard.fxml");
-        var TaskOverview = FXML.load(TaskOverviewCtrl.class, "client", "scenes", "TaskOverview.fxml");
+        var tagManagement = FXML.load(TagManagementCtrl.class, "client", "scenes", "TagManagement.fxml");
+        var taskOverview = FXML.load(TaskOverviewCtrl.class, "client", "scenes", "TaskOverview.fxml");
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
 
         ServerUtils server = new ServerUtils();
         var createBoard = FXML.load(CreateBoardCtrl.class, "client", "scenes", "CreateBoard.fxml");
-        mainCtrl.initialize(primaryStage, overview, add, connect, boardInput, board, taskList1, addTask, TaskOverview, createBoard, server, adminPass, adminDash);
+
+        primaryStage.setOnCloseRequest(event -> {
+            mainCtrl.stop();
+        });
+        mainCtrl.initialize(primaryStage, connect, boardInput, board, taskList1, addTask, taskOverview, createBoard, server, adminPass, adminDash, tagManagement);
     }
 }

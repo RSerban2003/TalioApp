@@ -14,7 +14,6 @@ import server.database.TaskListRepository;
 import server.database.TaskRepository;
 
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/boards/{board}/{list}/{task}")

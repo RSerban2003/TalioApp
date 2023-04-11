@@ -16,15 +16,16 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import javax.inject.Inject;
 
 public class TaskComponent extends VBox {
     private static final String style = "-fx-background-color: #f7f7f5; -fx-border-width: 2; -fx-border-color: gray;  -fx-border-radius: 10 10 10 10;-fx-background-radius: 10 10 10 10;";
     private final long taskId;
-    private MainCtrl mainCtrl;
-    private Task task;
     private TaskList taskList;
+    private Task task;
+    private MainCtrl mainCtrl;
 
     @Inject
     public TaskComponent(Task task, TaskList taskList, Board board, MainCtrl mainCtrl) {
@@ -43,6 +44,7 @@ public class TaskComponent extends VBox {
 
         // Creates button for editing tasks
         Button editButton = new Button("Edit");
+        editButton.setStyle("-fx-background-color: #8d8d8d; -fx-text-fill: #000000");
         editButton.setMinWidth(50);
         editButton.setMaxWidth(50);
         editButton.setOnAction(event -> {
@@ -51,6 +53,7 @@ public class TaskComponent extends VBox {
 
         // Creates button for deleting tasks
         Button deleteButton = new Button("X");
+        deleteButton.setStyle("-fx-background-color: #8d8d8d; -fx-text-fill: #000000");
         AnnotationConfigApplicationContext context
             = new AnnotationConfigApplicationContext();
         context.scan("client");
@@ -68,6 +71,13 @@ public class TaskComponent extends VBox {
                 alert.close();
             }
         });
+
+        // implementation for description indicator
+        Label descriptionLabel = new Label("- See Description");
+        descriptionLabel.setStyle("-fx-font-size: 10px;");
+        descriptionLabel.setTextFill(Color.GRAY);
+        hasDescription(descriptionLabel);
+
         ProgressBar progressBar = new ProgressBar();
         progressBar.setPrefWidth(80);
         if(task.getNestedTasks() == null || task.getNestedTasks().size() == 0) {
@@ -78,18 +88,25 @@ public class TaskComponent extends VBox {
             double completedSubtasks = task.getNestedTasks().stream().filter(NestedTask::getComplete).count();
             progressBar.setProgress(completedSubtasks / subTasks);
         }
+
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
+
         //Adds delete button to topRow box
         topRow.getChildren().add(deleteButton);
-        topRow.setPadding(new Insets(0, 10, 10, 10));
+        topRow.setPadding(new Insets(0, 10, 0, 10));
+
+        // creates individual box for description indicator
+        HBox descriptionIndicatorBox = new HBox(descriptionLabel);
+        descriptionIndicatorBox.setPadding(new Insets(0, 10, 2, 10));
+        descriptionIndicatorBox.setAlignment(Pos.CENTER_LEFT);
 
         //Creates individual box for edit button
         HBox editButtonBox = new HBox(progressBar, spacer, editButton);
         editButtonBox.setAlignment(Pos.CENTER);
-        editButtonBox.setPadding(new Insets(5, 10, 0, 10));
+        editButtonBox.setPadding(new Insets(0, 10, 0, 10));
 
-        VBox container = new VBox(topRow, editButtonBox);
+        VBox container = new VBox(topRow, descriptionIndicatorBox, editButtonBox);
         container.setAlignment(Pos.CENTER);
 
         getChildren().add(container);
@@ -116,5 +133,13 @@ public class TaskComponent extends VBox {
 
     public TaskList getTaskList() {
         return taskList;
+    }
+    public void hasDescription(Label iconLabel) {
+        if (task.getDescription() == null || task.getDescription().trim().equals("")
+                || task.getDescription().trim().isEmpty()) {
+            iconLabel.setVisible(false);
+            return;
+        }
+        iconLabel.setVisible(true);
     }
 }

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane fx:id="anchorPane" maxHeight="500.0" maxWidth="900.0" minHeight="500.0" minWidth="900.0" prefHeight="500.0" prefWidth="900.0" style="-fx-background-color: #615f5e;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.TagManagementCtrl">
+   <children>
+      <TextArea editable="false" layoutX="356.0" layoutY="-6.0" maxWidth="915.0" prefHeight="63.0" prefWidth="183.0" style="-fx-border-color: transparent; -fx-border-width: 0; -fx-background-size: 10; -fx-background-color: transparent; -fx-control-inner-background: #454342; -fx-font-size: 20; -fx-text-fill: #FFFFFF;" wrapText="true">
+         <font>
+            <Font size="20.0" />
+         </font>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </TextArea>
+      <TextArea editable="false" layoutX="-7.0" layoutY="444.0" maxWidth="915.0" prefHeight="63.0" prefWidth="908.0" style="-fx-border-color: transparent; -fx-border-width: 0; -fx-background-size: 10; -fx-background-color: transparent; -fx-control-inner-background: #454342; -fx-font-size: 20; -fx-text-fill: #FFFFFF;" wrapText="true">
+         <font>
+            <Font size="20.0" />
+         </font>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </TextArea>
+      <TextArea fx:id="tagNameTextField" editable="false" layoutX="500.0" layoutY="165.0" maxHeight="45.0" maxWidth="250.0" minHeight="45.0" minWidth="250.0" prefHeight="45.0" prefWidth="250.0" style="-fx-border-color: transparent; -fx-border-width: 0; -fx-background-size: 10; -fx-background-color: transparent; -fx-control-inner-background: #454342; -fx-font-size: 20; -fx-text-fill: #FFFFFF;" text="New Tag" visible="false">
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <font>
+            <Font size="1.0" />
+         </font>
+      </TextArea>
+      <Button fx:id="addTagButton" layoutX="97.0" layoutY="98.0" mnemonicParsing="false" onAction="#onAddTagButtonClicked" style="-fx-background-color: #454342; -fx-text-fill: #ffffff;" text="+" />
+      <Button fx:id="editNameButton" layoutX="762.0" layoutY="175.0" mnemonicParsing="false" onAction="#onEditNameButtonClicked" prefHeight="25.0" prefWidth="60.0" style="-fx-background-color: #454342; -fx-text-fill: #FFFFFF;" text="Edit" visible="false" />
+      <Button fx:id="saveNameButton" layoutX="762.0" layoutY="153.0" mnemonicParsing="false" onAction="#onSaveNameButtonClicked" prefHeight="25.0" prefWidth="60.0" style="-fx-background-color: #454342; -fx-text-fill: #FFFFFF;" text="Save" visible="false" />
+      <Button fx:id="cancelNameButton" layoutX="762.0" layoutY="198.0" mnemonicParsing="false" onAction="#onCancelNameButtonClicked" prefHeight="25.0" prefWidth="60.0" style="-fx-background-color: #C70000; -fx-text-fill: #FFFFFF;" text="Cancel" visible="false" />
+      <Button fx:id="createTagButton" layoutX="576.0" layoutY="234.0" mnemonicParsing="false" onAction="#onCreateTagButtonClicked" prefHeight="25.0" prefWidth="60.0" style="-fx-background-color: #454342; -fx-text-fill: #FFFFFF;" text="Create" visible="false" />
+      <Button fx:id="cancelTagButton" layoutX="500.0" layoutY="234.0" mnemonicParsing="false" onAction="#onCancelTagButtonClicked" prefHeight="25.0" prefWidth="60.0" style="-fx-background-color: #C70000; -fx-text-fill: #FFFFFF;" text="Cancel" visible="false" />
+    <Button fx:id="backButton" layoutX="420.0" layoutY="461.0" mnemonicParsing="false" onAction="#onBackButtonClicked" prefHeight="25.0" prefWidth="60.0" style="-fx-background-color: #615f5e; -fx-text-fill: #FFFFFF;" text="Back" />
+      <Text fill="WHITE" layoutX="377.0" layoutY="32.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tag Management">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Text>
+      <Text fill="WHITE" layoutX="54.0" layoutY="118.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tags">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Text>
+      <Text fx:id="tagNameText" fill="WHITE" layoutX="500.0" layoutY="151.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tag Name:" visible="false">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Text>
+      <AnchorPane layoutX="54.0" layoutY="132.0" prefHeight="291.0" prefWidth="197.0">
+         <children>
+            <VBox layoutX="-4.0" prefHeight="291.0" prefWidth="240.0" AnchorPane.leftAnchor="-4.0" AnchorPane.rightAnchor="-2.0">
+               <children>
+                  <ScrollPane prefHeight="292.0" prefWidth="263.0" style="-fx-border-color: transparent; -fx-background-color: #8c8886; -fx-control-inner-background: #8c8886;" VBox.vgrow="ALWAYS">
+                     <content>
+                        <AnchorPane fx:id="tagAnchorPane" prefHeight="288.0" prefWidth="186.0" />
+                     </content>
+                  </ScrollPane>
+               </children>
+            </VBox>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

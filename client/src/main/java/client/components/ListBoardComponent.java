@@ -5,16 +5,11 @@ import client.scenes.MainCtrl;
 import commons.Board;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
-import java.util.Map;
 
-import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 
-import java.util.Map;
 
 import java.util.List;
 
@@ -45,9 +40,13 @@ public class ListBoardComponent extends AnchorPane {
             hbox.setSpacing(20.0);
             hbox.setLayoutX(50.0);
             hbox.setLayoutY(50.0);
+            hbox.setPrefSize(1000, 1300 );
 
             getChildren().clear();
             getChildren().add(hbox);
         });
+    }
+    public void refresh() {
+        update(listBoard.get());
     }
 }

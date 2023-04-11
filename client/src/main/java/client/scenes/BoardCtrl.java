@@ -5,7 +5,6 @@ import client.components.ClientBoardList;
 import client.utils.ServerUtils;
 import client.utils.WorkspaceUtils;
 import commons.Board;
-import commons.ListOfBoards;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -51,7 +50,6 @@ public class BoardCtrl implements Initializable {
     private ClientBoardList boardList;
     private ObservableList<Board> boardListSource;
     private Board board;
-
     private SimpleObjectProperty<Board> observableBoard;
     private BoardComponent boardComponent;
 
@@ -76,8 +74,10 @@ public class BoardCtrl implements Initializable {
         setBoardID(board.getId());
         boardAnchor.getChildren().clear();
         boardAnchor.getChildren().add(boardComponent);
+        boardList.setMainCtrl(mainCtrl);
         if (board.getTitle().length() > 10) textBoardName.setText(board.getTitle().substring(0,10)+ "..");
         else textBoardName.setText(board.getTitle());
+        refreshBoardList();
     }
 
     public long getBoardID() {
@@ -113,6 +113,12 @@ public class BoardCtrl implements Initializable {
         else {
             alert.close();
         }
+    }
+
+    public void onTagManagementButtonClicked() {
+        mainCtrl.setBoardId(boardID, board);
+        mainCtrl.showTagManagement();
+
     }
 
     public void disconnectServer(){

@@ -2,11 +2,9 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import commons.Board;
-import commons.TaskList;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
-import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -14,7 +12,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
 
 
 import javax.inject.Inject;

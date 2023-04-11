@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.components.ClientBoardList;
 import client.utils.ServerUtils;
 import client.utils.WorkspaceUtils;
 import com.google.inject.Inject;
@@ -9,22 +10,28 @@ import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.Response;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import org.glassfish.jersey.client.ClientConfig;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.Scanner;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
-public class BoardInputCtrl {
+public class BoardInputCtrl implements Initializable {
     @FXML
     private TextField boardIdTextField;
 
@@ -32,6 +39,10 @@ public class BoardInputCtrl {
     private MainCtrl mainCtrl;
     private BoardCtrl boardCtrl;
     private WorkspaceUtils workspaceUtils;
+    @FXML
+    private ClientBoardList boardList;
+    private ObservableList<Board> boardListSource;
+
 
     @Inject
     public BoardInputCtrl(ServerUtils server, MainCtrl mainCtrl, BoardCtrl boardCtrl, WorkspaceUtils workspaceUtils) {
@@ -39,6 +50,11 @@ public class BoardInputCtrl {
         this.server = server;
         this.boardCtrl = boardCtrl;
         this.workspaceUtils = workspaceUtils;
+    }
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        boardList.setWorkspaceUtils(workspaceUtils);
+        boardList.setMainCtrl(mainCtrl);
     }
 
     /**
@@ -92,11 +108,12 @@ public class BoardInputCtrl {
                 ioe.printStackTrace();
             }
             mainCtrl.updateBoard(board);
-            } catch (ProcessingException e) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setContentText("Failed to retrieve board: " + e.getMessage());
-                alert.showAndWait();
-            }
+            mainCtrl.refreshBoardList();
+        } catch (ProcessingException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("Failed to retrieve board: " + e.getMessage());
+            alert.showAndWait();
+        }
     }
 
     public void keyPressed(KeyEvent e) {
@@ -119,6 +136,7 @@ public class BoardInputCtrl {
     public void cancel() {
         clearFields();
         mainCtrl.showConnect();
+        server.stopAndRestart();
     }
 
     public void admin(){
@@ -130,4 +148,19 @@ public class BoardInputCtrl {
     }
 
 
+    public void refreshBoardList() {
+        List<Long> boardIds = new ArrayList<>();
+        try {
+            List<Long> allIds = workspaceUtils.getFromFile(ServerUtils.getHost());
+            for(Long id: allIds) {
+                if(!server.boardExists(id.toString())) {
+                    workspaceUtils.deleteFromFile(ServerUtils.getHost(), id);
+                } else boardIds.add(id);
+            }
+        } catch (FileNotFoundException fnfe) {
+            fnfe.printStackTrace();
+        }
+        boardListSource = FXCollections.observableList(boardIds.stream().map(server::getBoard).toList());
+        boardList.setItems(boardListSource);
+    }
 }

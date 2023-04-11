@@ -2,7 +2,6 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import commons.Board;
-import commons.ListOfBoards;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -26,7 +25,7 @@ public class ConnectCtrl {
     public void connectServer() {
         server.setHost(hostname.getText());
         if(server.ping()) {
-            mainCtrl.showBoard();
+            mainCtrl.showBoardinput();
             mainCtrl.refreshBoardList();
             server.astablishConnection();
             server.registerForMessages("/topic/boardView", Board.class, q ->
