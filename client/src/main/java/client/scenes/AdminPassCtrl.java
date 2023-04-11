@@ -37,8 +37,6 @@ public class AdminPassCtrl {
         this.server = server;
     }
 
-
-
     public void checkPass(){
         // check if the input field is either empty or null to display a warning
         String password = adminPass.getText();
@@ -92,7 +90,6 @@ public class AdminPassCtrl {
                 response.close();
             }
         }
-
     }
 
     public void retrieveAllBoards(){

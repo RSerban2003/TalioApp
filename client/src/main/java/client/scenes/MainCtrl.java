@@ -15,10 +15,10 @@
  */
 package client.scenes;
 
-import client.components.TaskListComponent;
 import commons.Task;
 import client.utils.ServerUtils;
 import commons.Board;
+import javafx.collections.ObservableList;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -37,7 +37,7 @@ public class MainCtrl {
     private Stage primaryStage;
     private Stage popUpStage;
 
-//    private QuoteOverviewCtrl overviewCtrl;
+    private QuoteOverviewCtrl overviewCtrl;
     private Scene overview;
 
     public Scene getOverview() {
@@ -76,7 +76,7 @@ public class MainCtrl {
     private long taskID;
     private Task task;
 
-    public void initialize(Stage primaryStage, /*Pair<QuoteOverviewCtrl, Parent> overview */
+    public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
                            Pair<AddQuoteCtrl, Parent> add, Pair<ConnectCtrl, Parent> connect, Pair<BoardInputCtrl, Parent> boardInput,
                            Pair<BoardCtrl, Parent> board, Pair<AddTaskListCtrl, Parent> taskList1, Pair<AddTaskCtrl, Parent> addTask,
                            Pair<TaskOverviewCtrl, Parent> taskOverview, Pair<CreateBoardCtrl, Parent> createBoard, ServerUtils server,
@@ -87,8 +87,8 @@ public class MainCtrl {
         this.popUpStage = new Stage();
         popUpStage.initModality(Modality.APPLICATION_MODAL);
 
-//        this.overviewCtrl = overview.getKey();
-//        this.overview = new Scene(overview.getValue());
+        this.overviewCtrl = overview.getKey();
+        this.overview = new Scene(overview.getValue());
 
         this.addCtrl = add.getKey();
         this.add = new Scene(add.getValue());
@@ -127,11 +127,11 @@ public class MainCtrl {
         primaryStage.show();
     }
 
-//    public void showOverview() {
-//        primaryStage.setTitle("Quotes: Overview");
-//        primaryStage.setScene(overview);
-//        overviewCtrl.refresh();
-//    }
+    public void showOverview() {
+        primaryStage.setTitle("Quotes: Overview");
+        primaryStage.setScene(overview);
+        overviewCtrl.refresh();
+    }
 
     public Stage getPopUpStage() {
         return popUpStage;
@@ -141,11 +141,11 @@ public class MainCtrl {
         return primaryStage;
     }
 
-//    public void showAdd() {
-//        primaryStage.setTitle("Quotes: Adding Quote");
-//        primaryStage.setScene(add);
-//        add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
-//    }
+    public void showAdd() {
+        primaryStage.setTitle("Quotes: Adding Quote");
+        primaryStage.setScene(add);
+        add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
+    }
 
     public void showConnect() {
         primaryStage.setTitle("Connect: select a hostname");
