@@ -105,9 +105,9 @@ public class TagController {
         if (tag.getBoard().getId() != boardId) return ResponseEntity.badRequest().build();
         Board board = boardRepository.findById(boardId).get();
 
-
+        List<Task> tasks = null;
         if(tag.getTaskList() != null && tag.getTaskList().size() > 0){
-            List<Task> tasks = tag.getTaskList();
+            tasks = tag.getTaskList();
             for (Task task : tasks){
                 task.remove(tag);
             }
@@ -123,11 +123,10 @@ public class TagController {
         Board board1 = boardRepository.findById(boardId).get();
         // send update to client using WebSocket
         msgs.convertAndSend("/topic/" + boardId, board1);
-
-        if(tag.getTaskList() != null && tag.getTaskList().size() > 0){
-            for (Task task : tag.getTaskList()){
+        if(tasks != null) {
+            for (Task task : tasks) {
                 Task retTask = taskRepository.findById(task.getId()).get();
-                msgs.convertAndSend("/topic/"+boardId+"/"+retTask.getTaskList().getId()+"/"+retTask.getId(), retTask);
+                msgs.convertAndSend("/topic/" + boardId + "/" + retTask.getTaskList().getId() + "/" + retTask.getId(), retTask);
             }
         }
 
