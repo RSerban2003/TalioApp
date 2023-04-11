@@ -1,13 +1,10 @@
 package client.scenes;
 
-import client.components.AddTagComponent;
 import client.components.SubListBoardComponent;
 import client.utils.ServerUtils;
-import commons.Board;
 import commons.Tag;
 import commons.Task;
 import javafx.application.Platform;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -31,53 +28,27 @@ public class AddTagCtrl {
     private Button LeaveButton;
     @FXML
     private VBox tagsBox;
-    private AnchorPane anchorPane;
     private ServerUtils server;
     private MainCtrl mainCtrl;
-
-    private SimpleObjectProperty<Task> observableTask;
-    private SimpleObjectProperty<Board> observableBoard;
-
-    AddTagComponent addTagComponent;
+    private BoardCtrl boardCtrl;
 
     private Long boardID;
     private Long listID;
-    private Long taskID;
+    private Long taskId;
     private Task task;
 
 
     @Inject
-    public AddTagCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public AddTagCtrl(ServerUtils server, MainCtrl mainCtrl, BoardCtrl boardCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
-
-        observableTask = new SimpleObjectProperty<Task>();
-        observableBoard = new SimpleObjectProperty<Board>();
-
-        addTagComponent = new AddTagComponent(observableBoard,observableTask,mainCtrl,server);
+        this.boardCtrl = boardCtrl;
     }
 
-    public void setIDs(Long boardID, Long listID, Long taskID) {
+    public void setIDs(Long boardID, Long listID, Long taskId) {
         this.boardID = boardID;
         this.listID = listID;
-        this.taskID = taskID;
-
-        addTagComponent.setIds(boardID,listID,taskID);
-
-        server.registerForMessages("/topic/"+boardID+"/"+listID+"/"+taskID, Task.class, b -> {
-            observableTask.set(b);
-            setTask(b);
-            mainCtrl.setTask(b);
-            update(b);
-        });
-    }
-
-    public void updateScene(Board board) {
-        observableBoard.set(board);
-        anchorPane.getChildren().clear();
-        anchorPane.getChildren().add(tagsBox);
-        tagsBox.getChildren().clear();
-        tagsBox.getChildren().add(addTagComponent);
+        this.taskId = taskId;
     }
 
     public void setTask(Task task) {
@@ -89,9 +60,11 @@ public class AddTagCtrl {
     }
 
     public void update(Task task) {
-        observableTask.set(task);
+        var tagsList = server.getBoard(boardID).getTagList();
+        System.out.println(tagsList);
+        this.task = task;
 
-        /*tagsBox.getChildren().clear();
+        tagsBox.getChildren().clear();
         for (Tag tag : tagsList) {
             if (task.getTagList().contains(tag)) continue;
             HBox box = new HBox();
@@ -101,13 +74,13 @@ public class AddTagCtrl {
             Button addButton = new Button("add to task");
             addButton.setStyle("-fx-background-color: #454342; -fx-text-fill: #FFFFFF");
             addButton.setOnAction(event -> {
-                server.addTag(boardID,listID,taskID,tag.getId());
+                server.addTag(boardID,listID,taskId,tag.getId());
+                update(task);
             });
             box.getChildren().addAll(name,addButton);
             box.setSpacing(20);
             tagsBox.getChildren().add(box);
-        }*/
-
+        }
     }
 
 
