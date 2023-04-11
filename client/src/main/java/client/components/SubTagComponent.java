@@ -18,7 +18,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 public class SubTagComponent extends VBox{
 
-    private static final String style = "-fx-background-color: #615f5e; -fx-border-width: 2; -fx-border-color: #615f5e;"
+    private static final String style = "-fx-background-color: #615f5e; -fx-border-width: 2; -fx-border-color: #454342;"
             + "-fx-border-radius: 10 10 10 10;-fx-background-radius: 10 10 10 10;";
     private Tag tag;
     public SubTagComponent(Tag tag, MainCtrl mainCtrl, Long boardId, ServerUtils server){
@@ -37,10 +37,10 @@ public class SubTagComponent extends VBox{
         tagNameLabel.setStyle("-fx-background-color: #615f5e; -fx-text-fill: white;");
         tagNameField.setStyle("-fx-background-color: #8c8886; -fx-text-fill: white;");
 
-        tagNameLabel.setMinWidth(150);
-        tagNameLabel.setMaxWidth(150);
-        tagNameField.setMinWidth(150);
-        tagNameField.setMaxWidth(150);
+        tagNameLabel.setMinWidth(155);
+        tagNameLabel.setMaxWidth(155);
+        tagNameField.setMinWidth(155);
+        tagNameField.setMaxWidth(155);
 
         AnnotationConfigApplicationContext context
                 = new AnnotationConfigApplicationContext();
@@ -50,8 +50,8 @@ public class SubTagComponent extends VBox{
         //Tag delete button
         Button deleteButton = new Button("X");
         deleteButton.setStyle("-fx-background-color: #454342; -fx-text-fill:  #FFFFFF;");
-        deleteButton.setMinWidth(25);
-        deleteButton.setMaxWidth(25);
+        deleteButton.setMinWidth(30);
+        deleteButton.setMaxWidth(30);
 
         // Tag name edit buttons
         Button editNameButton = new Button("Edit");
