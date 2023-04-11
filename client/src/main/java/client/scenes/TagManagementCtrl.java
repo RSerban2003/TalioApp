@@ -185,10 +185,7 @@ public class TagManagementCtrl {
             alert.showAndWait();
         }
         else {
-            TagComponent newTagComponent = new TagComponent(observableBoard, mainCtrl, this, server);
-            newTagComponent.setTag(newTag, boardID);
-            tagsVBox.getChildren().add(newTagComponent);
-            server.send("/topic/" + boardID + "/add-tag", newTag);
+
         }
     }
 
@@ -205,11 +202,6 @@ public class TagManagementCtrl {
         tagAnchorPane.getChildren().add(tagsVBox);
         tagsVBox.getChildren().clear();
 
-        for (Tag tag : board.getTagList()) {
-            TagComponent tagComponent = new TagComponent(observableBoard, mainCtrl, this, server);
-            tagComponent.setTag(tag, boardID);
-            tagsVBox.getChildren().add(tagComponent);
-        }
 
     }
 
