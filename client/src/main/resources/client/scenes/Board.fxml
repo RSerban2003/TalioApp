@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import client.components.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
+
 
 <AnchorPane maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #615f5e;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.BoardCtrl">
    <children>
@@ -86,11 +86,12 @@
                                  <children>
                                     <AnchorPane prefHeight="200.0" prefWidth="200.0">
                                        <children>
-                                           <GridPane prefHeight="68.0" prefWidth="437.0" style="-fx-background-color: #615f5e;">
+                                           <GridPane prefHeight="68.0" prefWidth="500.0" style="-fx-background-color: #615f5e;">
                                                <columnConstraints>
                                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="235.800048828125" minWidth="10.0" prefWidth="222.2000732421875" />
-                                                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="142.199951171875" minWidth="10.0" prefWidth="71.7999267578125" />
-                                                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="142.199951171875" minWidth="10.0" prefWidth="100.0" />
+                                                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="142.199951171875" minWidth="10.0" prefWidth="56.0" />
+                                                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="142.199951171875" minWidth="10.0" prefWidth="87.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="142.199951171875" minWidth="10.0" prefWidth="103.0" />
                                                </columnConstraints>
                                                <rowConstraints>
                                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -122,6 +123,7 @@
                                                            <Insets left="10.0" />
                                                        </GridPane.margin>
                                                    </Button>
+                                                <Button fx:id="tagManagementName" mnemonicParsing="false" onAction="#onTagManagementButtonClicked" prefHeight="25.0" prefWidth="113.0" style="-fx-background-color: #454342; -fx-text-fill: #FFFFFF;" text="TagManagement" GridPane.columnIndex="3" />
                                                    <Button fx:id="AddTaskListButton" mnemonicParsing="false" onAction="#addTaskList" style="-fx-background-color: #454342; -fx-text-fill: #FFFFFF;" text="Add tasklist" GridPane.columnIndex="2" />
                                                </children>
                                            </GridPane>

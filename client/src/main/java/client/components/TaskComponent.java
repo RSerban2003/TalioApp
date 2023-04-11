@@ -26,12 +26,13 @@ public class TaskComponent extends VBox {
     private TaskList taskList;
     private Task task;
     private MainCtrl mainCtrl;
+
     @Inject
     public TaskComponent(Task task, TaskList taskList, Board board, MainCtrl mainCtrl) {
         super();
         this.mainCtrl = mainCtrl;
-        this.taskList = taskList;
         this.task = task;
+        this.taskList = taskList;
 
         //Creates the name box
         Label nameLabel = new Label(task.getName());
@@ -47,9 +48,7 @@ public class TaskComponent extends VBox {
         editButton.setMinWidth(50);
         editButton.setMaxWidth(50);
         editButton.setOnAction(event -> {
-            mainCtrl.setTaskList(taskList.getId());
-            mainCtrl.setTask(task);
-            mainCtrl.showTaskOverview();
+            openTaskOverview(task, taskList);
         });
 
         // Creates button for deleting tasks
@@ -122,6 +121,19 @@ public class TaskComponent extends VBox {
         return taskId;
     }
 
+    public void openTaskOverview(Task task, TaskList taskList) {
+        mainCtrl.setTaskList(taskList.getId());
+        mainCtrl.setTask(task);
+        mainCtrl.showTaskOverview();
+    }
+
+    public Task getTask() {
+        return task;
+    }
+
+    public TaskList getTaskList() {
+        return taskList;
+    }
     public void hasDescription(Label iconLabel) {
         if (task.getDescription() == null || task.getDescription().trim().equals("")
                 || task.getDescription().trim().isEmpty()) {

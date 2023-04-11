@@ -25,7 +25,7 @@ public class ConnectCtrl {
     public void connectServer() {
         server.setHost(hostname.getText());
         if(server.ping()) {
-            mainCtrl.showBoard();
+            mainCtrl.showBoardinput();
             mainCtrl.refreshBoardList();
             server.astablishConnection();
             server.registerForMessages("/topic/boardView", Board.class, q ->
