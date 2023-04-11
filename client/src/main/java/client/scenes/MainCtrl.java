@@ -193,6 +193,7 @@ public class MainCtrl {
         popUpStage.setY(Screen.getPrimary().getVisualBounds().getHeight() / 2 - taskList1.getHeight() / 2);
         taskList1.setOnKeyPressed(e -> addTaskListCtrl.keyPressed(e));
     }
+
     public void setTask(Task task) {
         this.taskID = task.getId();
         this.task = task;

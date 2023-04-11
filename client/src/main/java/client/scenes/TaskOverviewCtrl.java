@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.components.NestedTaskComponent;
+import client.components.TagTaskDetailComponent;
 import client.utils.ServerUtils;
 import commons.Task;
 import javafx.beans.property.SimpleObjectProperty;
@@ -43,6 +44,8 @@ public class TaskOverviewCtrl {
 
     @FXML
     private AnchorPane nestedTaskAnchorPane;
+    @FXML
+    private AnchorPane tagAnchorPane;
 
     private ServerUtils server;
 
@@ -54,6 +57,7 @@ public class TaskOverviewCtrl {
     private SimpleObjectProperty<Task> observableTask;
 
     private NestedTaskComponent nestedTaskComponent;
+    private TagTaskDetailComponent tagTaskDetailComponent;
 
     private long boardID;
     private long tasklistID;
@@ -64,8 +68,10 @@ public class TaskOverviewCtrl {
         this.mainCtrl = mainCtrl;
         this.server = server;
         nestedTaskAnchorPane = new AnchorPane();
+        tagAnchorPane = new AnchorPane();
         observableTask = new SimpleObjectProperty<Task>();
         nestedTaskComponent = new NestedTaskComponent(observableTask, server, mainCtrl);
+        tagTaskDetailComponent = new TagTaskDetailComponent(observableTask, server, mainCtrl);
     }
 
     public void setIDs(long boardID, long tasklistID, long taskID) {
@@ -74,6 +80,8 @@ public class TaskOverviewCtrl {
         this.taskID = taskID;
         nestedTaskComponent.setBoardId(boardID);
         nestedTaskComponent.setTaskListId(tasklistID);
+        tagTaskDetailComponent.setBoardId(boardID);
+        tagTaskDetailComponent.setTaskListId(tasklistID);
         if(boardID != 0) {
             server.registerForMessages("/topic/" + boardID + "/" + tasklistID + "/" + taskID, Task.class, q -> {
                 observableTask.set(q);
@@ -87,6 +95,8 @@ public class TaskOverviewCtrl {
         observableTask.set(task);
         nestedTaskAnchorPane.getChildren().clear();
         nestedTaskAnchorPane.getChildren().add(nestedTaskComponent);
+        tagAnchorPane.getChildren().clear();
+        tagAnchorPane.getChildren().add(tagTaskDetailComponent);
     }
 
     @FXML
