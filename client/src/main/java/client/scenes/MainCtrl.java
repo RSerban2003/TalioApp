@@ -89,6 +89,7 @@ public class MainCtrl {
         this.addTask = new Scene(addTask.getValue(), 900, 500);
 
         this.server = server;
+        server.startUpEXEC();
 
         this.addTaskListCtrl = taskList1.getKey();
         this.taskList1 = new Scene(taskList1.getValue(),900, 500);
