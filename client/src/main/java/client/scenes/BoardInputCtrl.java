@@ -109,11 +109,11 @@ public class BoardInputCtrl implements Initializable {
             }
             mainCtrl.updateBoard(board);
             mainCtrl.refreshBoardList();
-            } catch (ProcessingException e) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setContentText("Failed to retrieve board: " + e.getMessage());
-                alert.showAndWait();
-            }
+        } catch (ProcessingException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("Failed to retrieve board: " + e.getMessage());
+            alert.showAndWait();
+        }
     }
 
     public void keyPressed(KeyEvent e) {
@@ -136,6 +136,7 @@ public class BoardInputCtrl implements Initializable {
     public void cancel() {
         clearFields();
         mainCtrl.showConnect();
+        server.stop();
     }
 
     public void admin(){

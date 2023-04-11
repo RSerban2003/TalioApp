@@ -1,18 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AdminDashboardCtrl">
+<AnchorPane maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AdminDashboardCtrl">
     <children>
         <HBox prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
@@ -22,7 +15,7 @@
                             <children>
                                 <AnchorPane prefHeight="70.0" prefWidth="159.0">
                                     <children>
-                                        <Label alignment="CENTER" prefHeight="94.0" prefWidth="159.0" text="Talio" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                        <Label alignment="CENTER" prefHeight="94.0" prefWidth="159.0" style="-fx-background-color: #615f5e; -fx-text-fill: #FFFFFF;" text="Talio" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                             <font>
                                                 <Font name="Arial Nova Light" size="27.0" />
                                             </font>
@@ -31,9 +24,9 @@
                                 </AnchorPane>
                                 <AnchorPane prefHeight="143.0" prefWidth="159.0" VBox.vgrow="ALWAYS">
                                     <children>
-                                        <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="119.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                        <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="119.0" style="-fx-background-color: #615f5e;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                             <children>
-                                                <Button mnemonicParsing="false" onAction="#disconnectBoard" prefWidth="112.0" text="User Screen">
+                                                <Button mnemonicParsing="false" onAction="#disconnectBoard" prefWidth="112.0" style="-fx-background-color: #454342; -fx-text-fill: #FFFFFF;" text="User Screen">
                                                     <VBox.margin>
                                                         <Insets left="5.0" right="5.0" top="20.0" />
                                                     </VBox.margin>
@@ -47,9 +40,9 @@
                                 </AnchorPane>
                                 <AnchorPane prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                                     <children>
-                                        <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="119.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                        <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="119.0" style="-fx-background-color: #615f5e;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                             <children>
-                                                <Button mnemonicParsing="false" onAction="#disconnectServer" prefWidth="112.0" text="Disconnect Server">
+                                                <Button mnemonicParsing="false" onAction="#disconnectServer" prefWidth="112.0" style="-fx-background-color: #454342; -fx-text-fill: #FFFFFF;" text="Disconnect Server">
                                                     <VBox.margin>
                                                         <Insets bottom="20.0" top="5.0" />
                                                     </VBox.margin>
@@ -62,7 +55,6 @@
                         </VBox>
                     </children>
                 </AnchorPane>
-                <Separator orientation="VERTICAL" prefHeight="576.0" prefWidth="0.0" />
                 <AnchorPane minWidth="600.0" prefHeight="576.0" prefWidth="735.0" HBox.hgrow="ALWAYS">
                     <children>
                         <VBox prefHeight="600.0" prefWidth="735.2" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -71,27 +63,27 @@
                                     <children>
                                         <HBox prefHeight="107.2" prefWidth="735.2" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                             <children>
-                                                <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                                <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #615f5e;">
                                                     <children>
-                                                          <Text fx:id="textBoardName" layoutX="14.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Admin Dashboard">
+                                                          <Text fx:id="textBoardName" layoutX="14.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: #FFFFFF;" text="Admin Dashboard">
                                                               <font>
                                                                   <Font name="Arial" size="26.0" />
                                                               </font>
                                                           </Text>
                                                     </children>
                                                 </AnchorPane>
-                                                <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                                                <Region prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #615f5e;" HBox.hgrow="ALWAYS" />
                                             </children>
                                         </HBox>
                                     </children>
                                 </AnchorPane>
                                 <AnchorPane prefWidth="735.0" VBox.vgrow="ALWAYS">
                                     <children>
-                                        <VBox fx:id="boardVBox" prefHeight="508.0" prefWidth="735.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                        <VBox fx:id="boardVBox" prefHeight="541.0" prefWidth="740.0" style="-fx-background-color: transparent;" AnchorPane.bottomAnchor="-9.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                             <children>
-                                                <ScrollPane hbarPolicy="ALWAYS">
+                                                <ScrollPane minHeight="528.0" minWidth="738.0" prefHeight="543.0" prefWidth="740.0" style="-fx-background-color: #8c8886;" stylesheets="@../../css/ScrollPane.css">
                                                     <content>
-                                                        <AnchorPane fx:id="boardAnchor" />
+                                                        <AnchorPane fx:id="boardAnchor" minHeight="530.0" minWidth="738.0" style="-fx-background-color: trasnparent;" />
                                                     </content>
                                                 </ScrollPane>
                                             </children>

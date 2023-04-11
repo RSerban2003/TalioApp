@@ -1,4 +1,5 @@
 DELETE FROM nestedtask;
+DELETE FROM tag;
 DELETE FROM task;
 DELETE FROM tasklist;
 DELETE FROM board;
@@ -22,3 +23,6 @@ INSERT INTO Task (id, name, description, tasklist_id, index) VALUES (101, 'thisi
 INSERT INTO NestedTask (id, name, isComplete, task_id, index) VALUES (100, 'nestedTest', FALSE, 100, 0);
 INSERT INTO NestedTask (id, name, isComplete, task_id, index) VALUES (101, 'diff', TRUE, 100, 1);
 INSERT INTO NestedTask (id, name, isComplete, task_id, index) VALUES (102, 'nestedTest', FALSE, 101, 0);
+
+INSERT INTO Tag (id, name, board_id) VALUES (100, 'important', 100);
+INSERT INTO Tag (id, name, board_id) VALUES (101, 'less important', 100);

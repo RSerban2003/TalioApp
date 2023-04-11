@@ -1,6 +1,5 @@
 package client.components;
 
-import client.scenes.BoardCtrl;
 import client.scenes.MainCtrl;
 import client.utils.ServerUtils;
 import client.utils.WorkspaceUtils;
@@ -17,11 +16,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import org.springframework.stereotype.Component;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.util.List;
 @Component
 public class ClientBoardList extends ListView<Board> {
     private WorkspaceUtils workspaceUtils;
@@ -34,14 +28,18 @@ public class ClientBoardList extends ListView<Board> {
         private Button copyId;
         private HBox root;
         private Region padding;
+        //("-fx-background-color: #454342")
         private ListView listView;
         public BoardCell(ListView<Board> boardListView) {
             super();
+            super.setStyle("-fx-background-color: #615f5e");
             this.listView = boardListView;
-            root = new HBox(10);
+            root = new HBox(5);
             root.setAlignment(Pos.CENTER_LEFT);
-            root.setPadding(new Insets(5, 5, 5, 5));
+            root.setPadding(new Insets(10, 10, 10, 10));
+            root.setStyle("-fx-background-color: #615f5e");
             leave = new Button("Leave");
+            leave.setStyle("-fx-background-color: #454342; -fx-text-fill: #FFFFFF");
             leave.setOnAction(a -> {
                 workspaceUtils.deleteFromFile(ServerUtils.getHost(), board.getId());
                 if(mainCtrl.getBoardId() == board.getId()) mainCtrl.showBoardinput();
@@ -49,11 +47,13 @@ public class ClientBoardList extends ListView<Board> {
 
             });
             open = new Button("Open");
+            open.setStyle("-fx-background-color: #454342; -fx-text-fill: #FFFFFF");
             open.setOnAction(event -> {
                 mainCtrl.updateBoard(board);
                 mainCtrl.showBoard();
             });
             copyId = new Button("copy ID");
+            copyId.setStyle("-fx-background-color: #454342; -fx-text-fill: #FFFFFF");
             copyId.setOnAction(event -> {
                 Long invite = board.getId();
                 String inviteString = invite.toString();
@@ -76,6 +76,7 @@ public class ClientBoardList extends ListView<Board> {
                 setText(null);
                 setGraphic(null);
             } else {
+                boardTitle.setStyle("-fx-text-fill: #FFFFFF");
                 boardTitle.setText(board.getTitle());
                 this.board = board;
                 setGraphic(root);
