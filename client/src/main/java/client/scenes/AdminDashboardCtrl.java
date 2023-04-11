@@ -63,7 +63,7 @@ public class AdminDashboardCtrl {
 
     public void disconnectServer(){
         mainCtrl.showConnect();
-        server.stop();
+        server.stopAndRestart();
         server.unregisterForMessages("/topic/admin");
     }
 }

@@ -67,6 +67,12 @@ public class ServerUtils {
     }
     private static ExecutorService EXEC;
 
+    public void startUpEXEC() {
+        if (EXEC == null || EXEC.isShutdown()) {
+            EXEC = Executors.newSingleThreadExecutor();
+        }
+    }
+
     public void registerForUpdates(Consumer<Board> consumer) {
         if (EXEC == null || EXEC.isShutdown()) {
             EXEC = Executors.newSingleThreadExecutor();
@@ -88,6 +94,11 @@ public class ServerUtils {
 
     public void stop() {
         EXEC.shutdownNow();
+    }
+
+    public void stopAndRestart() {
+        EXEC.shutdownNow();
+        startUpEXEC();
     }
 
     public boolean ping() {
