@@ -75,6 +75,7 @@ public class BoardCtrl implements Initializable {
         setBoardID(board.getId());
         boardAnchor.getChildren().clear();
         boardAnchor.getChildren().add(boardComponent);
+        boardList.setMainCtrl(mainCtrl);
         if (board.getTitle().length() > 10) textBoardName.setText(board.getTitle().substring(0,10)+ "..");
         else textBoardName.setText(board.getTitle());
         refreshBoardList();
