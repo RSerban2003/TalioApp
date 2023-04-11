@@ -18,7 +18,7 @@ public class AdminDashboardCtrl {
     private final WebSocketUtils webSocket;
     private MainCtrl mainCtrl;
     private Board board;
-
+    private ServerUtils server;
     private SimpleObjectProperty<List<Board>> observableList;
     private ListBoardComponent boardComponent;
 
@@ -33,11 +33,23 @@ public class AdminDashboardCtrl {
 
     public void updateAdmin(List<Board> boardList) {
         observableList.set(boardList);
-        boardAnchor.getChildren().clear();
-        boardAnchor.getChildren().add(boardComponent);
+        boardComponent.refresh();
+        if(boardAnchor.getChildren().size() == 0) {
+            boardAnchor.getChildren().add(boardComponent);
+        }
+    }
+
+    public void addBoardToList(Board board){
+        observableList.get().add(board);
+        updateAdmin(observableList.get());
     }
 
     public void getUpdates(){
+        server.registerForUpdates(board -> {
+            System.out.println(board);
+            addBoardToList(board);
+        });
+
         webSocket.registerForMessages("/topic/admin", ListOfBoards.class, q ->{
             List<Board> boardList = q.getBoardList();
             observableList.set(boardList);
@@ -51,6 +63,7 @@ public class AdminDashboardCtrl {
 
     public void disconnectServer(){
         mainCtrl.showConnect();
+        server.stopAndRestart();
         webSocket.unregisterForMessages("/topic/admin");
     }
 }

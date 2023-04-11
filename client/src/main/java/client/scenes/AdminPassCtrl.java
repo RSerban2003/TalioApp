@@ -15,11 +15,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import org.glassfish.jersey.client.ClientConfig;
 
-import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.ResourceBundle;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
@@ -27,7 +25,6 @@ import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 public class AdminPassCtrl {
     @FXML
     private TextField adminPass;
-
     private ServerUtils server;
     private MainCtrl mainCtrl;
 

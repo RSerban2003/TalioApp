@@ -4,17 +4,14 @@ import client.utils.ServerUtils;
 import client.utils.WorkspaceUtils;
 import com.google.inject.Inject;
 import commons.Board;
-import jakarta.ws.rs.ProcessingException;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
-import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.Response;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
-import org.glassfish.jersey.client.ClientConfig;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -98,7 +95,7 @@ public class CreateBoardCtrl {
             if (response != null) {
                 response.close();
             }
-      }
+        }
     }
 
     public void keyPressed(KeyEvent e) {

@@ -1,6 +1,5 @@
 package client.components;
 
-import client.Main;
 import client.utils.ServerUtils;
 import client.scenes.MainCtrl;
 import commons.Board;
@@ -8,13 +7,12 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.input.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class SubListBoardComponent extends VBox {
-    private static final String style = "-fx-background-color: #f7f7f5; -fx-border-width: 2; -fx-border-color: gray;  -fx-border-radius: 10 10 10 10;-fx-background-radius: 10 10 10 10;";
+    private static final String style = "-fx-background-color: #c7c7c7; -fx-border-width: 2; -fx-border-color: gray;  -fx-border-radius: 10 10 10 10;-fx-background-radius: 10 10 10 10;";
     private final Board board;
 
     private MainCtrl mainCtrl;
@@ -35,6 +33,7 @@ public class SubListBoardComponent extends VBox {
 
         // Create button
         Button deleteButton = new Button("Delete");
+        deleteButton.setStyle("-fx-background-color: #8d8d8d; -fx-text-fill: #000000");
         AnnotationConfigApplicationContext context
                 = new AnnotationConfigApplicationContext();
         context.scan("client");
@@ -47,6 +46,7 @@ public class SubListBoardComponent extends VBox {
 
         // Create button
         Button joinButton = new Button("Join");
+        joinButton.setStyle("-fx-background-color: #8d8d8d; -fx-text-fill: #000000");
         MainCtrl finalMainCtrl = mainCtrl;
         joinButton.setOnAction(event -> {
             Board newBoard = finalServer.getBoard(board.getId());

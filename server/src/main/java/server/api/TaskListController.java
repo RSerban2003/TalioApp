@@ -2,6 +2,8 @@ package server.api;
 
 
 import commons.Board;
+import commons.Tag;
+import commons.Task;
 import commons.TaskList;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,8 +38,8 @@ public class TaskListController {
 
     @GetMapping(path = "/{list}/get")
     public ResponseEntity<?> getById(@PathVariable("list") long listId) {
-        var TL = taskListRepository.findById(listId);
-        if (TL.isPresent()) return ResponseEntity.ok(taskListRepository.findById(listId).get());
+        var tL = taskListRepository.findById(listId);
+        if (tL.isPresent()) return ResponseEntity.ok(taskListRepository.findById(listId).get());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("List not found");
     }
 
@@ -88,6 +90,18 @@ public class TaskListController {
 
         if(tL.get().getBoard().getId() != boardId) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Tasklist does not belong to board");
         Board board = b.get();
+
+        if(taskList.getTask() != null && taskList.getTask().size() > 0){
+            for (Task task : taskList.getTask()){
+                if(task.getTagList() != null && task.getTagList().size() > 0){
+                    List<Tag> tags = task.getTagList();
+                    for (Tag tag : tags){
+                        tag.remove(task);
+                    }
+                    task.setTagList(null);
+                }
+            }
+        }
 
         board.remove(taskList);
         taskList.setBoard(null);

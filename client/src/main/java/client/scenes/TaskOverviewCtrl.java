@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.components.NestedTaskComponent;
+import client.components.TagTaskDetailComponent;
 import client.utils.ServerUtils;
 import client.utils.WebSocketUtils;
 import commons.Task;
@@ -25,10 +26,13 @@ public class TaskOverviewCtrl {
     private Button editDescriptionButton;
 
     @FXML
-    private Button submitButton;
+    private Button backButton;
 
     @FXML
-    private Button cancelButton;
+    private Button saveTitleButton;
+
+    @FXML
+    private Button saveDescriptionButton;
 
     @FXML
     private TextArea titleTextArea;
@@ -41,6 +45,8 @@ public class TaskOverviewCtrl {
 
     @FXML
     private AnchorPane nestedTaskAnchorPane;
+    @FXML
+    private AnchorPane tagAnchorPane;
 
     private ServerUtils server;
 
@@ -54,6 +60,7 @@ public class TaskOverviewCtrl {
     private SimpleObjectProperty<Task> observableTask;
 
     private NestedTaskComponent nestedTaskComponent;
+    private TagTaskDetailComponent tagTaskDetailComponent;
 
     private long boardID;
     private long tasklistID;
@@ -65,8 +72,10 @@ public class TaskOverviewCtrl {
         this.server = server;
         this.webSocket = webSocket;
         nestedTaskAnchorPane = new AnchorPane();
+        tagAnchorPane = new AnchorPane();
         observableTask = new SimpleObjectProperty<Task>();
         nestedTaskComponent = new NestedTaskComponent(observableTask, server, mainCtrl);
+        tagTaskDetailComponent = new TagTaskDetailComponent(observableTask, server, mainCtrl);
     }
 
     public void setIDs(long boardID, long tasklistID, long taskID) {
@@ -75,6 +84,8 @@ public class TaskOverviewCtrl {
         this.taskID = taskID;
         nestedTaskComponent.setBoardId(boardID);
         nestedTaskComponent.setTaskListId(tasklistID);
+        tagTaskDetailComponent.setBoardId(boardID);
+        tagTaskDetailComponent.setTaskListId(tasklistID);
         if(boardID != 0) {
             webSocket.registerForMessages("/topic/" + boardID + "/" + tasklistID + "/" + taskID, Task.class, q -> {
                 observableTask.set(q);
@@ -88,6 +99,8 @@ public class TaskOverviewCtrl {
         observableTask.set(task);
         nestedTaskAnchorPane.getChildren().clear();
         nestedTaskAnchorPane.getChildren().add(nestedTaskComponent);
+        tagAnchorPane.getChildren().clear();
+        tagAnchorPane.getChildren().add(tagTaskDetailComponent);
     }
 
     @FXML
@@ -95,6 +108,8 @@ public class TaskOverviewCtrl {
         initialTitle = titleTextArea.getText();
         titleTextArea.setEditable(true);
         titleTextArea.requestFocus();
+        editTitleButton.setVisible(false);
+        saveTitleButton.setVisible(true);
     }
 
     @FXML
@@ -116,6 +131,8 @@ public class TaskOverviewCtrl {
         initialDescription = descriptionTextArea.getText();
         descriptionTextArea.setEditable(true);
         descriptionTextArea.requestFocus();
+        editDescriptionButton.setVisible(false);
+        saveDescriptionButton.setVisible(true);
     }
 
     @FXML
@@ -124,9 +141,11 @@ public class TaskOverviewCtrl {
     }
 
     @FXML
-    private void onSubmitButtonClicked() {
-        String title = titleTextArea.getText();
-        String description = descriptionTextArea.getText();
+    private void onSaveTitleButtonClicked() {
+        saveTitleButton.setVisible(false);
+        editTitleButton.setVisible(true);
+        String title = titleTextArea.getText().trim();
+        String description = descriptionTextArea.getText().trim();
         if (title == null || title.isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setContentText("Task name cannot be empty. Please enter a name for the task.");
@@ -134,7 +153,7 @@ public class TaskOverviewCtrl {
             return;
         }
         Map<String, String> body = new HashMap<>();
-        if (title.trim().isEmpty()) {
+        if (title.isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setContentText("Task name cannot be empty. Please enter a name for the task.");
             alert.showAndWait();
@@ -148,10 +167,28 @@ public class TaskOverviewCtrl {
         }
         webSocket.unregisterForMessages("/topic/"+boardID+"/"+tasklistID+"/"+taskID);
         mainCtrl.getPopUpStage().close();
+        titleTextArea.setEditable(false);
     }
 
     @FXML
-    private void onCancelButtonClicked() {
+    private void onSaveDescriptionButtonClicked() {
+        saveDescriptionButton.setVisible(false);
+        editDescriptionButton.setVisible(true);
+        String title = titleTextArea.getText().trim();
+        String description = descriptionTextArea.getText().trim();
+        Map<String, String> body = new HashMap<>();
+        if (!server.editTask(boardID, tasklistID, taskID, title, description)) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setContentText("Failed to add the task: Unable to send the request.");
+            alert.showAndWait();
+            return;
+        }
+        webSocket.unregisterForMessages("/topic/"+boardID+"/"+tasklistID+"/"+taskID);
+        descriptionTextArea.setEditable(false);
+    }
+
+    @FXML
+    private void onBackButtonClicked() {
         this.resetFields();
         webSocket.unregisterForMessages("/topic/"+boardID+"/"+tasklistID+"/"+taskID);
         mainCtrl.getPopUpStage().close();
@@ -186,8 +223,6 @@ public class TaskOverviewCtrl {
                 } else if (descriptionTextArea.isFocused()) {
                     descriptionTextArea.setEditable(false);
                     removeFocus();
-                } else {
-                    onSubmitButtonClicked();
                 }
                 break;
             case ESCAPE:
@@ -200,7 +235,7 @@ public class TaskOverviewCtrl {
                     descriptionTextArea.setEditable(false);
                     removeFocus();
                 } else {
-                    onCancelButtonClicked();
+                    onBackButtonClicked();
                 }
                 break;
             default:

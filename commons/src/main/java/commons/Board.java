@@ -25,15 +25,20 @@ public class Board {
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
     private List<TaskList> listOfTaskList;
 
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+    private List<Tag> tagList;
+
 
     public Board(Long id, String title) {
         this.id = id;
         this.title = title;
         this.listOfTaskList = new ArrayList<>();
+        this.tagList = new ArrayList<>();
     }
 
     public Board() {
         this.listOfTaskList = new ArrayList<>();
+        this.tagList = new ArrayList<>();
     }
 
     public void setListOfTaskList(List<TaskList> listOfTaskList) {
@@ -61,6 +66,19 @@ public class Board {
     public void remove(TaskList taskList) {
         if (!listOfTaskList.contains(taskList)) return;
         this.listOfTaskList.remove(taskList);
+    }
+
+    public void add(Tag tag){
+        tagList.add(tag);
+    }
+
+    public void remove(Tag tag){
+        if (!tagList.contains(tag)) return;
+        this.tagList.remove(tag);
+    }
+
+    public List<Tag> getTagList() {
+        return tagList;
     }
 
     public void setId(Long id) {
