@@ -67,6 +67,12 @@ public class ServerUtils {
     }
     private static ExecutorService EXEC;
 
+    public void startUpEXEC() {
+        if (EXEC == null || EXEC.isShutdown()) {
+            EXEC = Executors.newSingleThreadExecutor();
+        }
+    }
+
     public void registerForUpdates(Consumer<Board> consumer) {
         if (EXEC == null || EXEC.isShutdown()) {
             EXEC = Executors.newSingleThreadExecutor();
@@ -88,6 +94,11 @@ public class ServerUtils {
 
     public void stop() {
         EXEC.shutdownNow();
+    }
+
+    public void stopAndRestart() {
+        EXEC.shutdownNow();
+        startUpEXEC();
     }
 
     public boolean ping() {
@@ -295,7 +306,7 @@ public class ServerUtils {
         return status == 200;
     }
 
-    public boolean createTag(Long boardId, String name) {
+    public Tag createTag(Long boardId, String name) {
         Client client = ClientBuilder.newClient();
         Map<String, String> body = new HashMap<>();
         if(name.trim().isEmpty() || name == null) {
@@ -308,8 +319,13 @@ public class ServerUtils {
                 .post(Entity.entity(body, APPLICATION_JSON));
 
         int status = response.getStatus();
+        if (status == 200) {
+            Tag createdTag = response.readEntity(Tag.class);
+            response.close();
+            return createdTag;
+        }
         response.close();
-        return status == 200;
+        return null;
     }
 
     public boolean editTag(Long boardId, Long tagId, String name) {
@@ -317,12 +333,13 @@ public class ServerUtils {
         Map<String, String> body = new HashMap<>();
         body.put("name", name);
 
-        Response response = client.target(SERVER).path("api/boards/" + boardId + "/" + tagId + "/editTag")
+        Response response = client.target(SERVER).path("api/boards/" + boardId + "/" + tagId + "/edit-tag")
                 .request(APPLICATION_JSON).accept(APPLICATION_JSON)
                 .post(Entity.entity(body, APPLICATION_JSON));
 
         int status = response.getStatus();
         response.close();
+        System.out.println(response);
         return status == 200;
     }
 
@@ -332,6 +349,7 @@ public class ServerUtils {
         Response response = client.target(SERVER).path("api/boards/"+ boardId + "/"+ tagId + "/delete-tag").request().delete();
 
         int status = response.getStatus();
+        System.out.println(status);
         response.close();
         return status == 200;
     }

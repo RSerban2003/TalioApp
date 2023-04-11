@@ -38,6 +38,7 @@ public class Board {
 
     public Board() {
         this.listOfTaskList = new ArrayList<>();
+        this.tagList = new ArrayList<>();
     }
 
     public void setListOfTaskList(List<TaskList> listOfTaskList) {
